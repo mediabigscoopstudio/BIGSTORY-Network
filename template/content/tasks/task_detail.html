@@ -1,0 +1,214 @@
+{% extends "content/base.html" %}
+{% block 'title' %}{{ task.title }}{% endblock 'title' %}
+{% block 'css' %}
+<style>
+  .page-wrap { padding:24px 28px 40px; }
+  .page-header { display:flex; align-items:center; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
+  .page-header a { color:#888; font-size:13px; text-decoration:none; }
+  .page-header a:hover { color:#333; }
+  .page-header h2 { font-size:20px; font-weight:700; color:#1a1a2e; margin:0; }
+  .sep { color:#ccc; }
+  .two-col { display:grid; grid-template-columns:1fr 290px; gap:16px; align-items:start; }
+  @media (max-width:780px) { .two-col { grid-template-columns:1fr; } }
+  .card { background:#fff; border-radius:12px; padding:20px 22px; border:1px solid #f0f0f0; box-shadow:0 1px 3px rgba(0,0,0,0.05); margin-bottom:14px; }
+  .card-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#bbb; margin-bottom:14px; }
+  .project-accent { height:4px; border-radius:4px; margin-bottom:16px; }
+  .task-main-title { font-size:20px; font-weight:700; color:#1a1a2e; margin-bottom:8px; line-height:1.3; }
+  .task-desc { font-size:14px; color:#555; line-height:1.6; margin-bottom:16px; }
+  .badge-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .badge { font-size:11px; font-weight:600; padding:4px 10px; border-radius:6px; }
+  .badge-todo { background:#f0f0f0; color:#555; }
+  .badge-inprogress { background:#fff3e0; color:#b26a00; }
+  .badge-review { background:#ede7fe; color:#5e35b1; }
+  .badge-done { background:#e6f9f1; color:#0e7a4e; }
+  .badge-low { background:#f0f0f0; color:#666; }
+  .badge-medium { background:#fff3e0; color:#b26a00; }
+  .badge-high { background:#fdecea; color:#c0392b; }
+  .badge-urgent { background:#c0392b; color:#fff; }
+  .status-section { margin-top:14px; padding-top:14px; border-top:1px solid #f0f0f0; }
+  .status-label { font-size:12px; font-weight:600; color:#aaa; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px; }
+  .status-btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .status-btn { font-size:12px; padding:7px 14px; border-radius:7px; border:1.5px solid #e5e5e5; background:#fff; color:#555; cursor:pointer; font-weight:500; transition:all 0.12s; }
+  .status-btn:hover { background:#f5f5f5; }
+  .active-todo { border-color:#ccc; background:#f0f0f0; color:#444; font-weight:700; }
+  .active-inprogress { border-color:#f0a500; background:#fff3e0; color:#b26a00; font-weight:700; }
+  .active-review { border-color:#7F77DD; background:#ede7fe; color:#5e35b1; font-weight:700; }
+  .done-locked { font-size:12px; padding:7px 14px; border-radius:7px; border:1.5px solid #e5e5e5; color:#ccc; cursor:not-allowed; background:#fafafa; }
+  /* bstv list */
+  .video-list { display:flex; flex-direction:column; gap:8px; }
+  .video-item { display:flex; align-items:center; gap:10px; padding:10px 12px; background:#f5f8ff; border:1px solid #dce9ff; border-radius:8px; }
+  .video-item-info { flex:1; min-width:0; }
+  .video-item-title { font-size:13px; font-weight:600; color:#1565c0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .video-item-type { font-size:11px; color:#85b7eb; }
+  .video-detach { font-size:11px; color:#e57373; border:none; background:none; cursor:pointer; padding:0; text-decoration:none; }
+  .video-detach:hover { color:#c0392b; }
+  /* bstv attach inline */
+  .bstv-search-wrap { position:relative; }
+  .bstv-results { position:absolute; top:100%; left:0; right:0; z-index:100; background:#fff; border:1.5px solid #e5e5e5; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.1); max-height:180px; overflow-y:auto; display:none; }
+  .bstv-result-item { padding:9px 14px; cursor:pointer; font-size:13px; color:#333; border-bottom:1px solid #f5f5f5; transition:background 0.1s; }
+  .bstv-result-item:last-child { border-bottom:none; }
+  .bstv-result-item:hover { background:#f5f5f5; }
+  /* meta */
+  .meta-row { display:flex; justify-content:space-between; font-size:13px; padding:7px 0; border-bottom:1px solid #f8f8f8; }
+  .meta-row:last-child { border-bottom:none; }
+  .meta-key { color:#aaa; font-size:12px; }
+  .meta-val { color:#333; font-weight:500; }
+  .meta-overdue { color:#c0392b; }
+  /* comments */
+  .comment-item { padding:10px 0; border-bottom:1px solid #f5f5f5; }
+  .comment-item:last-child { border-bottom:none; }
+  .comment-header { display:flex; justify-content:space-between; margin-bottom:3px; }
+  .comment-author { font-size:12px; font-weight:700; color:#333; }
+  .comment-time { font-size:11px; color:#ccc; }
+  .comment-body { font-size:13px; color:#555; line-height:1.5; }
+  .comment-form { margin-top:14px; }
+  textarea.comment-input { width:100%; padding:9px 12px; border:1.5px solid #e5e5e5; border-radius:8px; font-size:13px; outline:none; resize:vertical; min-height:65px; box-sizing:border-box; transition:border-color 0.15s; }
+  textarea.comment-input:focus { border-color:#1a1a2e; }
+  .comment-submit { margin-top:8px; background:#1a1a2e; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-size:13px; cursor:pointer; transition:background 0.2s; display:block; width:100%; }
+  .comment-submit:hover { background:#16213e; }
+  .empty-note { font-size:13px; color:#ccc; text-align:center; padding:12px 0; }
+  .form-control-sm { width:100%; padding:9px 12px; border:1.5px solid #e5e5e5; border-radius:8px; font-size:13px; background:#fafafa; outline:none; transition:border-color 0.15s; }
+  .form-control-sm:focus { border-color:#1a1a2e; background:#fff; }
+  .btn-attach { margin-top:6px; background:#1a1a2e; color:#fff; border:none; padding:7px 14px; border-radius:7px; font-size:12px; cursor:pointer; }
+</style>
+{% endblock 'css' %}
+{% block 'body' %}
+<div class="page-wrap">
+  <div class="page-header">
+    <a href="/">Dashboard</a><span class="sep">›</span>
+    <a href="/my_tasks">My Tasks</a><span class="sep">›</span>
+    <h2>{{ task.title|truncatechars:45 }}</h2>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="project-accent" style="background: {{ task.project.color_hex }};"></div>
+        <div class="task-main-title">{{ task.title }}</div>
+        <div class="badge-row">
+          <span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span>
+          <span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span>
+          <span class="badge" style="background:#e3f0ff; color:#1565c0;">{{ task.get_task_type_display }}</span>
+        </div>
+        {% if task.description %}<p class="task-desc">{{ task.description }}</p>{% endif %}
+        {% if task.status != 'done' %}
+        <div class="status-section">
+          <div class="status-label">Update status</div>
+          <form method="POST" action="/update_task_status/{{ task.id }}" class="status-btns">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="/task_detail/{{ task.id }}">
+            <button type="submit" name="status" value="todo" class="status-btn {% if task.status == 'todo' %}active-todo{% endif %}">To Do</button>
+            <button type="submit" name="status" value="inprogress" class="status-btn {% if task.status == 'inprogress' %}active-inprogress{% endif %}">In Progress</button>
+            <button type="submit" name="status" value="review" class="status-btn {% if task.status == 'review' %}active-review{% endif %}">Submit for review</button>
+            <span class="done-locked" title="Admin marks Done">Done (admin only)</span>
+          </form>
+        </div>
+        {% else %}
+        <div class="status-section">
+          <span class="badge badge-done" style="font-size:13px; padding:7px 16px;">Marked Done by admin ✓</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- BSTV videos -->
+      <div class="card">
+        <div class="card-title">Linked videos ({{ bstvs.count }})</div>
+        {% if bstvs %}
+        <div class="video-list" style="margin-bottom:14px;">
+          {% for tb in bstvs %}
+          <div class="video-item">
+            <div class="video-item-info">
+              <div class="video-item-title">{{ tb.bstv.title|truncatechars:55 }}</div>
+              <div class="video-item-type">{{ tb.bstv.type }} &middot; {{ tb.bstv.category }}</div>
+            </div>
+            <a href="/detach_bstv/{{ task.id }}/{{ tb.bstv.id }}" class="video-detach" onclick="return confirm('Detach this video?')">Detach</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-note" style="margin-bottom:12px;">No videos linked yet.</p>
+        {% endif %}
+        <!-- attach more -->
+        <div class="bstv-search-wrap">
+          <input type="text" id="bstvSearch" class="form-control-sm" placeholder="Search BSTV to attach…" autocomplete="off">
+          <div class="bstv-results" id="bstvResults"></div>
+        </div>
+        <form id="attachForm" method="POST" action="/attach_bstv/{{ task.id }}" style="margin-top:6px; display:none;">
+          {% csrf_token %}
+          <input type="hidden" name="bstv_id" id="bstv_id_hidden">
+          <button type="submit" class="btn-attach">Attach selected video</button>
+        </form>
+      </div>
+
+      <!-- comments -->
+      <div class="card">
+        <div class="card-title">Comments ({{ comments.count }})</div>
+        {% if comments %}
+          {% for comment in comments %}
+          <div class="comment-item">
+            <div class="comment-header">
+              <span class="comment-author">{{ comment.author.name }}</span>
+              <span class="comment-time">{{ comment.created_at|date:"M j, g:i a" }}</span>
+            </div>
+            <p class="comment-body">{{ comment.body }}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+        <p class="empty-note">No comments yet.</p>
+        {% endif %}
+        <form method="POST" action="/add_task_comment/{{ task.id }}" class="comment-form">
+          {% csrf_token %}
+          <textarea name="body" class="comment-input" placeholder="Add a comment…" required></textarea>
+          <button type="submit" class="comment-submit">Post comment</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- right meta -->
+    <div class="card">
+      <div class="card-title">Task info</div>
+      <div class="meta-row"><span class="meta-key">Project</span><span class="meta-val">{{ task.project.name }}</span></div>
+      <div class="meta-row">
+        <span class="meta-key">Due date</span>
+        <span class="meta-val {% if task.is_overdue %}meta-overdue{% endif %}">
+          {% if task.due_date %}{{ task.due_date|date:"M j, Y" }}{% if task.is_overdue %} (overdue){% endif %}{% else %}—{% endif %}
+        </span>
+      </div>
+      <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">{{ task.get_task_type_display }}</span></div>
+      <div class="meta-row"><span class="meta-key">Priority</span><span class="meta-val">{{ task.get_priority_display }}</span></div>
+      <div class="meta-row"><span class="meta-key">Created</span><span class="meta-val">{{ task.created_at|date:"M j, Y" }}</span></div>
+      <div class="meta-row"><span class="meta-key">Updated</span><span class="meta-val">{{ task.updated_at|date:"M j, Y" }}</span></div>
+      <div class="meta-row"><span class="meta-key">Videos</span><span class="meta-val">{{ task.task_bstvs.count }}</span></div>
+    </div>
+  </div>
+</div>
+{% endblock 'body' %}
+{% block 'script' %}
+<script>
+  const si = document.getElementById('bstvSearch');
+  const rb = document.getElementById('bstvResults');
+  const af = document.getElementById('attachForm');
+  const hiddenId = document.getElementById('bstv_id_hidden');
+  si.addEventListener('input', function() {
+    const term = this.value.trim();
+    if (term.length < 2) { rb.style.display = 'none'; return; }
+    fetch(`/ajax/search_bstv/?term=${encodeURIComponent(term)}`)
+      .then(r => r.json()).then(data => {
+        rb.innerHTML = '';
+        if (!data.length) { rb.style.display = 'none'; return; }
+        data.forEach(item => {
+          const d = document.createElement('div');
+          d.className = 'bstv-result-item'; d.textContent = item.label;
+          d.onclick = () => {
+            hiddenId.value = item.value;
+            si.value = item.label;
+            rb.style.display = 'none';
+            af.style.display = 'block';
+          };
+          rb.appendChild(d);
+        });
+        rb.style.display = 'block';
+      });
+  });
+  document.addEventListener('click', e => { if (!si.contains(e.target)) rb.style.display = 'none'; });
+</script>
+{% endblock 'script' %}

@@ -1,0 +1,127 @@
+{% extends "editor/base.html" %}
+{% block 'title' %}My Projects{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .page-wrap { padding: 24px 28px 40px; }
+  .page-header { margin-bottom: 22px; }
+  .page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a2e; margin: 0; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .project-card {
+    background: #fff; border-radius: 12px;
+    border: 1px solid #f0f0f0; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.15s;
+    text-decoration: none; color: inherit;
+  }
+  .project-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); transform: translateY(-2px); }
+
+  .project-accent { height: 5px; width: 100%; }
+  .project-body   { padding: 16px 18px; flex: 1; }
+  .project-top    { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .project-name   { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+
+  .role-pill {
+    font-size: 10px; font-weight: 700; padding: 3px 8px;
+    border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .role-lead   { background: #ede7fe; color: #5e35b1; }
+  .role-member { background: #f0f0f0; color: #666; }
+
+  .project-vertical { font-size: 11px; color: #bbb; margin-bottom: 12px; }
+
+  /* my task counts */
+  .my-counts { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .count-badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 5px; }
+  .cb-todo       { background: #f0f0f0; color: #555; }
+  .cb-inprogress { background: #fff3e0; color: #b26a00; }
+  .cb-review     { background: #ede7fe; color: #5e35b1; }
+  .cb-done       { background: #e6f9f1; color: #0e7a4e; }
+  .cb-overdue    { background: #fdecea; color: #c0392b; }
+
+  .project-footer {
+    padding: 11px 18px; border-top: 1px solid #f5f5f5;
+    background: #fafafa; display: flex; align-items: center; justify-content: space-between;
+  }
+  .view-tasks-btn {
+    font-size: 12px; font-weight: 600; color: #1a1a2e;
+    text-decoration: none; padding: 6px 14px; border-radius: 6px;
+    border: 1.5px solid #1a1a2e; transition: all 0.15s;
+  }
+  .view-tasks-btn:hover { background: #1a1a2e; color: #fff; }
+  .project-status { font-size: 11px; color: #aaa; }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: #ccc; }
+  .empty-state h4 { color: #aaa; font-size: 16px; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="page-wrap">
+
+  <div class="page-header">
+    <h2>My Projects</h2>
+  </div>
+
+  {% if projects_data %}
+  <div class="projects-grid">
+    {% for item in projects_data %}
+    <div class="project-card">
+      <div class="project-accent" style="background: {{ item.project.color_hex }};"></div>
+      <div class="project-body">
+        <div class="project-top">
+          <span class="project-name">{{ item.project.name }}</span>
+          <span class="role-pill role-{{ item.role }}">{{ item.role }}</span>
+        </div>
+        {% if item.project.vertical %}
+        <div class="project-vertical">{{ item.project.vertical.title }}</div>
+        {% endif %}
+
+        <!-- my task counts for this project -->
+        <div class="my-counts">
+          {% if item.my_counts.todo > 0 %}
+          <span class="count-badge cb-todo">{{ item.my_counts.todo }} to do</span>
+          {% endif %}
+          {% if item.my_counts.inprogress > 0 %}
+          <span class="count-badge cb-inprogress">{{ item.my_counts.inprogress }} in progress</span>
+          {% endif %}
+          {% if item.my_counts.review > 0 %}
+          <span class="count-badge cb-review">{{ item.my_counts.review }} review</span>
+          {% endif %}
+          {% if item.my_counts.done > 0 %}
+          <span class="count-badge cb-done">{{ item.my_counts.done }} done</span>
+          {% endif %}
+          {% if item.my_counts.overdue > 0 %}
+          <span class="count-badge cb-overdue">{{ item.my_counts.overdue }} overdue</span>
+          {% endif %}
+          {% if item.my_counts.todo == 0 and item.my_counts.inprogress == 0 and item.my_counts.review == 0 and item.my_counts.done == 0 %}
+          <span style="font-size:12px; color:#ccc;">No tasks assigned to you</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="project-footer">
+        <a href="/project_tasks/{{ item.project.id }}" class="view-tasks-btn">View my tasks</a>
+        <span class="project-status">{{ item.project.get_status_display }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <h4>You're not assigned to any projects yet.</h4>
+    <p>Your admin will add you to projects and assign tasks.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}{% endblock 'script' %}

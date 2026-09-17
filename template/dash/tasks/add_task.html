@@ -1,0 +1,438 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Add Task{% if selected_project %} — {{ selected_project.name }}{% endif %}{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .page-header { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+  .page-header a { color:#888; font-size:13px; text-decoration:none; }
+  .page-header a:hover { color:#333; }
+  .page-header h2 { font-size:22px; font-weight:600; margin:0; color:#1a1a2e; }
+  .sep { color:#ccc; }
+
+  .form-card {
+    background:#fff; border-radius:14px;
+    box-shadow:0 1px 6px rgba(0,0,0,0.07);
+    border:1px solid #f0f0f0; padding:32px; max-width:800px;
+  }
+  .project-accent { height:4px; border-radius:4px; margin-bottom:24px; }
+  .section-title {
+    font-size:12px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.06em; color:#bbb; margin-bottom:14px;
+    padding-bottom:8px; border-top:1px solid #f5f5f5; padding-top:20px;
+  }
+  .section-title:first-of-type { border-top:none; padding-top:0; }
+  .form-group { margin-bottom:18px; }
+  .form-group label { display:block; font-size:13px; font-weight:600; color:#333; margin-bottom:6px; }
+  .form-group label span { color:#999; font-weight:400; margin-left:4px; }
+  .form-control {
+    width:100%; padding:10px 14px; border:1.5px solid #e5e5e5;
+    border-radius:8px; font-size:14px; color:#333; background:#fafafa;
+    transition:border-color 0.15s; outline:none;
+  }
+  .form-control:focus { border-color:#1a1a2e; background:#fff; }
+  select.form-control { appearance:none; cursor:pointer; }
+  textarea.form-control { resize:vertical; min-height:80px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+  @media (max-width:700px) { .form-row, .form-row-3 { grid-template-columns:1fr; } }
+
+  /* deploy platform pills */
+  .platform-pills { display:flex; gap:8px; flex-wrap:wrap; }
+  .platform-pill {
+    padding:7px 16px; border-radius:20px; border:1.5px solid #e5e5e5;
+    background:#fafafa; cursor:pointer; font-size:12px; font-weight:600;
+    color:#555; transition:all 0.15s; user-select:none; display:flex;
+    align-items:center; gap:6px;
+  }
+  .platform-pill:hover { border-color:#aaa; background:#f0f0f0; }
+  .platform-pill.selected { border-color:#1a1a2e; background:#1a1a2e; color:#fff; }
+  .platform-pill input { display:none; }
+  .platform-none {
+    padding:7px 16px; border-radius:20px; border:1.5px dashed #e5e5e5;
+    background:#fff; cursor:pointer; font-size:12px; font-weight:600;
+    color:#ccc; transition:all 0.15s; user-select:none;
+  }
+  .platform-none.selected { border-color:#aaa; color:#888; background:#f5f5f5; }
+
+  /* task type selector */
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+  .type-pill {
+    padding: 8px 12px; border-radius: 8px; border: 1.5px solid #e5e5e5;
+    background: #fafafa; cursor: pointer; text-align: center;
+    font-size: 12px; font-weight: 600; color: #555;
+    transition: all 0.15s; user-select: none;
+  }
+  .type-pill:hover { border-color: #aaa; background: #f0f0f0; }
+  .type-pill.selected { border-color: #1a1a2e; background: #1a1a2e; color: #fff; }
+  .type-pill .type-icon { display: block; font-size: 18px; margin-bottom: 3px; }
+  .type-pill input { display: none; }
+
+  /* attachment panels */
+  .attach-panel { display: none; }
+  .attach-panel.visible { display: block; }
+
+  /* search styles */
+  .search-wrap { position: relative; }
+  .search-results {
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 100;
+    background: #fff; border: 1.5px solid #e5e5e5; border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1); max-height: 200px;
+    overflow-y: auto; display: none;
+  }
+  .search-result-item {
+    padding: 9px 14px; cursor: pointer; font-size: 13px; color: #333;
+    border-bottom: 1px solid #f5f5f5; transition: background 0.1s;
+  }
+  .search-result-item:last-child { border-bottom: none; }
+  .search-result-item:hover { background: #f5f5f5; }
+  .attached-items { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .attached-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  }
+  .tag-article { background: #e3f0ff; color: #1565c0; }
+  .tag-bstv    { background: #fce4ec; color: #880e4f; }
+  .attached-tag button {
+    background: none; border: none; cursor: pointer;
+    font-size: 14px; line-height: 1; padding: 0; font-weight: 600;
+    color: inherit; opacity: 0.6;
+  }
+  .attached-tag button:hover { opacity: 1; }
+
+  /* assignee hint */
+  .assignee-hint {
+    font-size: 11px; color: #aaa; margin-top: 5px;
+    padding: 6px 10px; background: #fafafa; border-radius: 6px;
+    border-left: 3px solid #e5e5e5;
+  }
+  .hint-editorial { border-color: #1565c0; color: #1565c0; background: #f0f7ff; }
+  .hint-video     { border-color: #880e4f; color: #880e4f; background: #fdf0f5; }
+  .hint-social    { border-color: #f0a500; color: #b26a00; background: #fff8e1; }
+
+  .duplicate-tip {
+    background: #f0f7ff; border: 1px solid #b5d4f4; border-radius: 8px;
+    padding: 10px 14px; font-size: 12px; color: #1565c0; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .form-footer {
+    display:flex; align-items:center; gap:12px;
+    margin-top:24px; padding-top:18px; border-top:1px solid #f0f0f0;
+  }
+  .btn-submit {
+    background:#1a1a2e; color:#fff; border:none; padding:10px 24px;
+    border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; transition:background 0.2s;
+  }
+  .btn-submit:hover { background:#16213e; }
+  .btn-cancel { color:#888; font-size:14px; text-decoration:none; padding:10px 14px; border-radius:8px; transition:background 0.15s; }
+  .btn-cancel:hover { background:#f5f5f5; color:#333; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="container-fluid py-4 px-4">
+
+  <div class="page-header">
+    <a href="/projects">Projects</a>
+    <span class="sep">›</span>
+    {% if selected_project %}
+      <a href="/project_detail/{{ selected_project.id }}">{{ selected_project.name }}</a>
+      <span class="sep">›</span>
+    {% endif %}
+    <h2>New Task</h2>
+  </div>
+
+  <div class="form-card">
+    {% if selected_project %}
+    <div class="project-accent" style="background: {{ selected_project.color_hex }};"></div>
+    {% endif %}
+
+    <div class="duplicate-tip">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      To assign the same brief to multiple people — create one task, then use <strong>Duplicate &amp; reassign</strong> on the project board.
+    </div>
+
+    <form method="POST" action="{% if selected_project %}/add_task/{{ selected_project.id }}{% else %}/add_task{% endif %}">
+      {% csrf_token %}
+
+      <p class="section-title">Task details</p>
+
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" name="title" class="form-control" placeholder="What needs to be done?" required>
+      </div>
+      <div class="form-group">
+        <label>Description <span>(optional)</span></label>
+        <textarea name="description" class="form-control" placeholder="Brief, context, links…"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Project</label>
+          <select name="project" class="form-control" required>
+            <option value="">— Select project —</option>
+            {% for p in projects %}
+            <option value="{{ p.id }}" {% if selected_project and selected_project.id == p.id %}selected{% endif %}>
+              {{ p.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Assigned to <span>(one person — duplicate to assign more)</span></label>
+          <select name="assigned_to" class="form-control" id="assigneeSelect" onchange="updateHint(this)">
+            <option value="">— Unassigned —</option>
+            {% for author in authors %}
+            <option value="{{ author.id }}" data-designation="{{ author.designation }}">
+              {{ author.name }} — {{ author.designation }}
+            </option>
+            {% endfor %}
+          </select>
+          <div class="assignee-hint" id="assigneeHint">Select an assignee to see their role.</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Priority</label>
+          <select name="priority" class="form-control">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select name="status" class="form-control">
+            <option value="todo" selected>To Do</option>
+            <option value="inprogress">In Progress</option>
+            <option value="review">Review</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- dates row -->
+      <p class="section-title">Dates</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Due date <span>(optional)</span></label>
+          <input type="date" name="due_date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Deploy date <span>(optional)</span></label>
+          <input type="date" name="deploy_date" class="form-control">
+        </div>
+      </div>
+
+      <!-- deploy platform -->
+      <div class="form-group">
+        <label>Deploy platform <span>(optional)</span></label>
+        <div class="platform-pills">
+          <span class="platform-none selected" id="platformNone" onclick="selectPlatform('', this)">None</span>
+          <label class="platform-pill" onclick="selectPlatform('website', this)">
+            🌐 Website
+            <input type="radio" name="deploy_platform" value="website">
+          </label>
+          <label class="platform-pill" onclick="selectPlatform('linkedin', this)">
+            💼 LinkedIn
+            <input type="radio" name="deploy_platform" value="linkedin">
+          </label>
+          <label class="platform-pill" onclick="selectPlatform('meta', this)">
+            📘 Meta
+            <input type="radio" name="deploy_platform" value="meta">
+          </label>
+          <label class="platform-pill" onclick="selectPlatform('youtube', this)">
+            ▶️ YouTube
+            <input type="radio" name="deploy_platform" value="youtube">
+          </label>
+        </div>
+        <input type="hidden" name="deploy_platform" id="deployPlatformValue" value="">
+      </div>
+
+      <!-- task type pills -->
+      <p class="section-title">Task type</p>
+      <div class="form-group">
+        <div class="type-grid" id="typeGrid">
+          {% for val, label in task_types %}
+          <label class="type-pill {% if forloop.first %}selected{% endif %}" onclick="selectType('{{ val }}', this)">
+            <span class="type-icon">
+              {% if val == 'article' %}📝
+              {% elif val == 'seo' %}🔍
+              {% elif val == 'social' %}📱
+              {% elif val == 'video_shoot' %}🎬
+              {% elif val == 'video_edit' %}✂️
+              {% elif val == 'video_upload' %}⬆️
+              {% elif val == 'reel' %}🎞️
+              {% elif val == 'youtube' %}▶️
+              {% elif val == 'calendar' %}📅
+              {% else %}⚙️
+              {% endif %}
+            </span>
+            {{ label }}
+            <input type="radio" name="task_type" value="{{ val }}" {% if forloop.first %}checked{% endif %}>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- article attachment panel -->
+      <div class="attach-panel" id="panel-article">
+        <p class="section-title">Link articles <span style="font-weight:400; text-transform:none; font-size:12px;">(optional)</span></p>
+        <div class="form-group">
+          <label>Search articles</label>
+          <div class="search-wrap">
+            <input type="text" id="articleSearchInput" class="form-control" placeholder="Type article title…" autocomplete="off">
+            <div class="search-results" id="articleResults"></div>
+          </div>
+          <div class="attached-items" id="attachedArticles"></div>
+          <div id="article_ids"></div>
+        </div>
+      </div>
+
+      <!-- BSTV attachment panel -->
+      <div class="attach-panel" id="panel-bstv">
+        <p class="section-title">Link videos <span style="font-weight:400; text-transform:none; font-size:12px;">(optional)</span></p>
+        <div class="form-group">
+          <label>Search BSTV</label>
+          <div class="search-wrap">
+            <input type="text" id="bstvSearchInput" class="form-control" placeholder="Type video title…" autocomplete="off">
+            <div class="search-results" id="bstvResults"></div>
+          </div>
+          <div class="attached-items" id="attachedBstvs"></div>
+          <div id="bstv_ids"></div>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button type="submit" class="btn-submit">Create task</button>
+        <a href="{% if selected_project %}/project_detail/{{ selected_project.id }}{% else %}/tasks{% endif %}" class="btn-cancel">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script>
+  // ── deploy platform ──────────────────────────────────────────────
+  function selectPlatform(val, el) {
+    document.querySelectorAll('.platform-pill').forEach(p => p.classList.remove('selected'));
+    document.getElementById('platformNone').classList.remove('selected');
+    el.classList.add('selected');
+    document.getElementById('deployPlatformValue').value = val;
+    if (val) el.querySelector('input[type=radio]').checked = true;
+  }
+
+  // ── task type → show/hide attachment panels ──────────────────────
+  const ARTICLE_TYPES = ['article', 'seo'];
+  const BSTV_TYPES    = ['video_shoot','video_edit','video_upload','reel','youtube','social'];
+
+  function selectType(val, el) {
+    document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input[type=radio]').checked = true;
+    document.getElementById('panel-article').classList.toggle('visible', ARTICLE_TYPES.includes(val));
+    document.getElementById('panel-bstv').classList.toggle('visible', BSTV_TYPES.includes(val));
+  }
+
+  const defaultType = document.querySelector('.type-pill.selected input').value;
+  document.getElementById('panel-article').classList.toggle('visible', ARTICLE_TYPES.includes(defaultType));
+  document.getElementById('panel-bstv').classList.toggle('visible', BSTV_TYPES.includes(defaultType));
+
+  // ── assignee hint ────────────────────────────────────────────────
+  function updateHint(sel) {
+    const hint = document.getElementById('assigneeHint');
+    const opt  = sel.options[sel.selectedIndex];
+    if (!opt.value) { hint.className = 'assignee-hint'; hint.textContent = 'Select an assignee to see their role.'; return; }
+    const desig = opt.dataset.designation || '';
+    const lower = desig.toLowerCase();
+    if (lower.includes('editor') || lower.includes('writer')) {
+      hint.className = 'assignee-hint hint-editorial';
+      hint.textContent = `${desig} — editorial tasks and article assignments recommended.`;
+    } else if (lower.includes('reel') || lower.includes('video') || lower.includes('content')) {
+      hint.className = 'assignee-hint hint-video';
+      hint.textContent = `${desig} — video and reel tasks recommended.`;
+    } else if (lower.includes('social') || lower.includes('media')) {
+      hint.className = 'assignee-hint hint-social';
+      hint.textContent = `${desig} — social media tasks recommended.`;
+    } else {
+      hint.className = 'assignee-hint';
+      hint.textContent = desig;
+    }
+  }
+
+  // ── article search ───────────────────────────────────────────────
+  const artAttached = {};
+  makeSearch(
+    document.getElementById('articleSearchInput'),
+    document.getElementById('articleResults'),
+    document.getElementById('attachedArticles'),
+    document.getElementById('article_ids'),
+    '/ajax/search_articles/',
+    artAttached, 'articles', 'tag-article'
+  );
+
+  // ── BSTV search ──────────────────────────────────────────────────
+  const bstvAttached = {};
+  makeSearch(
+    document.getElementById('bstvSearchInput'),
+    document.getElementById('bstvResults'),
+    document.getElementById('attachedBstvs'),
+    document.getElementById('bstv_ids'),
+    '/ajax/search_bstv_for_task/',
+    bstvAttached, 'bstvs', 'tag-bstv'
+  );
+
+  function makeSearch(input, results, tagsWrap, idsWrap, url, store, fieldName, tagClass) {
+    input.addEventListener('input', function() {
+      const term = this.value.trim();
+      if (term.length < 2) { results.style.display = 'none'; return; }
+      fetch(`${url}?term=${encodeURIComponent(term)}`)
+        .then(r => r.json())
+        .then(data => {
+          results.innerHTML = '';
+          const filtered = data.filter(i => !store[i.value]);
+          if (!filtered.length) { results.style.display = 'none'; return; }
+          filtered.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'search-result-item';
+            div.textContent = item.label;
+            div.onclick = () => attach(item.value, item.label, input, results, tagsWrap, idsWrap, store, fieldName, tagClass);
+            results.appendChild(div);
+          });
+          results.style.display = 'block';
+        });
+    });
+    document.addEventListener('click', e => { if (!input.contains(e.target)) results.style.display = 'none'; });
+  }
+
+  function attach(id, label, input, results, tagsWrap, idsWrap, store, fieldName, tagClass) {
+    if (store[id]) return;
+    store[id] = label;
+    results.style.display = 'none';
+    input.value = '';
+    const shortLabel = label.length > 45 ? label.substring(0, 45) + '…' : label;
+    const tag = document.createElement('span');
+    tag.className = `attached-tag ${tagClass}`;
+    tag.id = `tag_${fieldName}_${id}`;
+    tag.innerHTML = `${shortLabel} <button type="button" onclick="detach(${id},'${fieldName}',this.closest('.attached-tag'))">&times;</button>`;
+    tagsWrap.appendChild(tag);
+    const inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = fieldName; inp.value = id; inp.id = `inp_${fieldName}_${id}`;
+    idsWrap.appendChild(inp);
+  }
+
+  function detach(id, fieldName, tag) {
+    tag.remove();
+    const inp = document.getElementById(`inp_${fieldName}_${id}`);
+    if (inp) inp.remove();
+  }
+</script>
+{% endblock 'script' %}

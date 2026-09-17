@@ -1,0 +1,132 @@
+{% extends "main/base.html" %}
+{% block 'title' %}{{tags.title}}{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="{{tags.meta_description}}">
+<meta name="keywords" content="{{tags.meta_keywords}}">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/tags/{{tags.slug}}">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/tags/{{tags.slug}}">
+<meta property="og:title" content="{{tags.meta_title}}">
+<meta property="og:description" content="{{tags.meta_description}}">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/tags/{{tags.slug}}">
+<meta name="twitter:title" content="{{tags.meta_title}}">
+<meta name="twitter:description" content="{{tags.meta_description}}">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema.org JSON-LD for Daily News Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "{{tags.meta_title}}",
+  "description": "{{tags.meta_description}}",
+  "url": "https://bigstorynetwork.com/tags/{{tags.slug}}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Vector.png"
+    }
+  },
+  "image": "https://bigstorynetwork.com/static/main/Brandplate.webp",
+  "about": {
+    "@type": "ItemList",
+    "name": "{{tags.meta_title}}",
+    "description": "{{tags.meta_description}}"
+  }
+}
+</script>
+
+{% endblock 'meta' %}
+{% block 'css' %}
+<style>
+    .section-title {
+font-size: 3rem;
+font-weight: 700;
+color: #d71920;
+}
+.news-card img {
+width: 100%;
+border-radius: 4px;
+}
+.news-category {
+font-weight: 700;
+color: #d71920;
+margin-top: 10px;
+}
+.news-title {
+font-size: 1.4rem;
+font-weight: 700;
+line-height: 1.2;
+}
+</style>
+{% endblock 'css' %}
+{% block 'body' %}
+  <div class="container py-4">
+<h1 class="section-title mb-4 d-flex align-items-center gap-2">
+<img src="/static/main/Vector.png" alt="BIGSTORY Networks" style="width:50px; height:auto;" />
+{{tags.title}}
+</h1>
+<div class="container py-4" style="border-top: solid #d60000 2px;">
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    {% for i in page_obj %}
+    <div class="col">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <div class="card border-0">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+          <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+        </div>
+      </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  <br>
+  <div class="d-flex justify-content-between mt-4">
+
+    {% if page_obj.has_previous %}
+      <a href="https://bigstorynetwork.com/tags/{{tags.slug}}?page={{page_obj.previous_page_number}}" class="btn btn-dark">
+        ← Previous
+      </a>
+    {% else %}
+      <span></span>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+      <a href="https://bigstorynetwork.com/tags/{{tags.slug}}?page={{page_obj.next_page_number}}" class="btn btn-dark">
+        Next →
+      </a>
+    {% endif %}
+
+</div>
+</div>
+</div>
+{% endblock 'body' %}
+{% block 'script' %}
+  
+{% endblock 'script' %}

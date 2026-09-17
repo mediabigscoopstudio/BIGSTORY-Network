@@ -1,0 +1,99 @@
+    /* Justin Hero Section - Minimal */
+.justin-hero-section img {
+  object-fit: cover;
+}
+/* Sidebar Title */
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 2px solid #d60000;
+  padding-top: 6px;
+}
+.sidebar-title span {
+  background: #d60000;
+  color: #fff;
+  padding: 2px 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+/* Mini story card */
+.mini-story-img {
+  width: 80px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Author box */
+.author-box {
+  background: #e53935;
+  color: white;
+}
+.author-img {
+  max-width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.author-text {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+#content_section img
+{
+    width: 100%;
+}
+#content_section 
+{
+    line-height: 1.6;
+}
+.socials
+{
+    background-color: #e5b900;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    padding: auto;
+    font-size: 20px;
+    border-radius: 50%;
+    
+}
+.socials a 
+{
+    text-decoration: none;
+    color: #d60000;
+}
+.recent-card img 
+{
+    width: 100%;
+}
+.bigstory-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+}
+.bigstory-tag img {
+  width: 24px;
+  height: 24px;
+}
+
+
+.bigstory-tag span {
+  background: #d60000;
+  color: #fff;
+  padding: 2px 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+@media (max-width: 991px) {
+  .justin-hero-section h1 {
+    font-size: 1.6rem;
+  }
+}

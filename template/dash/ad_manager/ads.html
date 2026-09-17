@@ -1,0 +1,54 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Advertisement Management{% endblock 'title' %}
+{% block 'css' %}{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid">
+    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+        <div class="flex-grow-1">
+            <h4 class="fs-18 fw-semibold m-0">Advertisement</h4>
+        </div>
+        <a aria-label="Add Image" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Add Advertisement" href="/add_ad">Add Advertisement</a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table datatable" id="datatable_1">
+                            <thead>
+                              <tr>
+                                <th>Image</th>
+                                <th>Type</th>
+                                <th>Url</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in adv %}
+                                <tr>
+                                    <td class="ps-0">
+                                        <img src="/media/{{i.image}}" style="height: 80px; max-width: 100px;" alt="{{i.alt_text}}">
+                                    </td>
+                                    <td>
+                                       <span>{{i.type}}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{i.url}}" target="_blank">Link Redirect</a>
+                                    </td>
+                                    <td>
+                                        <a aria-label="anchor" class="btn btn-sm bg-success-subtle" data-bs-toggle="tooltip" data-bs-original-title="Edit Image" href="/edit_ad/{{i.id}}">Edit</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete Image" href="/delete_ad/{{i.id}}">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

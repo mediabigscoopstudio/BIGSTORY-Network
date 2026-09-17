@@ -1,0 +1,163 @@
+{% extends "main/base.html" %}
+{% block 'title' %}{{author.name}} | BIGSTORY Network{% endblock 'title' %}
+{% block 'meta' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "{{author.name|escapejs}}",
+    "jobTitle": "{{author.designation|escapejs}}",
+    "description": "{{author.description|truncatechars:200|escapejs}}",
+    "image": "https://bigstorynetwork.com{{author.image.url}}",
+    "url": "https://bigstorynetwork.com/author/{{author.slug}}",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "BIGSTORY Network",
+      "url": "https://bigstorynetwork.com"
+    }
+    {% if author.linkedin_url or author.twitter_url or author.instagram_url or author.facebook_url %}
+    ,"sameAs": [
+      {% if author.linkedin_url %}"{{author.linkedin_url}}"{% if author.twitter_url or author.instagram_url or author.facebook_url %},{% endif %}{% endif %}
+      {% if author.twitter_url %}"{{author.twitter_url}}"{% if author.instagram_url or author.facebook_url %},{% endif %}{% endif %}
+      {% if author.instagram_url %}"{{author.instagram_url}}"{% if author.facebook_url %},{% endif %}{% endif %}
+      {% if author.facebook_url %}"{{author.facebook_url}}"{% endif %}
+    ]
+    {% endif %}
+  }
+}
+</script>
+{% endblock 'meta' %}
+{% block 'css' %}
+<link rel="stylesheet" href="/static/main/css/justin.css">
+<link rel="stylesheet" href="/static/main/css/index.css">
+<link rel="stylesheet" href="/static/main/css/content.css">
+<style>
+  .global-news-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.bigstory-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+}
+.bigstory-tag img {
+  width: 24px;
+  height: 24px;
+}
+.text-levrage
+{
+  color: #333;
+}
+.text-levrage :is(h1, h2, h3, h4, h5, h6) {
+    color: #d60000;
+    font-family: 'Lato', sans-serif;
+}
+.text-levrage p
+{
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+}
+.text-levrage a
+{
+  color: #d60000;
+  text-decoration: underline solid #F4C430;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+.text-levrage img 
+{
+  max-height: 400px;
+  width: 100%;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;   /* Allows tags to go to next line */
+  gap: 8px;          /* Space between tags */
+}
+
+.tag {
+  background-color: red;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  white-space: nowrap; /* Remove this if you want tags to break inside a word */
+}
+</style>
+{% endblock 'css' %}
+{% block 'body' %}
+
+<div class="container py-5">
+
+          <!-- ✅ Author Section -->
+<div class="author-box d-flex flex-column flex-md-row align-items-center gap-3 p-3 rounded mt-4" onclick="location.href='/author/{{author.slug}}'">
+    <img src="/media/{{author.image}}" alt="{{author.name}}" class="author-img">
+
+    <div class="flex-grow-1 text-center text-md-start">
+        <h5 class="fw-bold mb-1">
+            {{author.name}}
+            <span class="badge bg-warning text-dark ms-2">{{author.designation}}</span>
+        </h5>
+
+        <p class="author-text mb-2">
+            {{author.description}}
+        </p>
+
+        <div class="d-flex gap-3 justify-content-center justify-content-md-start">
+            {% if author.facebook_url %}
+                <div class="socials"><a href="{{author.facebook_url}}" target="_blank"><i class="bi bi-facebook"></i></a></div>
+            {% endif %}
+            {% if author.instagram_url %}
+                <div class="socials"><a href="{{author.instagram_url}}" target="_blank"><i class="bi bi-instagram"></i></a></div>
+            {% endif %}
+            {% if author.linkedin_url %}
+                <div class="socials"><a href="{{author.linkedin_url}}" target="_blank"><i class="bi bi-linkedin"></i></a></div>
+            {% endif %}
+            {% if author.twitter_url %}
+                <div class="socials"><a href="{{author.twitter_url}}" target="_blank"><i class="bi bi-twitter"></i></a></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<br>
+    <!-- Articles Section -->
+    <h3 class="mb-4">Articles by {{ author.name }}</h3>
+
+    <div class="container py-4" style="border-top: solid #d60000 2px;">
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    
+    {% for i in articles %}
+      <div class="col">
+      <div class="card border-0">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+          <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+        </div>
+      </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+</div>
+
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

@@ -1,0 +1,333 @@
+{% extends "editor/base.html" %}
+{% block 'title' %}My Dashboard — {{ author.name }}{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .dash-wrap { padding: 24px 28px 40px; }
+
+  /* greeting */
+  .greeting { margin-bottom: 24px; }
+  .greeting h2 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin: 0 0 3px; }
+  .greeting p  { font-size: 13px; color: #999; margin: 0; }
+
+  /* summary cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .summary-card {
+    background: #fff; border-radius: 10px; padding: 16px 18px;
+    border: 1px solid #f0f0f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .summary-card .num { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .summary-card .lbl { font-size: 11px; color: #aaa; font-weight: 500; }
+  .s-total      .num { color: #1a1a2e; }
+  .s-todo       .num { color: #555; }
+  .s-inprogress .num { color: #b26a00; }
+  .s-review     .num { color: #5e35b1; }
+  .s-done       .num { color: #0e7a4e; }
+  .s-overdue    .num { color: #c0392b; }
+
+  /* overdue banner */
+  .overdue-banner {
+    background: #fdecea; border: 1px solid #fca5a5; border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 22px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .overdue-banner svg { flex-shrink: 0; margin-top: 1px; color: #c0392b; }
+  .overdue-banner h4  { font-size: 13px; font-weight: 700; color: #c0392b; margin: 0 0 8px; }
+  .overdue-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+  .overdue-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; }
+  .overdue-item a { color: #c0392b; font-weight: 600; text-decoration: none; }
+  .overdue-item a:hover { text-decoration: underline; }
+  .overdue-meta { font-size: 11px; color: #bbb; margin-left: auto; white-space: nowrap; }
+  .project-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* two col */
+  .two-col { display: grid; grid-template-columns: 1fr 300px; gap: 18px; align-items: start; }
+  @media (max-width: 880px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* section heading */
+  .section-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .section-row h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #aaa; margin: 0; }
+  .section-row a  { font-size: 13px; color: #888; text-decoration: none; }
+  .section-row a:hover { color: #1a1a2e; }
+
+  /* task list */
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .task-item {
+    background: #fff; border-radius: 10px; padding: 13px 16px;
+    border: 1px solid #f0f0f0; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: inherit;
+    transition: box-shadow 0.15s, transform 0.1s;
+  }
+  .task-item:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .task-accent { width: 4px; height: 40px; border-radius: 2px; flex-shrink: 0; }
+  .task-body { flex: 1; min-width: 0; }
+  .task-title { font-size: 13px; font-weight: 600; color: #1a1a2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .task-meta  { font-size: 11px; color: #aaa; margin-top: 3px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .task-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+
+  .badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; }
+  .badge-todo       { background: #f0f0f0; color: #555; }
+  .badge-inprogress { background: #fff3e0; color: #b26a00; }
+  .badge-review     { background: #ede7fe; color: #5e35b1; }
+  .badge-done       { background: #e6f9f1; color: #0e7a4e; }
+  .badge-low        { background: #f0f0f0; color: #666; }
+  .badge-medium     { background: #fff3e0; color: #b26a00; }
+  .badge-high       { background: #fdecea; color: #c0392b; }
+  .badge-urgent     { background: #c0392b; color: #fff; }
+  .due-date { font-size: 11px; color: #bbb; }
+  .due-overdue { color: #c0392b; font-weight: 600; }
+
+  /* side card */
+  .side-card {
+    background: #fff; border-radius: 12px; padding: 18px 20px;
+    border: 1px solid #f0f0f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 16px;
+  }
+  .side-card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #bbb; margin-bottom: 14px; }
+
+  /* quick actions */
+  .quick-actions { display: flex; flex-direction: column; gap: 8px; }
+  .qa-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 13px; border-radius: 8px;
+    border: 1.5px solid #f0f0f0; background: #fafafa;
+    color: #333; font-size: 13px; font-weight: 500;
+    text-decoration: none; transition: all 0.15s;
+  }
+  .qa-btn:hover { border-color: #1a1a2e; background: #1a1a2e; color: #fff; }
+  .qa-btn:hover svg { stroke: #fff; }
+  .qa-btn svg { flex-shrink: 0; stroke: #aaa; transition: stroke 0.15s; }
+
+  /* projects mini list */
+  .project-mini-list { display: flex; flex-direction: column; gap: 8px; }
+  .project-mini-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px;
+    border: 1px solid #f0f0f0; background: #fafafa;
+    text-decoration: none; color: inherit; transition: all 0.15s;
+  }
+  .project-mini-item:hover { border-color: #aaa; background: #f0f0f0; }
+  .project-mini-accent { width: 4px; height: 32px; border-radius: 2px; flex-shrink: 0; }
+  .project-mini-name { font-size: 13px; font-weight: 600; color: #1a1a2e; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .project-mini-count { font-size: 11px; color: #aaa; white-space: nowrap; }
+
+  /* heatmap */
+  .heatmap-wrap { overflow-x: auto; }
+  .heatmap-grid { display: flex; gap: 3px; min-width: 500px; }
+  .heatmap-week { display: flex; flex-direction: column; gap: 3px; }
+  .heatmap-cell { width: 12px; height: 12px; border-radius: 2px; cursor: default; transition: transform 0.1s; }
+  .heatmap-cell:hover { transform: scale(1.3); }
+  .level-0 { background: #f0f0f0; }
+  .level-1 { background: #CECBF6; }
+  .level-2 { background: #AFA9EC; }
+  .level-3 { background: #7F77DD; }
+  .level-4 { background: #534AB7; }
+  .heatmap-legend { display: flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 11px; color: #bbb; }
+  .legend-cell { width: 12px; height: 12px; border-radius: 2px; }
+
+  .empty-tasks { text-align: center; padding: 30px 0; color: #ccc; font-size: 13px; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="dash-wrap">
+
+  <!-- greeting -->
+  <div class="greeting">
+    <h2>Hey, {{ author.name }}</h2>
+    <p>{{ author.designation }} &middot; Here's your work for today.</p>
+  </div>
+
+  <!-- summary cards -->
+  <div class="summary-grid">
+    <div class="summary-card s-total">
+      <div class="num">{{ task_summary.total }}</div>
+      <div class="lbl">My tasks</div>
+    </div>
+    <div class="summary-card s-todo">
+      <div class="num">{{ task_summary.todo }}</div>
+      <div class="lbl">To do</div>
+    </div>
+    <div class="summary-card s-inprogress">
+      <div class="num">{{ task_summary.inprogress }}</div>
+      <div class="lbl">In progress</div>
+    </div>
+    <div class="summary-card s-review">
+      <div class="num">{{ task_summary.review }}</div>
+      <div class="lbl">In review</div>
+    </div>
+    <div class="summary-card s-done">
+      <div class="num">{{ task_summary.done }}</div>
+      <div class="lbl">Done</div>
+    </div>
+    <div class="summary-card s-overdue">
+      <div class="num">{{ task_summary.overdue }}</div>
+      <div class="lbl">Overdue</div>
+    </div>
+  </div>
+
+  <!-- overdue banner -->
+  {% if overdue_tasks %}
+  <div class="overdue-banner">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+      <h4>{{ task_summary.overdue }} task{{ task_summary.overdue|pluralize }} past due date</h4>
+      <ul class="overdue-list">
+        {% for task in overdue_tasks %}
+        <li class="overdue-item">
+          <span class="project-dot" style="background: {{ task.project.color_hex }};"></span>
+          <a href="/task_detail/{{ task.id }}">{{ task.title|truncatechars:50 }}</a>
+          <span class="overdue-meta">{{ task.project.name }} &middot; due {{ task.due_date|date:"M j" }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="two-col">
+
+    <!-- LEFT: my active tasks -->
+    <div>
+      <div class="section-row">
+        <h3>My active tasks</h3>
+        <a href="/my_tasks">View all →</a>
+      </div>
+
+      {% if recent_tasks %}
+      <div class="task-list">
+        {% for task in recent_tasks %}
+        <a href="/task_detail/{{ task.id }}" class="task-item">
+          <div class="task-accent" style="background: {{ task.project.color_hex }};"></div>
+          <div class="task-body">
+            <div class="task-title">{{ task.title }}</div>
+            <div class="task-meta">
+              <span>{{ task.project.name }}</span>
+              <span>{{ task.get_task_type_display }}</span>
+            </div>
+          </div>
+          <div class="task-right">
+            <span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span>
+            {% if task.due_date %}
+            <span class="due-date {% if task.is_overdue %}due-overdue{% endif %}">
+              {{ task.due_date|date:"M j" }}
+            </span>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-tasks">No active tasks assigned to you.</div>
+      {% endif %}
+
+      <!-- heatmap -->
+      <div style="margin-top: 20px;">
+        <div class="section-row">
+          <h3>My activity — last 90 days</h3>
+        </div>
+        <div class="side-card" style="margin-bottom:0;">
+          <div class="heatmap-wrap">
+            <div class="heatmap-grid" id="heatmapGrid"></div>
+          </div>
+          <div class="heatmap-legend">
+            <span>Less</span>
+            <div class="legend-cell level-0"></div>
+            <div class="legend-cell level-1"></div>
+            <div class="legend-cell level-2"></div>
+            <div class="legend-cell level-3"></div>
+            <div class="legend-cell level-4"></div>
+            <span>More</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+
+      <!-- quick actions -->
+      <div class="side-card">
+        <div class="side-card-title">Quick actions</div>
+        <div class="quick-actions">
+          <a href="/my_tasks" class="qa-btn">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            All my tasks
+          </a>
+          <a href="/my_projects" class="qa-btn">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+            My projects
+          </a>
+          <a href="/add_article" class="qa-btn">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            Write article
+          </a>
+          <a href="/articles" class="qa-btn">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            My articles
+          </a>
+          <a href="/profile" class="qa-btn">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            My profile
+          </a>
+        </div>
+      </div>
+
+      <!-- my projects -->
+      {% if my_projects %}
+      <div class="side-card">
+        <div class="side-card-title">My projects</div>
+        <div class="project-mini-list">
+          {% for project in my_projects %}
+          <a href="/project_tasks/{{ project.id }}" class="project-mini-item">
+            <div class="project-mini-accent" style="background: {{ project.color_hex }};"></div>
+            <span class="project-mini-name">{{ project.name }}</span>
+            <span class="project-mini-count">
+              {{ project.tasks.filter.count }} tasks
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script>
+  const heatmapData = [
+    {% for day in heatmap %}
+    { date: "{{ day.date }}", count: {{ day.count }}, level: {{ day.level }} }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  function buildHeatmap() {
+    const grid = document.getElementById('heatmapGrid');
+    let week = null;
+    heatmapData.forEach((day, i) => {
+      if (i % 7 === 0) {
+        week = document.createElement('div');
+        week.className = 'heatmap-week';
+        grid.appendChild(week);
+      }
+      const cell = document.createElement('div');
+      cell.className = `heatmap-cell level-${day.level}`;
+      cell.title = `${day.date}: ${day.count} action${day.count !== 1 ? 's' : ''}`;
+      week.appendChild(cell);
+    });
+  }
+  buildHeatmap();
+</script>
+{% endblock 'script' %}

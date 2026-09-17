@@ -1,0 +1,121 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}{{profile.name}}{% endblock 'title' %}
+{% block 'css' %}{% endblock 'css' %}
+{% block 'body' %}
+<div class="content">
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+        <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+            <div class="flex-grow-1">
+                <h4 class="fs-18 fw-semibold m-0">Profile</h4>
+            </div>
+
+            <a aria-label="Add Editor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Add Editor" href="/edit_editor/{{profile.id}}">Edit Editor</a>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="align-items-center">
+                            
+                            <div class="hando-main-sections">
+                                <div class="hando-profile-main">
+                                    <img src="/media/{{profile.image}}" class="rounded-circle img-fluid avatar-xxl img-thumbnail float-start" alt="image profile">
+                                </div>
+
+                                <div class="overflow-hidden ms-md-4 ms-0">
+                                    <h4 class="m-0 text-dark fs-20 mt-2 mt-md-0">{{profile.name}}</h4>
+                                    <p class="my-1 text-muted fs-16">{{profile.designation}}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body pt-0">
+                        <div class="tab-content text-muted">
+                            <div class="tab-pane active show pt-4" id="profile_about" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-md-6 mb-4">
+                                        <div class="">
+                                            <h5 class="fs-16 text-dark fw-semibold mb-3 text-capitalize">About {{profile.name}}</h5>
+                                            <p>{{profile.description}}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-md-6 mb-4">
+                                        <h5 class="fs-16 text-dark fw-semibold mb-3 text-capitalize">Contact Details</h5>
+                                        
+                                        <div class="row">
+
+                                            <div class="col-md-4 col-sm-4 col-lg-4 mb-3">
+                                                <div class="profile-email mb-md-2">
+                                                    <h6 class="text-uppercase fs-13">Email Addess</h6>
+                                                    <a href="#" class="text-primary fs-14 text-decoration-underline">{{profile.email}}</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-sm-4 col-lg-4 mb-3">
+                                                <div class="profile-email">
+                                                    <h6 class="text-uppercase fs-13">Social Media</h6>
+                                                    <ul class="social-list list-inline mt-0 mb-0">
+                                                        <li class="list-inline-item">
+                                                            <a href="{{profile.facebook_url}}" class="social-item border-primary text-primary justify-content-center align-content-center"><i class="mdi mdi-facebook fs-14"></i></a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a href="{{profile.instagram_url}}" class="social-item border-danger text-danger justify-content-center align-content-center"><i class="mdi mdi-instagram fs-14"></i></a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a href="{{profile.linkedin_url}}" class="social-item border-info text-info justify-content-center align-content-center"><i class="mdi mdi-linkedin fs-14"></i></a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a href="{{profile.twitter_url}}" class="social-item border-secondary text-secondary justify-content-center align-content-center"><i class="mdi mdi-twitter fs-14"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 col-lg-4 mb-3">
+                                                <div class="profile-email">
+                                                    <h6 class="text-uppercase fs-13">Location</h6>
+                                                    <a href="#" class="fs-14">{{profile.location}}</a>
+                                                </div>
+                                            </div>
+                                        </div>            
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="">
+                                            <h5 class="fs-16 text-dark fw-semibold mb-3 text-capitalize">Articles</h5>
+                                        </div>
+
+                                        <div class="row">
+                                            
+                                        </div>
+                                    </div><!-- end project -->
+
+                                </div>
+
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> 
+    <!-- container-fluid -->
+</div> 
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

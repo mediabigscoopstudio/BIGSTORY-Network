@@ -1,0 +1,348 @@
+{% extends "main/base.html" %}
+{% block 'title' %}Just In! — Daily News by BIGSTORY Network{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="Stay updated with BIGSTORY Network’s 'Just In!' — fast, sharp, daily news updates covering India, world affairs, geopolitics, business, tech, and everything that matters right now.">
+<meta name="keywords" content="Just In news, daily news India, breaking news India, BIGSTORY Network news, Indian latest updates, global news India, youth news, real-time news India, trending news today">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/just-in">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/just-in">
+<meta property="og:title" content="Just In! — Daily News by BIGSTORY Network">
+<meta property="og:description" content="Get the latest happenings with 'Just In!' — your daily dose of fast, clean, Indian perspective news on geopolitics, business, world events, economy, and more.">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/just-in">
+<meta name="twitter:title" content="Just In! — Daily News Updates">
+<meta name="twitter:description" content="BIGSTORY Network’s daily news feed — sharp, simple updates on what’s happening in India and around the world, right now.">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema.org JSON-LD for Daily News Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Just In! — Daily News by BIGSTORY Network",
+  "description": "Just In! is BIGSTORY Network’s daily news section featuring fast, concise updates on India, the world, geopolitics, economy, tech, and trending stories.",
+  "url": "https://bigstorynetwork.com/just-in",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Vector.png"
+    }
+  },
+  "image": "https://bigstorynetwork.com/static/main/Brandplate.webp",
+  "about": {
+    "@type": "ItemList",
+    "name": "Daily News Stories",
+    "description": "A feed of daily news articles covering global and Indian headlines."
+  }
+}
+</script>
+
+{% endblock 'meta' %}
+{% block 'css' %}
+<link rel="stylesheet" href="/static/main/css/justin.css">
+<link rel="stylesheet" href="/static/main/css/index.css">
+{% endblock 'css' %}
+
+{% block 'body' %}
+
+<!-- ===========================
+   TRENDING NOW SECTION
+=========================== -->
+<div class="container py-4">
+  <div class="main-section">
+    <!-- Trending Image -->
+    <div class="trending-column">
+      <img src="/static/main/Trending.webp" alt="Trending Image">
+    </div>
+    <!-- News Grid -->
+    <div class="news-section">
+      <div class="news-grid">
+      {% for i in selected_trending_articles %}
+        <div class="news-card">
+          <img src="/media/{{i.thumbnail_image}}" alt="{{i.title}}">
+          <div class="news-content">
+            <h5>{{i.title}}</h5>
+            <div class="news-meta">
+              <a href="/category/{{i.category.slug}}" style="text-decoration: none; color: #d60000;">
+                <span class="text-danger fw-bold">{{i.category.title}}</span>
+              </a>
+              <span class="ms-1">{{i.created_at}}</span>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FEATURED CONTENT -->
+<div class="container py-2" style="border-top: solid #d60000 2px;">
+    <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="" >
+        <span>Exclusive Content</span>
+      </div>
+      <br>
+  <div class="row g-4">
+{% if latest %}
+
+<div class="col-lg-4 col-12">
+  <a href="/content/{{latest.slug}}" style="color: black; text-decoration: none;">
+  <div class="d-flex flex-column gap-3">
+    <div class="global-news-card flex-column">
+      <img src="/media/{{ latest.thumbnail_image }}" alt="{{ latest.title }}">
+      <a href="/category/{{latest.category.slug}}" style="color: black; text-decoration: none;">
+      <div class="news-category">
+        {{ latest.category.title }}
+      </div>
+      </a>
+
+      <div class="news-title fs-2">
+        {{ latest.title }}
+      </div>
+
+      <p class="text-muted mb-1" style="font-size:0.95rem;">
+        {{ latest.description|truncatewords:30 }}
+      </p>
+
+      <div class="news-author">
+        {{ latest.author.name }}
+      </div>
+    </div>
+  </div>
+  </a>
+</div>
+{% endif %}
+{% if second_latest %}
+
+<div class="col-lg-4 col-12">
+  <a href="/content/{{second_latest.slug}}" style="color: black; text-decoration: none;">
+  <div class="d-flex flex-column gap-3">
+    <div class="global-news-card flex-column">
+      <img src="{{ second_latest.thumbnail_image.url }}" alt="{{ second_latest.title }}">
+      <a href="/category/{{second_latest.category.slug}}" style="color:black; text-decoration: none;">
+      <div class="news-category">
+        {{ second_latest.category.title }}
+      </div>
+      </a>
+      <a href="/content/{{second_latest.slug}}" style="color: black; text-decoration: none;">
+      <div class="news-title fs-2">
+        {{ second_latest.title }}
+      </div>
+      </a>
+      <a href="/content/{{second_latest.slug}}" style="color: black; text-decoration: none;">
+      <p class="text-muted mb-1" style="font-size:0.95rem;">
+        {{ second_latest.description|truncatewords:30 }}
+      </p>
+      </a>
+
+      <div class="news-author">
+        {{ second_latest.author.name }}
+      </div>
+    </div>
+  </div>
+  </a>
+</div>
+{% endif %}
+
+    <!-- ===== Column 3 (Content Cards + Reel) ===== -->
+    <div class="col-lg-4 col-12">
+      <div class="d-flex flex-column gap-3">
+        {% for i in ex2_reels %}
+          <div class="mini-content-card d-flex align-items-start gap-2">
+          <img src="/media/{{i.thumbnail_image}}" class="rounded" style="width:90px; height:60px; object-fit:cover;" alt="{{i.title}}">
+          <div>
+            <span class="fw-bold text-danger d-block small">{{i.category.title}}</span>
+            <span class="fw-bold small lh-sm d-block">{{i.title}}</span>
+          </div>
+        </div>
+        {% endfor %}
+
+        <div class="mini-content-card d-flex align-items-start gap-2">
+          <a href="https://www.instagram.com/bigstorynetwork/">
+          <img src="/static/main/Ad_Block.webp" alt="" style="width: 100%; border-radius: 10px;">
+          </a>
+        </div>
+
+        
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Content List -->
+<div class="container py-4" style="border-top: solid #d60000 2px;">
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    {% for i in page_obj %}
+    <div class="col">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <div class="card border-0">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+          <a href="/category/{{i.category.slug}}" style="text-decoration: none; color: #d60000;">
+          <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+          </a>
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+        </div>
+      </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  <br>
+  <div class="d-flex justify-content-between mt-4">
+
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-dark">
+        ← Previous
+      </a>
+    {% else %}
+      <span></span>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="btn btn-dark">
+        Next →
+      </a>
+    {% endif %}
+
+</div>
+</div>
+<br>
+    <!-- REELS SECTION -->
+<div class="container py-4">
+  <div class="row align-items-center">
+
+    <!-- Catch Up Section (Left on Desktop, Top on Mobile) -->
+    <div class="col-lg-4 col-12 mb-3 mb-lg-0">
+      <img src="/static/main/catchup.webp" class="img-fluid w-100" alt="Catch Up with our best">
+    </div>
+
+    <!-- Reels Section -->
+    <div class="col-lg-8 col-12">
+      <div class="row row-cols-3 g-3">
+        {% for i in reel_highlights %}
+          <div class="col">
+          <a href="{{i.link}}" target="_blank">
+            <img src="/media/{{i.thumbnail_image}}" class="img-fluid w-100 rounded" alt="{{i.title}}">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+</div>
+<!-- BIGSTORY FEATURE SECTION -->
+<div class="container py-2 bigstory-feature">
+    <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="" >
+        <span>Exclusive Content</span>
+      </div>
+      <br>
+  <div class="bigstory-card">
+       
+    {% if exclusive_main  %}
+      <!-- Left Content -->
+    <div class="bigstory-content" 
+    {% if exclusive_main.banner_background_colour %}
+      style="background-color: {{exclusive_main.banner_background_colour}};"
+    {% endif %}
+    >
+      
+      <div class="bigstory-header d-flex justify-content-between align-items-center mt-2"
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+         <a href="/category/{{exclusive_main.category.slug}}" style="text-decoration: none; color: #d60000;">
+          <span class="bigstory-subtag">{{exclusive_main.category.title}}</span>
+         </a>
+        
+        <span class="bigstory-date">{{exclusive_main.created_at}}</span>
+      </div>
+
+      <a href="/content/{{exclusive_main.slug}}" style="color: black; text-decoration: none;"> 
+      <h2 class="bigstory-title mt-5"
+      {% if exclusive_main.title_colour %}
+         style="color: {{exclusive_main.title_colour}};"
+       {% endif %}
+      >{{exclusive_main.title}}</h2>
+      </a>
+      <a href="/content/{{exclusive_main.slug}}" style="color: black; text-decoration: none;"> 
+      <p class="bigstory-text mt-2" 
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+        {{exclusive_main.description}}
+      </p>
+      </a>
+      <br><br>
+    </div>
+
+    <!-- Right Image -->
+    <div class="bigstory-image">
+      <a href="/content/{{exclusive_main.slug}}" style="text-decoration: none; color: black;">
+      <img src="/media/{{exclusive_main.thumbnail_image}}" alt="Bigstory Feature Image">
+      </a>
+    </div>
+    
+    {% endif %}
+  </div>
+  <!-- MULTI NEWS SECTION -->
+<div class="multi-news">
+  {% for i in exclusive_suggestions  %}
+    <div class="news-card">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+    <img src="/media/{{i.thumbnail_image}}" alt="{{title}}">
+    
+    <div class="news-info">
+      <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration:none">
+      <span class="news-category" >{{i.category}}</span>
+      </a>
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <h3 class="news-title">{{i.title}}</h3>
+      </a>
+    </div>
+    </a>
+    </div>
+  {% endfor %}
+</div>
+  
+</div>
+
+
+
+
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock 'script' %}

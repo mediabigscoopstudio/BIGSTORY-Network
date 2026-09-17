@@ -1,0 +1,60 @@
+{% load tz %}
+<div class="task-card">
+  <div class="task-card-title">{{ task.title }}</div>
+
+  <div class="task-meta">
+    <span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span>
+    {% if task.task_type in video_types %}
+      <span class="badge" style="background:#fce4ec; color:#880e4f;">{{ task.get_task_type_display }}</span>
+    {% elif task.task_type == 'article' %}
+      <span class="badge" style="background:#e3f0ff; color:#1565c0;">Article</span>
+    {% elif task.task_type == 'seo' %}
+      <span class="badge" style="background:#e8f5e9; color:#2e7d32;">SEO</span>
+    {% elif task.task_type == 'social' %}
+      <span class="badge" style="background:#fff3e0; color:#b26a00;">Social</span>
+    {% else %}
+      <span class="badge" style="background:#f3e5f5; color:#6a1b9a;">{{ task.get_task_type_display }}</span>
+    {% endif %}
+    {% if task.task_articles.count > 0 %}
+      <span class="badge" style="background:#e3f0ff; color:#1565c0;">{{ task.task_articles.count }} art.</span>
+    {% endif %}
+    {% if task.task_bstvs.count > 0 %}
+      <span class="badge" style="background:#fce4ec; color:#880e4f;">{{ task.task_bstvs.count }} vid.</span>
+    {% endif %}
+    {% if task.deploy_platform %}
+      <span class="badge" style="background:#1a1a2e; color:#fff;">{{ task.get_deploy_platform_display }}</span>
+    {% endif %}
+  </div>
+
+  <div class="task-footer">
+    <div class="assignee">
+      {% if task.assigned_to %}
+        {% if task.assigned_to.image %}
+          <img src="{{ task.assigned_to.image.url }}" class="av" title="{{ task.assigned_to.name }}">
+        {% else %}
+          <div class="av" style="background:{{ project.color_hex }};">{{ task.assigned_to.name|slice:":1" }}</div>
+        {% endif %}
+        <span class="aname">{{ task.assigned_to.name }}</span>
+      {% else %}
+        <span class="aname" style="color:#ccc;">Unassigned</span>
+      {% endif %}
+    </div>
+    <div style="text-align:right;">
+      {% if task.due_date %}
+        <div class="due {% if task.is_overdue %}overdue-due{% endif %}">
+          Due {{ task.due_date|date:"M j" }}
+        </div>
+      {% endif %}
+      {% if task.deploy_date %}
+        <div style="font-size:10px; color:#aaa;">Deploy {{ task.deploy_date|date:"M j" }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="task-actions">
+    <button onclick="openStatusModal({{ task.id }})" class="ta-btn">Move</button>
+    <a href="/edit_task/{{ task.id }}" class="ta-btn">Edit</a>
+    <button onclick="openDupModal({{ task.id }}, '{{ task.task_type }}')" class="ta-btn dup">Duplicate</button>
+    <a href="/delete_task/{{ task.id }}" class="ta-btn del" onclick="return confirm('Delete this task?')">Delete</a>
+  </div>
+</div>

@@ -1,0 +1,497 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Content Manager{% endblock 'title' %}
+{% block 'css' %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid">
+    <div class="row">
+       <div class="flex-grow-1">
+        <br>
+            <h4 class="fs-18 fw-semibold m-0">Home Page Content Management</h4> 
+        <br>
+        </div>
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Trending Articles</h5>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" action="/trending_articles">
+    {% csrf_token %}
+<label class="form-label">Trending Articles</label>
+<select class="form-select" name="in_trend_articles" id="trending_article" multiple>
+    {% for i in articles %}
+        <option value="{{ i.id }}"
+            {% if i in trending.articles.all %}selected{% endif %}>
+            {{ i.title }}
+        </option>
+    {% endfor %}
+</select>
+<button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+</form>
+                </div> 
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Trending Buzz</h5>
+                </div>
+ 
+                <div class="card-body">
+<form method="POST" action="/update_trending_buzz">
+    {% csrf_token %}
+
+    <label class="form-label">Trending Buzz (YouTube)</label>
+    <select class="form-select" name="trending_buzz" id="buzz" multiple>
+        {% for vid in youtube_videos %}
+            <option value="{{ vid.id }}"
+                {% if vid in trending_buzz.videos.all %}selected{% endif %}>
+                {{ vid.title }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+</form>
+                </div> 
+            </div>
+            <div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Exclusives 2</h5>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/update_exclusives2">
+            {% csrf_token %}
+
+            <!-- ✅ Article 1 -->
+            <label class="form-label fw-bold">Select Only 1 Main Article</label>
+            <select class="form-select mb-3" name="article1" id="Exlcusive2" multiple>
+                {% for i in exclusive_articles %}
+                    <option value="{{ i.id }}"
+                        {% if i in exclusives2.article1.all %}selected{% endif %}>
+                        {{ i.title }}
+                    </option>
+                {% endfor %}
+            </select>
+            
+
+            <!-- ✅ Article 2 -->
+            <label class="form-label fw-bold">Select Only 1 Main Article</label>
+            <select class="form-select mb-3" name="article2" id="Exlcusive2_A" multiple>
+                {% for i in exclusive_articles %}
+                    <option value="{{ i.id }}"
+                        {% if i in exclusives2.article2.all %}selected{% endif %}>
+                        {{ i.title }}
+                    </option>
+                {% endfor %}
+            </select>
+            <!-- ✅ Reels -->
+            <label class="form-label fw-bold">Youtube Videos (Highlight)</label>
+            <select class="form-select mb-3" name="reels" id="exlcusive2_C" multiple>
+                {% for r in youtube_videos %}
+                    <option value="{{ r.id }}"
+                        {% if r in exclusives2.reels.all %}selected{% endif %}>
+                        {{ r.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+        </form>
+
+    </div>
+            </div>
+            <div class="card mt-3">
+    <div class="card-header"><h5 class="mb-0">The Challengers</h5></div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/update_the_challengers">
+            {% csrf_token %}
+
+            <!-- Highlight -->
+            <label class="form-label">Highlight</label>
+            <select class="form-select mb-3" name="challenger_highlight"  id="challnegerA">
+                <option value="">-- Select Highlight --</option>
+                {% for a in articles %}
+                    <option value="{{ a.id }}"
+                        {% if challenger_section.Challanger_highlight and challenger_section.Challanger_highlight.id == a.id %}selected{% endif %}>
+                        {{ a.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Suggested -->
+            <label class="form-label">Suggested Articles</label>
+            <select class="form-select" name="challenger_suggested" id="challnegerB" multiple>
+                {% for a in articles %}
+                    <option value="{{ a.id }}"
+                        {% if a in challenger_section.suggested.all %}selected{% endif %}>
+                        {{ a.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+        </form>
+
+    </div>
+            </div>
+            <div class="card mt-3">
+    <div class="card-header"><h5 class="mb-0">UnTHiNK</h5></div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/update_unthink">
+            {% csrf_token %}
+
+            <!-- Highlight -->
+            <label class="form-label">Highlight</label>
+            <select class="form-select mb-3" name="unthink_highlight"  id="unthinkA">
+                <option value="">-- Select Highlight --</option>
+                {% for a in articles %}
+                    <option value="{{ a.id }}"
+                        {% if unthink_section.highlight and unthink_section.highlight.id == a.id %}selected{% endif %}>
+                        {{ a.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Suggested -->
+            <label class="form-label">Suggested Articles</label>
+            <select class="form-select" name="unthink_suggested" id="unthinkB" multiple>
+                {% for a in articles %}
+                    <option value="{{ a.id }}"
+                        {% if a in unthink_section.suggested.all %}selected{% endif %}>
+                        {{ a.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+        </form>
+
+    </div>
+</div>
+
+
+        </div> 
+
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Editors Choice</h5>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" action="/update_editors_choice">
+    {% csrf_token %}
+
+    <label class="form-label">Editor’s Choice</label>
+    <select class="form-select" name="editors_choice" id="editor" multiple>
+        {% for i in articles %}
+            <option value="{{ i.id }}"
+                {% if i in editors_choice.articles.all %}selected{% endif %}>
+                {{ i.title }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+</form>
+                </div> 
+            </div>
+            <div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Exclusive Section</h5>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/update_exclusives">
+            {% csrf_token %}
+
+            <!-- ✅ Main Exclusive -->
+            <label class="form-label">Select One Main Exclusive Article</label>
+            <select class="form-select mb-3" name="exclusive_main" id="exlcusive1_A">
+                {% for i in exclusive_articles %}
+                    <option value="{{ i.id }}"
+                        {% if exclusives.main_article and i.id == exclusives.main_article.id %}
+                            selected
+                        {% endif %}>
+                        {{ i.title }} 
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- ✅ Supporting Articles -->
+            <label class="form-label">Supporting Exclusive Articles (4 Only to be maintained)</label>
+            <select class="form-select" name="exclusive_articles" id="exlcusive1_B" multiple>
+                {% for i in exclusive_articles %}
+                    <option value="{{ i.id }}"
+                        {% if i in exclusives.articles.all %}
+                            selected
+                        {% endif %}>
+                        {{ i.title }} 
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+        </form>
+
+    </div>
+            </div>
+            <div class="card mt-3">
+    <div class="card-header">
+        <h5 class="mb-0">Latest Articles</h5>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/update_latest_articles">
+            {% csrf_token %}
+
+            <label class="form-label">Select Latest Articles</label>
+
+            <select class="form-select" name="latest_articles" id="latestArticleChoice" multiple>
+    {% for i in articles %}
+        <option value="{{ i.id }}"
+            {% if i in latest_articles.article.all %}selected{% endif %}>
+            {{ i.title }}
+        </option>
+    {% endfor %}
+</select>
+
+            <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+        </form>
+
+    </div>
+            </div>
+            <div class="card mt-3">
+    <div class="card-header">
+        <h5 class="mb-0">Reel Highlights</h5>
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/update_reel_highlights">
+            {% csrf_token %}
+
+            <label class="form-label">Select Reels</label>
+
+            <select class="form-select" name="reel_highlights" id="reelschoice" multiple>
+                {% for r in reel_videos %}
+                    <option value="{{ r.id }}"
+                        {% if r in reel_highlights.reels.all %}selected{% endif %}>
+                        {{ r.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+        </form>
+
+    </div>
+            </div>
+            <div class="card mt-3">
+    <div class="card-header"><h5 class="mb-0">BIGSHOT</h5></div>
+
+    <div class="card-body">
+
+        <form method="POST" action="/update_bigshot">
+            {% csrf_token %}
+
+            <!-- Highlight -->
+            <label class="form-label">Highlight</label>
+            <select class="form-select mb-3" name="bigshot_highlight" id="bigshotA">
+                <option value="">-- Select Highlight --</option>
+                {% for a in articles %}
+                    <option value="{{ a.id }}"
+                        {% if bigshot_section.highlight and bigshot_section.highlight.id == a.id %}selected{% endif %}>
+                        {{ a.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Suggested -->
+            <label class="form-label">Suggested Articles</label>
+            <select class="form-select" name="bigshot_suggested" multiple id="bigshotB">
+                {% for a in articles %}
+                    <option value="{{ a.id }}"
+                        {% if a in bigshot_section.suggested.all %}selected{% endif %}>
+                        {{ a.title }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button class="btn  mt-2" style="background-color: red; color: white;">Update</button>
+        </form>
+
+    </div>
+</div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+const articleSelect = document.getElementById('trending_article');
+const choices = new Choices(articleSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Articles',
+});
+</script>
+<script>
+const buzzSelect = document.getElementById('buzz');
+const buzzchoices = new Choices(buzzSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Video',
+});
+</script>
+
+<script>
+const editorchoiceSelect = document.getElementById('editor');
+const editorchoices = new Choices(editorchoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+
+<script>
+const exclusiveChoiceSelect = document.getElementById('exlcusive1_A');
+const exclusivechoices = new Choices(exclusiveChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const exclusiveCChoiceSelect = document.getElementById('exlcusive1_B');
+const exclusivecchoices = new Choices(exclusiveCChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const ExclusiveCCChoiceSelect = document.getElementById('Exlcusive2');
+constExclusiveccchoices = new Choices(ExclusiveCCChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>'<script>
+const exclusiveCCCChoiceSelect = document.getElementById('Exlcusive2_A');
+constExclusivecccchoices = new Choices(exclusiveCCCChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>'
+<script>
+const exclusiveCCCCChoiceSelect = document.getElementById('Exlcusive2_B');
+const exclusiveccccchoices = new Choices(exclusiveCCCCChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const exclusiveCCCCCChoiceSelect = document.getElementById('exlcusive2_C');
+const exclusivecccccchoices = new Choices(exclusiveCCCCCChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Reel',
+});
+</script>
+<script>
+const latestArticleSelect = document.getElementById('latestArticleChoice');
+const latestArticleChoices = new Choices(latestArticleSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const reelsChoiceSelect = document.getElementById('reelschoice');
+const reelsChoices = new Choices(reelsChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Reel',
+});
+</script>
+<script>
+const challengerAChoiceSelect = document.getElementById('challnegerA');
+const challengerAChoices = new Choices(challengerAChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const challengerBChoiceSelect = document.getElementById('challnegerB');
+const challengerBChoices = new Choices(challengerBChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const bigshotAChoiceSelect = document.getElementById('bigshotA');
+const bigshotAChoices = new Choices(bigshotAChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const bigshotBChoiceSelect = document.getElementById('bigshotB');
+const bigshotBChoices = new Choices(bigshotBChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const unthinkAChoiceSelect = document.getElementById('unthinkA');
+const unthinkAChoices = new Choices(unthinkAChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+<script>
+const unthinkBChoiceSelect = document.getElementById('unthinkB');
+const unthinkBChoices = new Choices(unthinkBChoiceSelect, {
+    removeItemButton: true,
+    searchEnabled: true,
+    placeholder: true,
+    placeholderValue: 'Select Article',
+});
+</script>
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

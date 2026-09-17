@@ -1,0 +1,1239 @@
+{% extends "main/base.html" %}
+{% block 'title' %}BIGSTORY Network — Media Kit 2026{% endblock 'title' %}
+{% block 'css' %}
+<style>
+  :root {
+    --cream: #f4efe6;
+    --cream2: #ede7db;
+    --ink: #1c1a17;
+    --ink2: #2e2b26;
+    --red: #d42b1e;
+    --red2: #b52318;
+    --gold: #c8973a;
+    --muted: #7a7267;
+    --rule: rgba(28,26,23,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── PAPER TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    padding: 80px 72px 72px;
+    position: relative;
+    overflow: hidden;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--red);
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .hero-logo img {
+    height: 80px;
+    width: auto;
+    display: block;
+  }
+
+  .hero-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(200,151,58,0.4);
+    padding: 8px 18px;
+    margin-top: 8px;
+  }
+
+  .hero-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 0 40px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.3s forwards;
+  }
+
+  .hero-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 8vw, 108px);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 0.95;
+    letter-spacing: -1px;
+    max-width: 820px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.5s forwards;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .hero-rule {
+    width: 72px;
+    height: 3px;
+    background: var(--gold);
+    margin: 36px 0;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.7s forwards;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    line-height: 1.85;
+    color: rgba(244,239,230,0.6);
+    max-width: 540px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.9s forwards;
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(244,239,230,0.12);
+    padding-top: 40px;
+    opacity: 0;
+    animation: fadeUp 0.7s 1.1s forwards;
+  }
+
+  .hero-stat {
+    padding: 0 32px 0 0;
+    border-right: 1px solid rgba(244,239,230,0.1);
+  }
+
+  .hero-stat:last-child { border-right: none; padding-right: 0; padding-left: 32px; }
+  .hero-stat:nth-child(2), .hero-stat:nth-child(3) { padding: 0 32px; }
+
+  .hero-stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 800;
+    color: var(--cream);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .hero-stat-num sup {
+    font-size: 0.45em;
+    color: var(--red);
+    vertical-align: super;
+    font-weight: 700;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.4);
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--red);
+    padding: 13px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker-track {
+    display: inline-flex;
+    gap: 48px;
+    animation: ticker 22s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.9);
+  }
+
+  .ticker-sep { color: rgba(244,239,230,0.35); }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 100px 72px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 0;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 80px;
+    margin-top: 60px;
+    align-items: start;
+  }
+
+  .about-body {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-top: 0;
+  }
+
+  .about-body strong { color: var(--ink); font-weight: 500; }
+
+  .about-pullquote {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink2);
+    border-left: 3px solid var(--red);
+    padding-left: 24px;
+    margin: 36px 0;
+  }
+
+  .about-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .pill {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid rgba(28,26,23,0.2);
+    color: var(--muted);
+    transition: all 0.25s;
+  }
+
+  .pill:hover { border-color: var(--red); color: var(--red); }
+
+  .why-list { list-style: none; }
+
+  .why-item {
+    display: flex;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .why-item:last-child { border-bottom: none; }
+
+  .why-n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--red);
+    opacity: 0.25;
+    line-height: 1;
+    min-width: 32px;
+  }
+
+  .why-text strong {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+
+  .why-text p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── CHANNELS STATS ── */
+  .channels-section {
+    background: var(--ink);
+    padding: 100px 72px;
+  }
+
+  .channels-section .section-label { color: var(--gold); }
+  .channels-section .section-title { color: var(--cream); }
+
+  .channel-block {
+    margin-top: 64px;
+    border: 1px solid rgba(244,239,230,0.1);
+  }
+
+  .channel-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 36px;
+    border-bottom: 1px solid rgba(244,239,230,0.08);
+    background: rgba(244,239,230,0.03);
+  }
+
+  .channel-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .ch-ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+  .ch-yt { background: #ff0000; }
+  .ch-web { background: rgba(200,151,58,0.2); }
+  .ch-bharat { background: linear-gradient(135deg, #138808, #FF9933); }
+
+  .channel-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .channel-handle {
+    font-size: 12px;
+    color: rgba(244,239,230,0.35);
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  .channel-period {
+    margin-left: auto;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(200,151,58,0.3);
+    padding: 5px 12px;
+  }
+
+  .channel-stats {
+    display: grid;
+    padding: 0;
+  }
+
+  .channel-stats.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .channel-stats.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .channel-stats.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .cstat {
+    padding: 36px 36px 32px;
+    border-right: 1px solid rgba(244,239,230,0.08);
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .cstat:hover { background: rgba(244,239,230,0.03); }
+  .cstat:last-child { border-right: none; }
+
+  .cstat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(244,239,230,0.35);
+    margin-bottom: 14px;
+  }
+
+  .cstat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 800;
+    color: var(--cream);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .cstat-num sup {
+    font-size: 0.42em;
+    color: var(--red);
+    font-weight: 700;
+    vertical-align: super;
+  }
+
+  .cstat-desc {
+    font-size: 12px;
+    color: rgba(244,239,230,0.4);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .cstat-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #4caf50;
+    background: rgba(76,175,80,0.12);
+    padding: 3px 8px;
+  }
+
+  .cstat-note {
+    font-size: 11px;
+    color: rgba(244,239,230,0.25);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ── GEO ── */
+  .geo-section {
+    background: var(--cream2);
+    padding: 100px 72px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .geo-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    margin-top: 60px;
+    align-items: start;
+  }
+
+  .geo-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .geo-country {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    min-width: 130px;
+    color: var(--ink2);
+  }
+
+  .geo-track {
+    flex: 1;
+    height: 5px;
+    background: rgba(28,26,23,0.08);
+    position: relative;
+  }
+
+  .geo-fill {
+    height: 100%;
+    background: var(--red);
+    width: 0;
+    transition: width 1.6s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .geo-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 42px;
+    text-align: right;
+  }
+
+  .geo-right {
+    border-left: 1px solid var(--rule);
+    padding-left: 80px;
+  }
+
+  .geo-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+
+  .geo-para {
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* ── VERTICALS ── */
+  .verticals-section {
+    padding: 100px 72px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .verticals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 60px;
+    border: 1px solid var(--rule);
+  }
+
+  .vcard {
+    padding: 40px 32px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vcard:hover { background: rgba(212,43,30,0.03); }
+  .vcard:nth-child(3n) { border-right: none; }
+  .vcard:nth-child(n+4) { border-bottom: none; }
+
+  .vcard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    transition: height 0.4s;
+  }
+
+  .vcard:hover::before { height: 100%; }
+
+  .v1::before { background: var(--red); }
+  .v2::before { background: var(--gold); }
+  .v3::before { background: #7b4db7; }
+  .v4::before { background: #2566b0; }
+  .v5::before { background: #c87428; }
+  .v6::before { background: #2e7d32; }
+
+  .vtag {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    margin-bottom: 20px;
+  }
+
+  .vname {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .v1 .vname { color: var(--red); }
+  .v2 .vname { color: var(--gold); }
+  .v3 .vname { color: #7b4db7; }
+  .v4 .vname { color: #2566b0; }
+  .v5 .vname { color: #c87428; }
+  .v6 .vname { color: #2e7d32; }
+
+  .vdesc {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  /* ── AD FORMATS ── */
+  .formats-section {
+    background: var(--cream2);
+    padding: 100px 72px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .formats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 60px;
+    border: 1px solid var(--rule);
+  }
+
+  .fcard {
+    padding: 44px 36px;
+    border-right: 1px solid var(--rule);
+    transition: background 0.3s;
+  }
+
+  .fcard:last-child { border-right: none; }
+  .fcard:hover { background: rgba(212,43,30,0.04); }
+
+  .fnum {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: rgba(212,43,30,0.1);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .ftitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+
+  .fdesc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  /* ── ADVERTISERS ── */
+  .adv-section {
+    padding: 100px 72px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .adv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+
+  .adv-card {
+    padding: 32px;
+    border: 1px solid var(--rule);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .adv-card:hover {
+    border-color: var(--red);
+    box-shadow: 0 4px 24px rgba(212,43,30,0.08);
+  }
+
+  .adv-icon { font-size: 28px; margin-bottom: 14px; }
+
+  .adv-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .adv-desc { font-size: 13px; line-height: 1.75; color: var(--muted); }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--ink);
+    padding: 100px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-bg-text {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 260px;
+    font-weight: 900;
+    color: rgba(244,239,230,0.025);
+    right: -20px;
+    bottom: -40px;
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -4px;
+    white-space: nowrap;
+  }
+
+  .cta-inner { position: relative; z-index: 1; max-width: 680px; }
+
+  .cta-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .cta-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 7vw, 80px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 28px;
+  }
+
+  .cta-headline em { font-style: italic; color: var(--red); }
+
+  .cta-body {
+    font-size: 15px;
+    line-height: 1.85;
+    color: rgba(244,239,230,0.6);
+    margin-bottom: 48px;
+    max-width: 520px;
+  }
+
+  .cta-person-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .cta-person-role {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+  }
+
+  .cta-contacts { display: flex; flex-direction: column; gap: 14px; }
+
+  .cta-contact {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    color: rgba(244,239,230,0.75);
+  }
+
+  .cta-contact-icon {
+    width: 34px;
+    height: 34px;
+    background: rgba(244,239,230,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .cta-contact a {
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(244,239,230,0.25);
+    padding-bottom: 1px;
+    transition: border-color 0.25s;
+  }
+
+  .cta-contact a:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.65s, transform 0.65s;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .hero, .section, .channels-section, .geo-section, .verticals-section, .formats-section, .adv-section, .cta-section, .formats-section { padding-left: 36px; padding-right: 36px; }
+    .hero-bottom { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .geo-inner { grid-template-columns: 1fr; gap: 48px; }
+    .geo-right { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 48px; }
+    .verticals-grid { grid-template-columns: 1fr 1fr; }
+    .vcard:nth-child(3n) { border-right: 1px solid var(--rule); }
+    .vcard:nth-child(2n) { border-right: none; }
+    .formats-row { grid-template-columns: 1fr; }
+    .fcard { border-right: none; border-bottom: 1px solid var(--rule); }
+    .adv-grid { grid-template-columns: 1fr 1fr; }
+    .channel-stats.cols-3, .channel-stats.cols-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 48px 24px; }
+    .hero-bottom { grid-template-columns: 1fr 1fr; }
+    .verticals-grid { grid-template-columns: 1fr; }
+    .adv-grid { grid-template-columns: 1fr; }
+    .channel-stats { grid-template-columns: 1fr !important; }
+    .cstat { border-right: none; border-bottom: 1px solid rgba(244,239,230,0.08); }
+  }
+</style>
+{% endblock 'css' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="Partner with BIGSTORY Network to reach India's most influential audience — metro professionals, entrepreneurs, and the global Indian diaspora. Explore display ads, branded content, and social amplification.">
+<meta name="keywords" content="advertise with BIGSTORY Network, media partnership India, digital advertising India, branded content India, sponsored content Indian media, advertise Indian diaspora, media kit BIGSTORY">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/advertise/">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/advertise/">
+<meta property="og:title" content="Advertise With BIGSTORY Network — Reach India's Most Influential Audience">
+<meta property="og:description" content="Connect your brand with India's metro professionals, policy makers, and global diaspora. Display ads, branded content, and social amplification across 6 premium verticals.">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/advertise/">
+<meta name="twitter:title" content="Advertise With BIGSTORY Network — India's Premium Digital Media Platform">
+<meta name="twitter:description" content="88M+ views in 90 days. Reach India's most valuable audience through display advertising, branded content, and social amplification.">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema.org JSON-LD for Advertise Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Advertise With BIGSTORY Network",
+  "url": "https://bigstorynetwork.com/advertise/",
+  "description": "Partner with BIGSTORY Network to reach India's most influential audience across 6 premium content verticals — through display advertising, branded content, and social media amplification.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Vector.png"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Advertising",
+      "email": "business@bigstorynetwork.com",
+      "telephone": "+91-97890-91524"
+    },
+    "sameAs": [
+      "https://www.instagram.com/bigstorynetwork/",
+      "https://www.youtube.com/@BIGSTORYNETWORK",
+      "https://www.instagram.com/bharatone_official/"
+    ]
+  },
+  "image": "https://bigstorynetwork.com/static/main/Brandplate.webp",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "BIGSTORY Network",
+    "url": "https://bigstorynetwork.com/"
+  }
+}
+</script>
+{% endblock 'meta' %}
+{% block 'body' %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-top">
+    <div class="hero-logo">
+        <img src="/static/main/Logo.png" alt="BIGSTORY Network">
+    </div>
+    <div class="hero-tag">Media Partnership Kit · 2026</div>
+  </div>
+
+  <div class="hero-center">
+    <div class="hero-eyebrow">Why BIGSTORY Network</div>
+    <h1 class="hero-headline">India's <em>Perspective</em><br>on the World.</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">A premium digital news and analysis platform built for India's most influential readers — metro professionals, entrepreneurs, policy makers, and the global Indian diaspora.</p>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-stat">
+      <div class="hero-stat-num">88<sup>M</sup></div>
+      <div class="hero-stat-label">Instagram Views · 90 Days</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4.2<sup>M</sup></div>
+      <div class="hero-stat-label">Instagram Interactions · 90 Days</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">164<sup>K</sup></div>
+      <div class="hero-stat-label">YouTube Views · 90 Days</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">Content Verticals</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">JUST IN</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">BIG SHOT</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">UN THiNK</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">BHARAT ONE</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">THE CHALLENGERS</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">GREEN INDIA</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">JUST IN</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">BIG SHOT</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">UN THiNK</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">BHARAT ONE</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">THE CHALLENGERS</span><span class="ticker-sep"> ◆ </span>
+    <span class="ticker-item">GREEN INDIA</span><span class="ticker-sep"> ◆ </span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section reveal">
+  <div class="section-label">Who We Are</div>
+  <h2 class="section-title">Not Just Another<br>News Platform.</h2>
+  <div class="about-grid">
+    <div>
+      <p class="about-body">BIGSTORY Network is built for <strong>India's most valuable readers</strong> — those who shape opinion, drive decisions, and influence markets. We don't chase viral noise. We build authoritative, deeply researched content that earns trust and commands attention.</p>
+      <blockquote class="about-pullquote">"The high-trust environment your clients' brands deserve to be in."</blockquote>
+      <p class="about-body">Our audience spans India's metro corridors, the Indian diaspora across the USA, Singapore, UK, Canada, and Australia — the exact readers that BFSI brands, ed-tech platforms, FMCG labels, and government bodies compete to reach.</p>
+      <div class="about-pills">
+        <span class="pill">Metro Professionals</span>
+        <span class="pill">Policy Makers</span>
+        <span class="pill">Indian Diaspora</span>
+        <span class="pill">Entrepreneurs</span>
+        <span class="pill">Global Readers</span>
+      </div>
+    </div>
+    <div>
+      <ul class="why-list">
+        <li class="why-item">
+          <div class="why-n">01</div>
+          <div class="why-text"><strong>Premium Brand-Safe Environment</strong><p>Authoritative journalism that attracts educated, high-income decision-makers — not clickbait audiences or algorithm chasers.</p></div>
+        </li>
+        <li class="why-item">
+          <div class="why-n">02</div>
+          <div class="why-text"><strong>Massive & Growing Reach</strong><p>88 million views in 90 days across platforms with consistent month-on-month growth across every channel.</p></div>
+        </li>
+        <li class="why-item">
+          <div class="why-n">03</div>
+          <div class="why-text"><strong>Global Indian Audience</strong><p>Readers from India, USA, Singapore, UK, Canada & Australia — the diaspora your clients most want to reach.</p></div>
+        </li>
+        <li class="why-item">
+          <div class="why-n">04</div>
+          <div class="why-text"><strong>Multi-Format Activation</strong><p>Display, branded content, and social amplification — flexible enough for any campaign brief or budget.</p></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CHANNEL STATS -->
+<section class="channels-section">
+  <div class="section-label reveal">Channel Performance</div>
+  <h2 class="section-title reveal">Every Number,<br>Every Channel.</h2>
+
+  <!-- Instagram Main -->
+  <div class="channel-block reveal" onclick="window.open('https://www.instagram.com/bigstorynetwork/', '_blank')" >
+    <div class="channel-header">
+      <div class="channel-icon ch-ig">📸</div>
+      <div>
+        <div class="channel-name">Instagram — BIGSTORY Network</div>
+        <div class="channel-handle">@bigstorynetwork</div>
+      </div>
+      <div class="channel-period">Last 90 Days</div>
+    </div>
+    <div class="channel-stats cols-3">
+      <div class="cstat">
+        <div class="cstat-badge">↑ Growing</div>
+        <div class="cstat-label">Total Views</div>
+        <div class="cstat-num">88<sup>M</sup></div>
+        <div class="cstat-desc">Reel & content views across 90 days</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-badge">↑ Growing</div>
+        <div class="cstat-label">Total Interactions</div>
+        <div class="cstat-num">4.2<sup>M</sup></div>
+        <div class="cstat-desc">Likes, comments, shares & saves</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-label">Followers</div>
+        <div class="cstat-num">18.2<sup>K</sup></div>
+        <div class="cstat-desc">Engaged, growing follower base</div>
+        <div class="cstat-note">High views-to-follower ratio — strong organic reach</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube -->
+  <div class="channel-block reveal" onclick="window.open('https://www.youtube.com/@BIGSTORYNETWORK', '_blank')">
+    <div class="channel-header">
+      <div class="channel-icon ch-yt">▶</div>
+      <div>
+        <div class="channel-name">YouTube — BIGSTORY Network</div>
+        <div class="channel-handle">@BIGSTORYNETWORK</div>
+      </div>
+      <div class="channel-period">Last 90 Days</div>
+    </div>
+    <div class="channel-stats cols-3">
+      <div class="cstat">
+        <div class="cstat-badge">↑ Growing</div>
+        <div class="cstat-label">Total Views</div>
+        <div class="cstat-num">164<sup>K</sup></div>
+        <div class="cstat-desc">Majority driven by YouTube Shorts</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-label">Watch Hours</div>
+        <div class="cstat-num">1.0<sup>K</sup></div>
+        <div class="cstat-desc">Total watch time across all videos</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-label">Subscribers</div>
+        <div class="cstat-num">304</div>
+        <div class="cstat-desc">Channel subscribers & growing</div>
+        <div class="cstat-note">Shorts-led growth strategy in play</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bharat One IG -->
+  <div class="channel-block reveal" onclick="window.open('https://www.instagram.com/bharatone_official/', '_blank')">
+    <div class="channel-header">
+      <div class="channel-icon ch-bharat">🇮🇳</div>
+      <div>
+        <div class="channel-name">Instagram — Bharat One</div>
+        <div class="channel-handle">@bharatone_official</div>
+      </div>
+      <div class="channel-period">Last 30 Days</div>
+    </div>
+    <div class="channel-stats cols-2">
+      <div class="cstat">
+        <div class="cstat-badge">↑ Growing</div>
+        <div class="cstat-label">Views</div>
+        <div class="cstat-num">17<sup>K</sup></div>
+        <div class="cstat-desc">Content views in the last 30 days</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-label">Interactions</div>
+        <div class="cstat-num">1.7<sup>K</sup></div>
+        <div class="cstat-desc">Likes, comments & shares</div>
+        <div class="cstat-note">184 Followers · High engagement rate</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Website -->
+  <div class="channel-block reveal" onclick="window.open('https://www.bigstorynetwork.com', '_blank')">
+    <div class="channel-header">
+      <div class="channel-icon ch-web" style="font-size:18px;">🌐</div>
+      <div>
+        <div class="channel-name">Website — bigstorynetwork.com</div>
+        <div class="channel-handle">bigstorynetwork.com</div>
+      </div>
+      <div class="channel-period">Last 90 Days</div>
+    </div>
+    <div class="channel-stats cols-3">
+      <div class="cstat">
+        <div class="cstat-label">Total Views</div>
+        <div class="cstat-num">16<sup>K</sup></div>
+        <div class="cstat-desc">Page views across all content</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-label">Avg. Session Duration</div>
+        <div class="cstat-num">46<sup>s</sup></div>
+        <div class="cstat-desc">Average time spent per visit</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-label">Domain Authority</div>
+        <div class="cstat-num">DA 3</div>
+        <div class="cstat-desc">Growing — site launched recently</div>
+        <div class="cstat-note">DA growth underway as content scales</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GEO AUDIENCE -->
+<section class="geo-section">
+  <div class="reveal">
+    <div class="section-label">Audience Geography</div>
+    <h2 class="section-title">A Global<br>Indian Audience.</h2>
+  </div>
+  <div class="geo-inner reveal">
+    <div>
+      <div class="geo-bar-row"><div class="geo-country">China</div><div class="geo-track"><div class="geo-fill" data-w="100"></div></div><div class="geo-val">6.6K</div></div>
+      <div class="geo-bar-row"><div class="geo-country">India</div><div class="geo-track"><div class="geo-fill" data-w="47"></div></div><div class="geo-val">3.1K</div></div>
+      <div class="geo-bar-row"><div class="geo-country">United States</div><div class="geo-track"><div class="geo-fill" data-w="23"></div></div><div class="geo-val">1.5K</div></div>
+      <div class="geo-bar-row"><div class="geo-country">Singapore</div><div class="geo-track"><div class="geo-fill" data-w="20"></div></div><div class="geo-val">1.3K</div></div>
+      <div class="geo-bar-row"><div class="geo-country">United Kingdom</div><div class="geo-track"><div class="geo-fill" data-w="5"></div></div><div class="geo-val">148</div></div>
+      <div class="geo-bar-row"><div class="geo-country">Canada</div><div class="geo-track"><div class="geo-fill" data-w="4"></div></div><div class="geo-val">139</div></div>
+      <div class="geo-bar-row"><div class="geo-country">Australia</div><div class="geo-track"><div class="geo-fill" data-w="3"></div></div><div class="geo-val">133</div></div>
+    </div>
+    <div class="geo-right">
+      <p class="geo-quote">"The audience your clients are chasing — we already have them."</p>
+      <p class="geo-para">BIGSTORY readers are spread across the world's most economically active markets — from India's metro corridors to NRI communities in the US, Singapore, UK, Canada, and Australia.</p>
+      <p class="geo-para">This is the high-income, English-fluent Indian audience that BFSI brands, ed-tech platforms, FMCG labels, and government bodies all compete to reach. With BIGSTORY, your client's message lands in a context they trust and read deeply.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VERTICALS -->
+<section class="verticals-section">
+  <div class="reveal">
+    <div class="section-label">Content Verticals</div>
+    <h2 class="section-title">Six Verticals.<br>One Mission.</h2>
+  </div>
+  <div class="verticals-grid reveal">
+    <div class="vcard v1" onclick="window.open('https://bigstorynetwork.com/just_in', '_blank')" ><div class="vtag">Breaking News</div><div class="vname">JUST IN</div><div class="vdesc">Real-time India and world news coverage. The fastest and most trusted daily news vertical — built for readers who act on information first.</div></div>
+    <div class="vcard v2" onclick="window.open('https://bigstorynetwork.com/bigshot', '_blank')"><div class="vtag">Business & Startups</div><div class="vname">BIG SHOT</div><div class="vdesc">Deep dives into India's business ecosystem, startup stories, and the economic forces reshaping the next decade of Indian enterprise.</div></div>
+    <div class="vcard v3" onclick="window.open('https://bigstorynetwork.com/unthink', '_blank')"><div class="vtag">Analysis & Opinion</div><div class="vname">UN THiNK</div><div class="vdesc">Contrarian analysis and bold opinion that challenges conventional wisdom — India's intellectual counterpoint to global narratives.</div></div>
+    <div class="vcard v4" onclick="window.open('https://bigstorynetwork.com/bharat_one', '_blank')"><div class="vtag">Geopolitics</div><div class="vname">BHARAT ONE</div><div class="vdesc">India's strategic perspective on world affairs — foreign policy, defence, diplomacy, and India's rising role on the global stage.</div></div>
+    <div class="vcard v5" onclick="window.open('https://bigstorynetwork.com/the_challengers', '_blank')"><div class="vtag">Leadership Profiles</div><div class="vname">THE CHALLENGERS</div><div class="vdesc">Stories of India's boldest founders, leaders, and changemakers — the people building tomorrow's institutions and industries.</div></div>
+    <div class="vcard v6"><div class="vtag">Sustainability</div><div class="vname">GREEN INDIA</div><div class="vdesc">India's environment, climate policy, and sustainability story — from renewable energy breakthroughs to grassroots conservation.</div></div>
+  </div>
+</section>
+
+<!-- AD FORMATS -->
+<section class="formats-section">
+  <div class="reveal">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Three Ways<br>to Show Up.</h2>
+  </div>
+  <div class="formats-row reveal">
+    <div class="fcard"><div class="fnum">01</div><div class="ftitle">Display Advertising</div><div class="fdesc">High-visibility placements across all BIGSTORY verticals on desktop and mobile. Your brand in a premium, brand-safe editorial context that commands real attention.</div></div>
+    <div class="fcard"><div class="fnum">02</div><div class="ftitle">Branded Content</div><div class="fdesc">Sponsored articles and editorial features crafted in BIGSTORY's authoritative voice — long-form, trust-building content that informs, educates, and converts.</div></div>
+    <div class="fcard"><div class="fnum">03</div><div class="ftitle">Social Amplification</div><div class="fdesc">Reach 88M+ views across Instagram and YouTube Shorts. Amplify campaigns through BIGSTORY's high-engagement social channels to the audiences that matter most.</div></div>
+  </div>
+</section>
+
+<!-- ADVERTISERS -->
+<section class="adv-section">
+  <div class="reveal">
+    <div class="section-label">Ideal Advertisers</div>
+    <h2 class="section-title">Your Client<br>Is Our Reader.</h2>
+  </div>
+  <div class="adv-grid reveal">
+    <div class="adv-card"><div class="adv-icon">🏦</div><div class="adv-title">BFSI & Finance</div><div class="adv-desc">Banks, insurers, fintechs, and wealth managers reaching high-income professionals who actively manage money and investments.</div></div>
+    <div class="adv-card"><div class="adv-icon">🚀</div><div class="adv-title">Ed-Tech & Startups</div><div class="adv-desc">Growth-stage brands targeting ambitious metro Indians and the diaspora hungry for skills, tools, and opportunities.</div></div>
+    <div class="adv-card"><div class="adv-icon">🛒</div><div class="adv-title">FMCG & Lifestyle</div><div class="adv-desc">Premium consumer brands reaching aspirational, purchase-ready Indians at home and abroad — across food, wellness, and lifestyle.</div></div>
+    <div class="adv-card"><div class="adv-icon">🏛️</div><div class="adv-title">Government & PSUs</div><div class="adv-desc">Policy communication and public awareness campaigns that need credible, high-trust editorial context and wide reach.</div></div>
+    <div class="adv-card"><div class="adv-icon">🌍</div><div class="adv-title">Global Brands</div><div class="adv-desc">International companies entering India or targeting the Indian diaspora across Singapore, USA, UK, Canada, and Australia.</div></div>
+    <div class="adv-card"><div class="adv-icon">📱</div><div class="adv-title">D2C & Digital Brands</div><div class="adv-desc">Digital-first brands seeking high-engagement environments beyond social media noise and algorithmic unpredictability.</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-bg-text">BIGSTORY</div>
+  <div class="cta-inner reveal">
+    <div class="cta-label">Let's Build Something Together</div>
+    <h2 class="cta-headline">Ready to<br><em>Partner?</em></h2>
+    <p class="cta-body">Tell us about your client's campaign goals and we'll build a custom media plan that delivers real impact — across the right verticals, the right formats, and the right audience.</p>
+    <div class="cta-person-name">Minaketan Mishra</div>
+    <div class="cta-person-role">Head of Business Development · BIGSTORY Network</div>
+    <div class="cta-contacts">
+      <div class="cta-contact"><div class="cta-contact-icon">✉</div><a href="mailto:business@bigstorynetwork.com">business@bigstorynetwork.com</a></div>
+      <div class="cta-contact"><div class="cta-contact-icon">📞</div><a href="tel:+919789091524">+91 97890 91524</a></div>
+      <div class="cta-contact"><div class="cta-contact-icon">🌐</div><a href="https://bigstorynetwork.com" target="_blank">bigstorynetwork.com</a></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('.geo-fill').forEach(b => {
+          b.style.width = b.dataset.w + '%';
+        });
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+{% endblock 'body' %}
+{% block 'script' %}
+{% endblock 'script' %}

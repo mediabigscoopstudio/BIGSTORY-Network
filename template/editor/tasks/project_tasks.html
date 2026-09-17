@@ -1,0 +1,255 @@
+{% extends "editor/base.html" %}
+{% block 'title' %}{{ project.name }} — My Tasks{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .page-wrap { padding: 24px 28px 40px; }
+  .page-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .page-header a { color: #888; font-size: 13px; text-decoration: none; }
+  .page-header a:hover { color: #333; }
+  .page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a2e; margin: 0; }
+  .sep { color: #ccc; }
+
+  /* project header */
+  .project-header {
+    background: #fff; border-radius: 12px; border: 1px solid #f0f0f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 20px;
+  }
+  .project-accent-bar { height: 5px; }
+  .project-header-body { padding: 16px 20px; }
+  .project-header-body h3 { font-size: 18px; font-weight: 700; color: #1a1a2e; margin: 0 0 4px; }
+  .project-meta { font-size: 12px; color: #aaa; }
+
+  /* my counts */
+  .counts-row {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px; margin-bottom: 22px;
+  }
+  .count-card {
+    background: #fff; border-radius: 10px; padding: 14px 16px;
+    border: 1px solid #f0f0f0; box-shadow: 0 1px 2px rgba(0,0,0,0.04); text-align: center;
+  }
+  .count-card .num { font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+  .count-card .lbl { font-size: 11px; color: #aaa; }
+  .c-todo       .num { color: #555; }
+  .c-inprogress .num { color: #b26a00; }
+  .c-review     .num { color: #5e35b1; }
+  .c-done       .num { color: #0e7a4e; }
+  .c-overdue    .num { color: #c0392b; }
+
+  /* kanban board */
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 700px) { .board { grid-template-columns: 1fr; } }
+
+  .board-col { display: flex; flex-direction: column; gap: 8px; }
+  .col-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .col-todo       { background: #f5f5f5; color: #555; }
+  .col-inprogress { background: #fff3e0; color: #b26a00; }
+  .col-review     { background: #ede7fe; color: #5e35b1; }
+
+  .task-card {
+    background: #fff; border-radius: 8px; padding: 12px 14px;
+    border: 1px solid #f0f0f0; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: box-shadow 0.15s; text-decoration: none; display: block; color: inherit;
+  }
+  .task-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+  .task-card.overdue { border-color: #fca5a5; background: #fff8f8; }
+
+  .task-card-title { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; line-height: 1.4; }
+  .task-card-meta  { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+
+  .badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+  .badge-low    { background: #f0f0f0; color: #666; }
+  .badge-medium { background: #fff3e0; color: #b26a00; }
+  .badge-high   { background: #fdecea; color: #c0392b; }
+  .badge-urgent { background: #c0392b; color: #fff; }
+
+  .due-date { font-size: 11px; color: #bbb; }
+  .due-overdue { color: #c0392b; font-weight: 600; }
+
+  /* status move form inside card */
+  .move-form { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .move-btn {
+    font-size: 10px; padding: 3px 8px; border-radius: 5px;
+    border: 1px solid #e5e5e5; background: #fff; color: #888;
+    cursor: pointer; transition: all 0.12s; font-weight: 500;
+  }
+  .move-btn:hover { background: #f5f5f5; color: #333; }
+  .move-btn.move-review { border-color: #7F77DD; color: #5e35b1; }
+  .move-btn.move-review:hover { background: #ede7fe; }
+  .move-btn.move-progress { border-color: #f0a500; color: #b26a00; }
+  .move-btn.move-progress:hover { background: #fff3e0; }
+  .done-locked { font-size: 10px; color: #ccc; padding: 3px 8px; }
+
+  /* done column separate below */
+  .done-section { margin-top: 22px; }
+  .done-section h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #aaa; margin-bottom: 10px; }
+  .done-list { display: flex; flex-direction: column; gap: 6px; }
+  .done-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: #f9fff9; border: 1px solid #e6f9f1;
+    border-radius: 8px; font-size: 13px; color: #555;
+  }
+  .done-check { color: #0e7a4e; font-weight: 700; flex-shrink: 0; }
+
+  .empty-col { font-size: 12px; color: #ccc; text-align: center; padding: 14px 0; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="page-wrap">
+
+  <div class="page-header">
+    <a href="/">Dashboard</a>
+    <span class="sep">›</span>
+    <a href="/my_projects">My Projects</a>
+    <span class="sep">›</span>
+    <h2>{{ project.name }}</h2>
+  </div>
+
+  <!-- project header -->
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: {{ project.color_hex }};"></div>
+    <div class="project-header-body">
+      <h3>{{ project.name }}</h3>
+      <div class="project-meta">
+        {% if project.vertical %}{{ project.vertical.title }} &middot; {% endif %}
+        Showing only tasks assigned to you
+      </div>
+    </div>
+  </div>
+
+  <!-- my counts -->
+  <div class="counts-row">
+    <div class="count-card c-todo">
+      <div class="num">{{ my_counts.todo }}</div>
+      <div class="lbl">To do</div>
+    </div>
+    <div class="count-card c-inprogress">
+      <div class="num">{{ my_counts.inprogress }}</div>
+      <div class="lbl">In progress</div>
+    </div>
+    <div class="count-card c-review">
+      <div class="num">{{ my_counts.review }}</div>
+      <div class="lbl">In review</div>
+    </div>
+    <div class="count-card c-done">
+      <div class="num">{{ my_counts.done }}</div>
+      <div class="lbl">Done</div>
+    </div>
+    {% if my_counts.overdue > 0 %}
+    <div class="count-card c-overdue">
+      <div class="num">{{ my_counts.overdue }}</div>
+      <div class="lbl">Overdue</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- kanban: 3 active columns only -->
+  <div class="board">
+
+    <!-- TO DO -->
+    <div class="board-col">
+      <div class="col-header col-todo">
+        <span>To Do</span>
+        <span>{{ my_counts.todo }}</span>
+      </div>
+      {% for task in board.todo %}
+      <a href="/task_detail/{{ task.id }}" class="task-card {% if task.is_overdue %}overdue{% endif %}">
+        <div class="task-card-title">{{ task.title }}</div>
+        <div class="task-card-meta">
+          <span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span>
+        </div>
+        {% if task.due_date %}
+        <div class="due-date {% if task.is_overdue %}due-overdue{% endif %}">
+          {% if task.is_overdue %}Overdue · {% endif %}{{ task.due_date|date:"M j" }}
+        </div>
+        {% endif %}
+        <form method="POST" action="/update_task_status/{{ task.id }}" class="move-form" onclick="event.stopPropagation();">
+          {% csrf_token %}
+          <button type="submit" name="status" value="inprogress" class="move-btn move-progress">→ In Progress</button>
+        </form>
+      </a>
+      {% empty %}
+      <p class="empty-col">Nothing here</p>
+      {% endfor %}
+    </div>
+
+    <!-- IN PROGRESS -->
+    <div class="board-col">
+      <div class="col-header col-inprogress">
+        <span>In Progress</span>
+        <span>{{ my_counts.inprogress }}</span>
+      </div>
+      {% for task in board.inprogress %}
+      <a href="/task_detail/{{ task.id }}" class="task-card {% if task.is_overdue %}overdue{% endif %}">
+        <div class="task-card-title">{{ task.title }}</div>
+        <div class="task-card-meta">
+          <span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span>
+        </div>
+        {% if task.due_date %}
+        <div class="due-date {% if task.is_overdue %}due-overdue{% endif %}">
+          {% if task.is_overdue %}Overdue · {% endif %}{{ task.due_date|date:"M j" }}
+        </div>
+        {% endif %}
+        <form method="POST" action="/update_task_status/{{ task.id }}" class="move-form" onclick="event.stopPropagation();">
+          {% csrf_token %}
+          <button type="submit" name="status" value="todo" class="move-btn">← To Do</button>
+          <button type="submit" name="status" value="review" class="move-btn move-review">Submit for review →</button>
+        </form>
+      </a>
+      {% empty %}
+      <p class="empty-col">Nothing here</p>
+      {% endfor %}
+    </div>
+
+    <!-- REVIEW -->
+    <div class="board-col">
+      <div class="col-header col-review">
+        <span>In Review</span>
+        <span>{{ my_counts.review }}</span>
+      </div>
+      {% for task in board.review %}
+      <a href="/task_detail/{{ task.id }}" class="task-card">
+        <div class="task-card-title">{{ task.title }}</div>
+        <div class="task-card-meta">
+          <span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span>
+        </div>
+        {% if task.due_date %}
+        <div class="due-date">{{ task.due_date|date:"M j" }}</div>
+        {% endif %}
+        <div class="move-form">
+          <span class="done-locked">Waiting for admin sign-off</span>
+        </div>
+      </a>
+      {% empty %}
+      <p class="empty-col">Nothing here</p>
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <!-- Done tasks — collapsed at bottom -->
+  {% if board.done %}
+  <div class="done-section">
+    <h4>Done ({{ my_counts.done }})</h4>
+    <div class="done-list">
+      {% for task in board.done %}
+      <div class="done-item">
+        <span class="done-check">✓</span>
+        <span>{{ task.title }}</span>
+        {% if task.due_date %}<span style="font-size:11px; color:#aaa; margin-left:auto;">{{ task.due_date|date:"M j" }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}{% endblock 'script' %}

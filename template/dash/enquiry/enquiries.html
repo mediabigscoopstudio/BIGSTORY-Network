@@ -1,0 +1,80 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Enquiries{% endblock 'title' %}
+{% block 'css' %}{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid">
+    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+        <div class="flex-grow-1">
+            <h4 class="fs-18 fw-semibold m-0">Enquiries</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table datatable" id="datatable_1">
+                            <thead>
+                              <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                                <th>Date & Time</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in enquiries %}
+                                <tr>
+                                    <td class="ps-0">
+                                        <p class="d-inline-block align-middle mb-0">
+                                            <span>{{i.name}}</span> 
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="d-inline-block align-middle mb-0">
+                                            <span>{{i.email_id}}</span> 
+                                        </p>
+                                    </td>
+                                    {% if i.status == "Pending" %}
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-warning">Pending</span>
+                                    </td>
+                                    {% elif i.status == "Resolved" %}
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-success">Resolved</span>
+                                    </td>
+                                    {% endif %}
+                                    
+                                    <td>
+                                        <a aria-label="anchor" class="btn btn-sm bg-primary-subtle me-1" data-bs-toggle="tooltip" data-bs-original-title="View Details" href="/view_details/{{i.id}}">
+                                            View Details
+                                        </a>
+                                    </td>
+                                    <td>{{i.created_at}}</td>
+                                    {% if i.status == "Pending" %}
+                                    <td>
+                                        <a aria-label="anchor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Resolved" href="/resolve_enquiry/{{i.id}}">Resolved</a>
+                                    </td>
+                                    {% elif i.status == "Resolved" %}
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-success">Resolved</span>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

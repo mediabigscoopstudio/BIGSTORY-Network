@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green India - CSR Brochure</title>
+    
+    <!-- Fonts: Fraunces (Recoleta Alternative) and Quicksand -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gi-dark': '#31643a',
+                        'gi-med': '#60853d',
+                        'gi-olive': '#95b046',
+                        'gi-pale': '#b3c59d',
+                        'gi-light': '#f4f5ef',
+                    },
+                    fontFamily: {
+                        'serif': ['Fraunces', 'serif'],
+                        'sans': ['Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Reset & Typography */
+        body {
+            background-color: #e5e7eb; /* Gray background for screen viewing */
+            margin: 0;
+            padding: 20px 0;
+            font-family: 'Quicksand', sans-serif;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-recoleta {
+            font-family: 'Fraunces', serif;
+        }
+
+        /* A4 Page Setup */
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            background-color: #f4f5ef; /* gi-light */
+            margin: 0 auto 40px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+        }
+
+        /* Print CSS: Removes margins, shadows, and forces page breaks */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                background-color: transparent;
+                padding: 0;
+            }
+            .a4-page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+            /* Hide the last page break to prevent a blank 5th page */
+            .a4-page:last-child {
+                page-break-after: auto;
+            }
+        }
+
+        /* Design Accents */
+        .shape-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Stats Box */
+        .stat-box {
+            border-left: 4px solid #31643a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         PAGE 1: FRONT COVER
+         ========================================== -->
+    <div class="a4-page flex flex-col justify-between p-12">
+        <!-- Abstract Background Elements -->
+        <div class="shape-circle bg-gi-pale opacity-40" style="width: 400px; height: 400px; top: -100px; right: -150px;"></div>
+        <div class="shape-circle bg-gi-olive opacity-20" style="width: 600px; height: 600px; bottom: -200px; left: -200px;"></div>
+
+        <!-- Top Logo -->
+        <div class="content-layer mt-12 flex justify-center">
+            <img src="https://www.bigstorynetwork.com/static/main/GreenIndia.webp" alt="Green India Logo" class="h-40 object-contain">
+        </div>
+
+        <!-- Center Content -->
+        <div class="content-layer text-center flex-grow flex flex-col justify-center">
+            <h1 class="text-5xl text-gi-dark leading-tight mb-6">
+                India's <i class="italic text-gi-med">Sustainability Stories</i><br>That Demand Attention.
+            </h1>
+            <div class="w-24 h-1 bg-gi-olive mx-auto mb-6"></div>
+            <p class="text-xl text-gray-700 tracking-wide font-medium">
+                Environment | Empowerment | Sustainable Growth
+            </p>
+        </div>
+
+        <!-- Bottom Vector & Bigstory branding -->
+        <div class="content-layer flex justify-between items-end pb-8">
+            <img src="https://www.bigstorynetwork.com/static/main/Vector.png" alt="Vector Art" class="w-48 opacity-80">
+            <div class="text-right">
+                <p class="text-sm font-bold text-gray-500 mb-1">An Impact Platform By</p>
+                <img src="https://www.bigstorynetwork.com/static/main/Logo.png" alt="BIGSTORY Network" class="h-8 object-contain">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         PAGE 2: INTRODUCTION & PROBLEM STATEMENT
+         ========================================== -->
+    <div class="a4-page p-12">
+        <!-- Top Accent Bar -->
+        <div class="absolute top-0 left-0 w-full h-4 bg-gi-dark"></div>
+        <div class="absolute top-4 left-0 w-2/3 h-2 bg-gi-med"></div>
+        <div class="absolute top-6 left-0 w-1/3 h-1 bg-gi-olive"></div>
+
+        <div class="content-layer mt-16 h-full flex flex-col">
+            <div class="mb-12">
+                <h2 class="text-4xl text-gi-dark mb-4">What is Green India?</h2>
+                <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                    Green India is BIGSTORY Network's dedicated impact platform covering sustainability in India, climate solutions, water crisis, circular economy, women entrepreneurs, grassroots innovation, and inclusive growth. 
+                </p>
+                <p class="text-lg text-gray-800 leading-relaxed font-medium mt-4">
+                    We bridge grassroots innovators, women entrepreneurs, policymakers, corporates, and young citizens through trusted storytelling and real-world opportunities. We amplify the stories that create measurable change.
+                </p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-8 mb-12">
+                <div class="stat-box bg-white p-6 shadow-sm">
+                    <h3 class="text-3xl text-gi-dark mb-1">60M+ Tonnes</h3>
+                    <p class="text-sm text-gi-med font-bold uppercase tracking-wider mb-2">Waste per Year</p>
+                    <p class="text-sm text-gray-600">India generates massive amounts of waste annually—largely unprocessed, choking cities and countryside.</p>
+                </div>
+                <div class="stat-box bg-white p-6 shadow-sm border-gi-med">
+                    <h3 class="text-3xl text-gi-med mb-1">50% Districts</h3>
+                    <p class="text-sm text-gi-olive font-bold uppercase tracking-wider mb-2">Face Water Stress</p>
+                    <p class="text-sm text-gray-600">Nearly half of India's districts are at risk, with cities racing toward Day Zero as rivers run dry.</p>
+                </div>
+                <div class="stat-box bg-white p-6 shadow-sm border-gi-olive">
+                    <h3 class="text-3xl text-gi-olive mb-1">Grassroots</h3>
+                    <p class="text-sm text-gi-dark font-bold uppercase tracking-wider mb-2">T2 & T3 Focus</p>
+                    <p class="text-sm text-gray-600">Empowering women entrepreneurs and innovators from underserved areas of rural and semi-urban India.</p>
+                </div>
+                <div class="stat-box bg-white p-6 shadow-sm border-gi-pale">
+                    <h3 class="text-3xl text-gi-dark mb-1">360° Impact</h3>
+                    <p class="text-sm text-gi-med font-bold uppercase tracking-wider mb-2">The Ecosystem</p>
+                    <p class="text-sm text-gray-600">Moving from Story → Empowerment → Ecosystem, driving real solutions over just awareness.</p>
+                </div>
+            </div>
+
+            <!-- Bottom Graphic Element -->
+            <div class="flex-grow flex items-end justify-center">
+                <div class="w-full h-32 bg-gi-pale rounded-t-3xl p-6 flex items-center justify-center">
+                    <h3 class="text-2xl text-gi-dark text-center">We focus on what's working — not just what's broken.</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         PAGE 3: INITIATIVES & FOUNDER
+         ========================================== -->
+    <div class="a4-page p-12">
+        <!-- Abstract Background -->
+        <div class="absolute right-0 top-0 w-1/3 h-full bg-gi-pale opacity-20"></div>
+
+        <div class="content-layer h-full flex flex-col">
+            
+            <!-- Pillars Section -->
+            <div class="mb-12">
+                <h2 class="text-3xl text-gi-dark mb-8 border-b-2 border-gi-olive pb-2 inline-block">The 5 Pillars of Impact</h2>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 rounded-full bg-gi-dark text-white flex items-center justify-center text-xl font-bold mr-4 flex-shrink-0">1</div>
+                        <div>
+                            <h4 class="text-xl text-gi-dark font-bold">Green Stories</h4>
+                            <p class="text-gray-700 text-sm mt-1">Impact storytelling series showcasing real changemakers and sustainable innovations.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 rounded-full bg-gi-med text-white flex items-center justify-center text-xl font-bold mr-4 flex-shrink-0">2</div>
+                        <div>
+                            <h4 class="text-xl text-gi-med font-bold">Women for Green</h4>
+                            <p class="text-gray-700 text-sm mt-1">Empowering women entrepreneurs in sustainability from Tier 2, Tier 3, and rural India.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 rounded-full bg-gi-olive text-white flex items-center justify-center text-xl font-bold mr-4 flex-shrink-0">3</div>
+                        <div>
+                            <h4 class="text-xl text-gi-olive font-bold">Green Dialogues</h4>
+                            <p class="text-gray-700 text-sm mt-1">A platform bringing policymakers, corporate leaders, and innovators together.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 rounded-full bg-gi-pale text-gi-dark flex items-center justify-center text-xl font-bold mr-4 flex-shrink-0">4</div>
+                        <div>
+                            <h4 class="text-xl text-gi-dark font-bold">Green Action Labs & Network</h4>
+                            <p class="text-gray-700 text-sm mt-1">On-ground implementation and connecting the ecosystem to scale inclusive growth.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Founder Section -->
+            <div class="mt-auto bg-white p-6 rounded-xl shadow-md flex items-center gap-6 border-t-4 border-gi-dark relative z-10">
+                <img src="https://www.bigstorynetwork.com/static/main/Sema.webp" alt="Sseema Giill" class="w-32 h-32 rounded-full object-cover border-4 border-gi-light shadow-sm">
+                <div>
+                    <svg class="w-8 h-8 text-gi-pale mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    <p class="text-gray-800 text-sm italic font-medium leading-relaxed mb-3">
+                        "We are at a defining moment where growth and sustainability must go hand in hand... What is needed right now is a platform that can bring visibility, scale, and collaboration — and that is exactly where Green India plays its most critical role."
+                    </p>
+                    <p class="text-gi-dark font-bold font-serif text-lg">Sseema Giill</p>
+                    <p class="text-xs text-gi-med uppercase tracking-wider font-bold">Founder, BIGSTORY Network</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         PAGE 4: BACK COVER & CTA
+         ========================================== -->
+    <div class="a4-page bg-gi-dark p-12 text-center flex flex-col justify-between items-center relative">
+        <!-- Background Vector Overlay -->
+        <div class="absolute inset-0 opacity-10 flex items-center justify-center overflow-hidden pointer-events-none">
+            <img src="https://www.bigstorynetwork.com/static/main/Vector.png" alt="Background Texture" class="w-[800px] h-auto max-w-none">
+        </div>
+
+        <div class="content-layer mt-20 w-full">
+            <h2 class="text-5xl text-gi-light mb-6">Partner With <span class="text-gi-olive italic">Green India</span></h2>
+            <div class="w-16 h-1 bg-gi-pale mx-auto mb-8"></div>
+            <p class="text-xl text-gi-light opacity-90 mb-12 max-w-md mx-auto leading-relaxed">
+                Scale your impact through strategic partnership. We connect your CSR initiatives and ESG goals with measurable grassroots action and high-impact media visibility.
+            </p>
+
+            <!-- White Contact Box -->
+            <div class="bg-gi-light p-8 rounded-2xl shadow-xl w-full max-w-sm mx-auto">
+                <h3 class="text-2xl text-gi-dark mb-2">Let's Build Together</h3>
+                <p class="text-sm text-gray-600 mb-6">Reach out to our leadership directly to explore CSR, Media, and Marketing partnerships.</p>
+                
+                <a href="mailto:ceo@bigstorynetwork.com" class="block w-full py-4 px-6 bg-gi-med text-white text-lg font-bold rounded-lg hover:bg-gi-olive transition-colors duration-300">
+                    ceo@bigstorynetwork.com
+                </a>
+            </div>
+        </div>
+
+        <div class="content-layer mb-12 w-full border-t border-gi-med pt-8">
+            <img src="https://www.bigstorynetwork.com/static/main/GreenIndia.webp" alt="Green India Logo" class="h-16 mx-auto mb-6 brightness-0 invert">
+            <p class="text-gi-pale text-sm">
+                A movement powered by <br>
+                <img src="https://www.bigstorynetwork.com/static/main/Logo.png" alt="BIGSTORY Network" class="h-6 inline-block mt-2 brightness-0 invert">
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

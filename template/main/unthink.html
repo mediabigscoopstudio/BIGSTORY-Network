@@ -1,0 +1,168 @@
+{% extends "main/base.html" %}
+{% block 'title' %}UN THINK — Decode the World Around You{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="UN THINK by BIGSTORY Network decodes the hidden forces shaping our daily lives — from loneliness, demographic shifts, Gen Z behaviour, economic patterns, policy impact, to societal changes across India and the world.">
+<meta name="keywords" content="UN THINK, societal analysis India, human behaviour trends, demographic dividend India, loneliness India, Gen Z India, social issues analysis, BIGSTORY Network deep dives, cultural shifts, policy impact on society">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/un-think">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/un-think">
+<meta property="og:title" content="UN THINK — Decode the World Around You">
+<meta property="og:description" content="Understand the deeper ‘why’ behind real-world issues. UN THINK explains societal shifts, youth trends, economic patterns, policy changes, and human behaviour through sharp, simple storytelling.">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/un-think">
+<meta name="twitter:title" content="UN THINK — Bigstory's Deep Dive Into Society & Behaviour">
+<meta name="twitter:description" content="Explore detailed explanations behind India's loneliness wave, demographic shifts, Gen Z protests, infrastructure failures, cultural trends, and more.">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema.org JSON-LD for UN THINK Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "UN THINK — Decode Societal & Behavioural Trends",
+  "description": "UN THINK by BIGSTORY Network explores the underlying forces shaping human behaviour and society — from demographic changes, loneliness, youth politics, infrastructure issues, to cultural and economic shifts.",
+  "url": "https://bigstorynetwork.com/un-think",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Vector.png"
+    }
+  },
+  "image": "https://bigstorynetwork.com/static/main/Brandplate.webp",
+  "about": {
+    "@type": "ItemList",
+    "name": "UN THINK Episode Series",
+    "description": "A collection of deep-dive analyses explaining the hidden patterns behind India's social, economic, and behavioural shifts."
+  }
+}
+</script>
+
+{% endblock 'meta' %}
+{% block 'css' %}
+<link rel="stylesheet" href="/static/main/css/index.css">
+{% endblock 'css' %}
+{% block 'body' %}
+<!-- BIGSTORY FEATURE SECTION -->
+<div class="container py-2 bigstory-feature">
+    <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="BIGSTORY" >
+        <span>UN THiNk</span>
+      </div>
+      <br>
+  <div class="bigstory-card">
+       
+    {% if exclusive_main  %}
+      <!-- Left Content -->
+    <div class="bigstory-content" 
+    {% if exclusive_main.banner_background_colour %}
+      style="background-color: {{exclusive_main.banner_background_colour}};"
+    {% else %}
+      style="background-color: white;"
+    {% endif %}
+    >
+      <a href="/content/{{exclusive_main.slug}}" 
+      {% if exclusive_main.remaining_text_colour %}
+         style="text-decoration: none; color: {{exclusive_main.remaining_text_colour}};"
+       {% else %}
+       style ="color:black;text-decoration: none;"
+       {% endif %}
+       >
+      <div class="bigstory-header d-flex justify-content-between align-items-center mt-2"
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+        <span class="bigstory-subtag">{{exclusive_main.category.title}}</span>
+        <span class="bigstory-date">{{exclusive_main.created_at}}</span>
+      </div>
+      <h2 class="bigstory-title mt-5"
+      {% if exclusive_main.title_colour %}
+         style="color: {{exclusive_main.title_colour}};"
+       {% endif %}
+      >{{exclusive_main.title}}</h2>
+      <p class="bigstory-text mt-2" 
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+        {{exclusive_main.description}}
+      </p>
+      <br><br>
+      </a>
+    </div>
+
+    <!-- Right Image -->
+    <div class="bigstory-image" style="background-color: transparent;">
+      <a href="/content/{{exclusive_main.slug}}" style="text-decoration: none; color: black;">
+      <img src="/media/{{exclusive_main.thumbnail_image}}" alt="Bigstory Feature Image">
+      </a>
+    </div>
+    {% endif %}
+  </div>
+  <!-- MULTI NEWS SECTION -->
+<div class="multi-news">
+  {% for i in exclusive_suggestions  %}
+    <div class="news-card">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+    <img src="/media/{{i.thumbnail_image}}" alt="{{title}}">
+    
+    <div class="news-info">
+      <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration:none">
+      <span class="news-category" >{{i.category}}</span>
+      </a>
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <h3 class="news-title">{{i.title}}</h3>
+      </a>
+    </div>
+    </a>
+  </div>
+  {% endfor %}
+  
+</div>
+  
+</div>
+<!-- TRENDING SECTION -->
+<div class="container py-4" style="border-top: solid #d60000 2px;">
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    
+    {% for i in Latest_Articles %}
+      <div class="col">
+      <div class="card border-0">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+          <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+        </div>
+      </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

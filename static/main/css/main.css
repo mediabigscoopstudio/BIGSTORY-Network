@@ -1,0 +1,261 @@
+    /* --- Custom Styles to Match Your Design --- */
+        :root {
+            --brand-red: #D92323;
+            --brand-yellow: #F4C430;
+            --brand-dark-text: #333;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+        }
+        h1, h2, h3, h4, h5, h6 
+        {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+        /* --- Top Trending Bar --- */
+        .trending-bar {
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 2px solid var(--brand-red);
+            padding-bottom: 0.5rem;
+        }
+        .trending-bar .lucide-zap {
+    fill: var(--brand-yellow);       /* Sets the inside color to red */
+    stroke: var(--brand-red);  /* Sets the outline color to yellow */
+    stroke-width: 2;              /* Adjust outline thickness if needed */
+}
+
+        /* --- Logo --- */
+        .logo-wrapper img {
+            max-width: 300px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        /* ADDED THIS STYLE FOR THE SEPARATOR */
+        .logo-separator {
+            border: none;
+            height: 2px;
+            background-color: var(--brand-red);
+            opacity: 1;
+            /* To match the width of the trending bar */
+            max-width: 100%; 
+        }
+
+        /* --- Main Navigation Bar --- */
+        .main-navbar
+        {
+            background-color: #ffffff;
+        }
+        .main-navbar {
+            border-bottom: 2px solid  var(--brand-red);
+            max-width: 100%; 
+        }
+        .navbar-nav .nav-link {
+            color: var(--brand-dark-text);
+            text-transform: uppercase;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            position: relative;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            /* ADJUSTED THIS VALUE FOR BETTER ALIGNMENT */
+            bottom: -1px;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 3px;
+            background-color: var(--brand-red);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-item.dropdown:hover > .nav-link::after {
+            transform: scaleX(1);
+        }
+        
+        /* --- Custom Buttons --- */
+        .btn-just-in {
+            background-color: var(--brand-red);
+            color: white;
+            font-weight: 700;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+        .btn-subscribe {
+            background-color: var(--brand-yellow);
+            color: var(--brand-dark-text);
+            font-weight: 700;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+        .btn-greenIndia{
+    background-color:#31643a !important;
+    border-color:#31643a !important;
+    color:#ffffff !important;
+    border-radius:4px;
+    font-size:0.9rem;
+    font-family:'Lato', sans-serif;
+    font-weight:700;
+}
+
+.btn-greenIndia:hover{
+    background-color:#295531 !important;
+    border-color:#295531 !important;
+    color:#ffffff !important;
+}
+        .btn-subscribe .lucide-crown
+        {
+            stroke: var(--brand-red);  /* Sets the outline color to yellow */ 
+        }
+
+        /* --- Mega Menu for Desktop --- */
+        .dropdown-mega {
+            position: static; /* Important for full-width dropdown */
+        }
+        .dropdown-menu-mega {
+            width: 100%;
+            left: 0;
+            right: 0;
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
+            border-top: 1px solid #eee;
+            margin-top: 0 !important; /* Override Bootstrap */
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        .article-card {
+            border: none;
+        }
+        .article-card img {
+            border-radius: 0px;
+        }
+        .article-card .card-body {
+            padding: 0.75rem 0;
+        }
+        .article-card .card-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--brand-dark-text);
+        }
+        .article-card a {
+            text-decoration: none;
+        }
+
+        /* --- Desktop Hover Functionality --- */
+        @media (min-width: 992px) {
+            .dropdown-mega:hover .dropdown-menu-mega {
+                display: block;
+            }
+        }
+        
+        /* --- Mobile Navigation --- */
+        .navbar-toggler {
+            border: none;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        .offcanvas-header {
+            border-bottom: 1px solid #eee;
+        }
+        .offcanvas-body .navbar-nav .nav-link{
+             padding-bottom: 1rem;
+             padding-top: 1rem;
+        }
+         .offcanvas-body .navbar-nav .nav-link::after {
+             display: none;
+         }
+        .mobile-submenu .article-card {
+            padding-left: 1.5rem; /* Indent sub-menu items */
+            padding-bottom: 1rem;
+        }
+        /* --- Footer --- */
+        .site-footer {
+            background-color: #ffffff;
+            color: var(--footer-text);
+            padding-top: 4rem;
+            padding-bottom: 2rem;
+            border-top: 2px solid var(--brand-red);
+        }
+        .site-footer h5 {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            color: var(--brand-dark-text);
+            font-size: 1rem;
+        }
+        .site-footer .footer-links {
+            list-style: none;
+            padding-left: 0;
+        }
+        .site-footer .footer-links li a {
+            color: var(--footer-text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            line-height: 2;
+        }
+        .site-footer .footer-links li a:hover {
+            color: var(--brand-red);
+        }
+        .site-footer .newsletter-form .form-control {
+            border-radius: 4px 0 0 4px;
+        }
+        .site-footer .newsletter-form .btn {
+            border-radius: 0 4px 4px 0;
+            background-color: var(--brand-dark-text);
+            color: white;
+        }
+        .site-footer .form-check-label {
+            font-size: 0.8rem;
+        }
+        .seprater
+        {
+            border: 2px solid var(--brand-red);
+        }
+        .site-footer .advertise-link {
+            font-weight: 700;
+            color: var(--brand-dark-text);
+            text-decoration: none;
+        }
+        .site-footer .social-icons a {
+            color: red;
+            margin-right: 1rem;
+        }
+        .site-footer .social-icons a:hover {
+            color: var(--brand-dark-text);
+        }
+        .site-footer .footer-bottom {
+            border-top: 1px solid #e9ecef;
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+        .site-footer .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            color: var(--brand-dark-text);
+            text-decoration: none;
+        }
+        .site-footer .footer-bottom-links a {
+            color: var(--footer-text);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .site-footer .footer-bottom-links a:hover {
+            color: var(--brand-dark-text);
+        }
+        .logo_footer
+        {
+            max-width: 200px;
+        }

@@ -1,0 +1,140 @@
+{% extends "content/base.html" %}
+{% block 'title' %}Content Calendar — {{ month_name }} {{ year }}{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .page-wrap { padding: 24px 28px 40px; }
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .cal-header h2 { font-size: 20px; font-weight: 700; color: #1a1a2e; margin: 0; }
+  .cal-nav { display: flex; align-items: center; gap: 8px; }
+  .cal-nav a {
+    padding: 7px 16px; border-radius: 7px; border: 1.5px solid #e5e5e5;
+    background: #fff; color: #333; font-size: 13px; font-weight: 500;
+    text-decoration: none; transition: all 0.15s;
+  }
+  .cal-nav a:hover { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+  .cal-nav span { font-size: 13px; color: #aaa; padding: 0 4px; }
+  .cal-add {
+    background: #1a1a2e; color: #fff; border: none; padding: 8px 18px;
+    border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .cal-add:hover { background: #16213e; color: #fff; }
+
+  .cal-meta { font-size: 13px; color: #aaa; margin-bottom: 16px; }
+
+  /* calendar grid */
+  .cal-grid { border-radius: 12px; overflow: hidden; border: 1px solid #f0f0f0; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .cal-days-header {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    background: #1a1a2e;
+  }
+  .cal-day-name {
+    padding: 10px 0; text-align: center; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.6);
+  }
+  .cal-week { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid #f0f0f0; }
+  .cal-cell {
+    min-height: 110px; padding: 8px; background: #fff; border-right: 1px solid #f5f5f5;
+    vertical-align: top; position: relative;
+  }
+  .cal-cell:last-child { border-right: none; }
+  .cal-cell.empty { background: #fafafa; }
+  .cal-cell.today { background: #f0f0ff; }
+
+  .cell-day-num {
+    font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 5px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+  }
+  .cell-day-num.is-today { background: #1a1a2e; color: #fff; }
+
+  .cell-task {
+    display: block; margin-bottom: 3px; padding: 3px 7px; border-radius: 5px;
+    font-size: 11px; font-weight: 500; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-decoration: none; transition: opacity 0.12s;
+  }
+  .cell-task:hover { opacity: 0.85; color: #fff; }
+  .cell-task.status-todo       { background: #888; }
+  .cell-task.status-inprogress { background: #f0a500; }
+  .cell-task.status-review     { background: #7F77DD; }
+  .cell-task.status-done       { background: #1D9E75; }
+
+  .more-tasks { font-size: 10px; color: #bbb; margin-top: 2px; padding-left: 4px; }
+
+  /* type legend */
+  .type-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .type-chip {
+    font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px;
+    border: 1px solid #e5e5e5; background: #f5f5f5; color: #666;
+    cursor: pointer; transition: all 0.12s;
+  }
+  .type-chip.active, .type-chip:hover { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="page-wrap">
+
+  <div class="cal-header">
+    <h2>{{ month_name }} {{ year }}</h2>
+    <div class="cal-nav">
+      <a href="/calendar?year={{ prev_year }}&month={{ prev_month }}">← Prev</a>
+      <a href="/calendar">Today</a>
+      <a href="/calendar?year={{ next_year }}&month={{ next_month }}">Next →</a>
+    </div>
+    <a href="/add_task" class="cal-add">+ New task</a>
+  </div>
+
+  <p class="cal-meta">{{ total_tasks }} task{{ total_tasks|pluralize }} scheduled this month — showing only your tasks.</p>
+
+  <!-- status colour legend -->
+  <div class="type-legend">
+    <span class="type-chip" style="background:#888; color:#fff; border-color:#888;">To Do</span>
+    <span class="type-chip" style="background:#f0a500; color:#fff; border-color:#f0a500;">In Progress</span>
+    <span class="type-chip" style="background:#7F77DD; color:#fff; border-color:#7F77DD;">Review</span>
+    <span class="type-chip" style="background:#1D9E75; color:#fff; border-color:#1D9E75;">Done</span>
+  </div>
+
+  <div class="cal-grid">
+    <!-- day names header -->
+    <div class="cal-days-header">
+      <div class="cal-day-name">Mon</div>
+      <div class="cal-day-name">Tue</div>
+      <div class="cal-day-name">Wed</div>
+      <div class="cal-day-name">Thu</div>
+      <div class="cal-day-name">Fri</div>
+      <div class="cal-day-name">Sat</div>
+      <div class="cal-day-name">Sun</div>
+    </div>
+
+    <!-- weeks -->
+    {% for week in weeks %}
+    <div class="cal-week">
+      {% for cell in week %}
+        {% if cell %}
+        <div class="cal-cell {% if cell.is_today %}today{% endif %}">
+          <div class="cell-day-num {% if cell.is_today %}is-today{% endif %}">{{ cell.day }}</div>
+          {% for task in cell.tasks|slice:":3" %}
+          <a href="/task_detail/{{ task.id }}" class="cell-task status-{{ task.status }}"
+             title="{{ task.title }} — {{ task.get_task_type_display }}">
+            {{ task.title|truncatechars:22 }}
+          </a>
+          {% endfor %}
+          {% if cell.tasks|length > 3 %}
+          <div class="more-tasks">+{{ cell.tasks|length|add:"-3" }} more</div>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="cal-cell empty"></div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}{% endblock 'script' %}

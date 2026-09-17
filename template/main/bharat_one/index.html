@@ -1,0 +1,134 @@
+{% extends "main/base.html" %}
+{% block 'title' %}Bharat One by BIGSTORY Network{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="Bharat One by BIGSTORY Network delivers India's perspective on global geopolitics, economy, technology, and power shifts — through sharp, simple, high-impact storytelling built for the new generation.">
+<meta name="keywords" content="Bharat One, BIGSTORY Network, Indian geopolitics, India world news, global affairs India, strategic affairs India, economy explainers India, youth news India, Bharat perspective news">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://bigstorynetwork.com/bharat-one">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/bharat-one">
+<meta property="og:title" content="Bharat One — India’s Lens on Global Power | BIGSTORY Network">
+<meta property="og:description" content="Bharat One by BIGSTORY Network explains the world from India’s perspective — geopolitics, economy, technology and global power shifts in sharp, simple storytelling.">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Bharat_One_by_BIGSTORY.webp">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/bharat-one">
+<meta name="twitter:title" content="Bharat One — India’s Perspective on the World | BIGSTORY Network">
+<meta name="twitter:description" content="Global power explained for India. Bharat One delivers geopolitics, economy and strategy in simple, high-impact stories.">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Bharat_One_by_BIGSTORY.webp">
+
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Bharat One",
+  "url": "https://bigstorynetwork.com/bharat_one",
+  "description": "Bharat One is a flagship vertical of BIGSTORY Network delivering India's perspective on geopolitics, global economy, technology and international affairs.",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://bigstorynetwork.com/static/main/Bharat_One_by_BIGSTORY.webp"
+  },
+  "publisher": {
+    "@type": "NewsMediaOrganization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Logo.png",
+      "width": 600,
+      "height": 60
+    }
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "BIGSTORY Network",
+    "url": "https://bigstorynetwork.com/"
+  },
+  "sameAs": [
+    "https://instagram.com/bharatone_official/"
+  ]
+}
+</script>
+
+{% endblock 'meta' %}
+
+{% block 'css' %}
+<style>
+.top-wrapper{padding:20px}
+.brand img{max-width:100%;height:auto}
+.catchup{border:3px transparent;padding:10px;height:100%;display:flex;align-items:center;justify-content:center}
+.catchup img{max-width:100%;height:auto}
+.sticky-sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+</style>
+{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid top-wrapper">
+  <div class="row">
+
+    <!-- LEFT: Articles -->
+    <div class="col-lg-8 col-md-7 col-sm-12 mb-3 mb-md-0">
+
+      <!-- Bharat One Banner -->
+      <div class="brand mb-4">
+        <img src="/static/main/bharat_one/BharatOne.webp" alt="Bharat One">
+      </div>
+
+      <!-- Articles Grid -->
+      <div class="row g-4">
+        {% for i in articles %}
+          <div class="col-lg-3 col-md-6 col-6" onclick="location.href='/content/{{i.slug}}'">
+            <div class="article-card">
+              <img src="/media/{{i.banner_image}}" class="img-fluid w-100" style="border-radius:10px;">
+              <div class="pt-2">
+                <div class="text-danger fw-bold">Bharat One</div>
+                <h3 class="fw-bold" style="font-size:15px;">{{i.title}}</h3>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Sticky Video Section -->
+    <div class="col-lg-4 col-md-5 col-sm-12">
+      <div class="sticky-sidebar">
+
+        <div class="catchup">
+          <img src="/static/main/bharat_one/CatchUp.webp">
+        </div>
+
+        <div class="mt-3">
+          <div class="row g-2">
+            {% for i in videos %}
+              <div class="col-6">
+                <img src="/media/{{i.thumbnail_image}}" class="img-fluid w-100"
+                     onclick="location.href='{{i.link}}'">
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

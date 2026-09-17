@@ -1,0 +1,71 @@
+{% extends "content/base.html" %}
+{% block 'title' %}BSTV{% endblock 'title' %}
+{% block 'css' %}{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid">
+    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+        <div class="flex-grow-1">
+            <h4 class="fs-18 fw-semibold m-0">Our Content</h4> 
+        </div>
+        <a aria-label="Add Editor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Add Articles" href="/add_bstv">Add Content</a>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table datatable" id="datatable_1">
+                            <thead>
+                              <tr>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in contents %}
+                                <tr>
+                                    <td class="ps-0">
+                                        <p class="d-inline-block align-middle mb-0">
+                                            <span>{{i.title}}</span> 
+                                        </p>
+                                    </td>
+                                    
+                                    {% if i.status == "Enabled" %}
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-warning">Enabled</span>
+                                    </td>
+                                    {% elif i.status == "Disabled" %}
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-success">Disabled</span>
+                                    </td>
+                                    {% endif %}
+                                    
+                                    {% if i.status == "Enabled" %}
+                                    <td>
+                                        <a aria-label="anchor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Disable BSTV Content" href="/disable_bstv/{{i.id}}">Disable</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-success-subtle" data-bs-toggle="tooltip" data-bs-original-title="Edit Content" href="/edit_bstv/{{i.id}}">Edit</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete Content" href="/delete_bstv/{{i.id}}">Delete</a>
+                                    </td>
+                                    {% elif i.status == "Disabled" %}
+                                    <td>
+                                        <a aria-label="anchor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Enable Content" href="/enable_bstv/{{i.id}}">Enable</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-success-subtle" data-bs-toggle="tooltip" data-bs-original-title="Edit Content" href="/edit_bstv/{{i.id}}">Edit</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete Content" href="/delete_bstv/{{i.id}}">Delete</a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

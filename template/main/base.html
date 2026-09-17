@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block 'title' %}    {% endblock 'title' %}</title>
+    <link rel="shortcut icon" href="https://bigstorynetwork.com/static/main/Vector.png" type="image/x-icon">
+    {% block 'meta' %}{% endblock 'meta' %}
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/main/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+      <style>
+        .trending-bar {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#typewriter {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 2px solid var(--brand-red);
+    white-space: nowrap;
+    padding-right: 4px;
+}
+
+@media (max-width: 576px) {
+    #typewriter {
+        font-size: 14px;
+        max-width: 100%;
+    }
+    .trending-bar strong {
+        font-size: 14px;
+    }
+}
+    </style>
+    {% block 'css' %}
+    {% endblock 'css' %}
+        <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9EWQP6EM4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J9EWQP6EM4');
+</script>
+
+<!-- Schema: BIGSTORY Organisation (sitewide) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "name": "BIGSTORY Network",
+  "alternateName": "BIGSTORY",
+  "url": "https://bigstorynetwork.com",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://bigstorynetwork.com/static/main/Logo.png",
+    "width": 600,
+    "height": 60
+  },
+  "description": "India's Perspective on the World — factual, politically neutral, Pro-India news and analysis.",
+  "publishingPrinciples": "https://bigstorynetwork.com/about_us",
+  "masthead": "https://bigstorynetwork.com/about_us",
+  "foundingDate": "2023",
+  "sameAs": [
+    "https://x.com/BIGSTORYNetwork",
+    "https://www.facebook.com/BIGSTORYNETWORKOfficial",
+    "https://www.instagram.com/bigstorynetwork/",
+    "https://www.youtube.com/@BIGSTORYNETWORK",
+    "https://www.linkedin.com/company/bigstorynetwork/"
+  ]
+}
+</script>
+<style>
+    .social-icons-red {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.social-icons-red a {
+    color: black;
+    font-size: 15px;
+    transition: 0.3s ease;
+}
+
+.social-icons-red a:hover {
+    color: darkred;
+    transform: scale(1.1);
+}
+</style>
+</head>
+<body>
+
+    <header class="container my-3">
+        <!-- Top Trending Bar -->
+        <div class="trending-bar d-flex align-items-center mb-4">
+    <i data-lucide="zap" class="me-2"></i>
+    <strong>TRENDING:</strong>
+    <div class="flex-grow-1 overflow-hidden ms-2">
+        <a id="typewriter-link" class="text-dark fw-semibold text-decoration-none" href="#">
+            <span id="typewriter" style="color: #D92323;"></span>
+        </a>
+    </div>
+</div>
+
+        <!-- Logo -->
+        <div class="logo-wrapper text-center my-4">
+            <a href="/">
+                <img src="/static/main/Logo.png" alt="BIGSTORY Network">
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="navbar navbar-expand-lg main-navbar sticky-top">
+        <div class="container">
+            <!-- Mobile Hamburger Menu Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNav" aria-controls="mobileNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Desktop Navigation Links -->
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown dropdown-mega">
+                        <a class="nav-link" href="/the_challengers" role="button" aria-expanded="false">
+                            The Challengers
+                        </a>
+                        <!-- The Mega Menu -->
+                        <div class="dropdown-menu dropdown-menu-mega">
+                            <div class="container">
+                                <div class="row">
+                                    {% for i in thechallengers_articles_header %}
+                                      <div class="col">
+                                        <div class="article-card card">
+                                            <a href="/content/{{i.slug}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><strong>{{i.title}}</strong></h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown dropdown-mega">
+                        <a class="nav-link" href="/unthink" role="button" aria-expanded="false">
+                            UN THiNK
+                        </a>
+                        <!-- The Mega Menu -->
+                        <div class="dropdown-menu dropdown-menu-mega">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="row">
+                                    {% for i in unthink_articles_header %}
+                                      <div class="col">
+                                        <div class="article-card card">
+                                            <a href="/content/{{i.slug}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <div class="card-body">
+                                                     <h5 class="card-title"><strong>{{i.title}}</strong></h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown dropdown-mega">
+                        <a class="nav-link" href="/bigshot" role="button" aria-expanded="false">
+                            BIG SHOT
+                        </a>
+                        <!-- The Mega Menu -->
+                        <div class="dropdown-menu dropdown-menu-mega">
+                            <div class="container">
+                                 <div class="row">
+                                    {% for i in bigshot_articles_header %}
+                                      <div class="col">
+                                        <div class="article-card card">
+                                            <a href="/content/{{i.slug}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{i.title}}</h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown dropdown-mega">
+                        <a class="nav-link" href="/category/expert-diaries" role="button" aria-expanded="false">
+                            EXPERT DIARIES
+                        </a>
+                        <!-- The Mega Menu -->
+                        <div class="dropdown-menu dropdown-menu-mega">
+                            <div class="container">
+                                <div class="row">
+                                    {% for i in expertdiaries_articles_header %}
+                                      <div class="col">
+                                        <div class="article-card card">
+                                            <a href="/content/{{i.slug}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <div class="card-body">
+                                                     <h5 class="card-title"><strong>{{i.title}}</strong></h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown dropdown-mega">
+                        <a class="nav-link" href="/category/gov-360" role="button" aria-expanded="false">
+                            GOV 360
+                        </a>
+                        <!-- The Mega Menu -->
+                        <div class="dropdown-menu dropdown-menu-mega">
+                            <div class="container">
+                                <div class="row">
+                                    {% for i in gov360_articles_header %}
+                                      <div class="col">
+                                        <div class="article-card card">
+                                            <a href="/content/{{i.slug}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <div class="card-body">
+                                                     <h5 class="card-title"><strong>{{i.title}}</strong></h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown dropdown-mega">
+                        <a class="nav-link" href="/bharat_one" role="button" aria-expanded="false">
+                            Bharat One
+                        </a>
+                        <!-- The Mega Menu -->
+                        <div class="dropdown-menu dropdown-menu-mega">
+                            <div class="container">
+                                <div class="row">
+                                    {% for i in bharat_one_articles %}
+                                      <div class="col">
+                                        <div class="article-card card">
+                                            <a href="/content/{{i.slug}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <div class="card-body">
+                                                     <h5 class="card-title"><strong>{{i.title}}</strong></h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-just-in me-2" onclick="location.href='/just_in'" >JUST IN</button>
+                    <button class="btn btn-greenIndia" onclick="window.open('/green-india','_blank')" > Green India</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Navigation Offcanvas -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav">
+          
+          <!-- Mobile Accordion Dropdown Item -->
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#challengersCollapse" role="button" aria-expanded="false" aria-controls="challengersCollapse">
+              The Challengers <i class="bi bi-chevron-down float-end"></i>
+            </a>
+            <div class="collapse mobile-submenu" id="challengersCollapse">
+                {% for i in thechallengers_articles_header|slice:":3" %}
+                 <div class="article-card card mt-3">
+                    <a href="/content/{{i.slug}}">
+                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                        <div class="card-body">
+                             <h5 class="card-title"><strong>{{i.title}}</strong></h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            
+            
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#unthinkCollapse" role="button" aria-expanded="false" aria-controls="unthinkCollapse">
+              UN THiNK <i class="bi bi-chevron-down float-end"></i>
+            </a>
+            
+            <div class="collapse mobile-submenu" id="unthinkCollapse">
+                {% for i in unthink_articles_header|slice:":3" %}
+                <div class="article-card card mt-3">
+                    <a href="/content/{{i.slug}}">
+                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                        <div class="card-body">
+                             <h5 class="card-title"><strong>{{i.title}}</strong></h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#bigshotCollapse" role="button" aria-expanded="false" aria-controls="bigshotCollapse">
+              BIG SHOT <i class="bi bi-chevron-down float-end"></i>
+            </a>
+            <div class="collapse mobile-submenu" id="bigshotCollapse">
+                {% for i in bigshot_articles_header|slice:":3" %}
+                <div class="article-card card mt-3">
+                    <a href="/content/{{i.slug}}">
+                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{i.title}}</h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/category/gov-360">GOV 360</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/bharat_one">Bharat One</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about_us">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/age_india">AGE India</a>
+          </li>
+        </ul>
+        <div class="mt-4">
+             <button class="btn btn-just-in w-100 mb-2" onclick="location.href='/just_in'" >JUST IN</button>
+             <button class="btn btn-greenIndia w-100" onclick="window.open('/green-india','_blank')"> Green India</button>
+        </div>
+      </div>
+    </div>
+    
+
+ {% block 'body' %}
+   
+ {% endblock 'body' %}
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row" >
+                <div class="col-md-4">
+                    <img src="/static/main/Logo.png" class="logo_footer" alt="BIGSTORY Network">
+                </div>
+                <div class="col-md-8 text-md-end">
+                    <div class="footer-bottom-links">
+                        <a href="/about_us">About Us</a>
+                        <a href="/career">Careers</a>
+                        <a href="/privacy_policy">Privacy Policy</a>
+                        <a href="/terms_and_conditions">Terms & Condition</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row footer-bottom align-items-center">
+                <!-- Link Columns -->
+                <div class="col-lg col-md-4 col-6 mb-4">
+                    <h5>Brands</h5>
+                    <ul class="footer-links">
+                        <li><a href="/bigshot">BIGSHOT</a></li>
+                        <li><a href="/the_challengers">The Challengers</a></li>
+                        <li><a href="/category/expert-diaries">Expert Diaries</a></li>
+                        <li><a href="/unthink">UN THiNk</a></li>
+                        <li><a href="/category/gov-360">GOV 360</a></li>
+                        <li><a href="/age_india">AGE India</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg col-md-4 col-6 mb-4">
+                    <h5>Topics</h5>
+                    <ul class="footer-links">
+                        <li><a href="/tags/russia-ukraine-war">Russia-Ukraine War</a></li>
+                        <li><a href="/tags/west-bengal-elections-2026">West Bengal Election 2026</a></li>
+                        <li><a href="/tags/donald-trump">Donald Trump</a></li>
+                        <li><a href="/tags/tamil-nadu-elections-2026">Tamil Nadu Election 2026</a></li>
+                        <li><a href="/tags/us-india-relations">India-US Relations</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg col-md-4 col-6 mb-4">
+                    <h5>Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="/about_us">About Us</a></li>
+                        <li><a href="/age_india">AGE INDIA</a></li>
+                        <li><a href="/authors">Our Authors</a></li>
+                    </ul>
+                </div>
+                 <div class="col-lg col-md-6 col-6 mb-4">
+                    <h5 class="mt-4">Discover</h5>
+                     <ul class="footer-links">
+                        <li><a href="/advertise_with_us">Advertise with us</a></li>
+                        <li><a href="/join_newsletter">Join Our Newsletter</a></li>
+                        <li><a href="/partner_with_us">Partner with us!</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter Column -->
+                <div class="col-lg-4 col-md-6">
+                    <h3>Subscribe to our Newletter</h3>
+                    <p>Start your day with impactful startup stories and concise news!</p>
+                    <form action="/join_newsletter_form" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group mb-3 newsletter-form">
+                            <input type="email" class="form-control" placeholder="Enter your Email" aria-label="Email" name="email">
+                            <button class="btn" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                    <hr class="seprater">
+                    <h5 class="mt-4">Follow Us</h5>
+                    <div class="social-icons-red">
+    <a href="https://x.com/BIGSTORYNetwork" target="_blank">
+        <i class="bi bi-twitter-x"></i>
+    </a>
+
+    <a href="https://www.facebook.com/people/BIGSTORY-Network/61589546408794/" target="_blank">
+        <i class="bi bi-facebook"></i>
+    </a>
+
+    <a href="https://www.instagram.com/bigstorynetwork/" target="_blank">
+        <i class="bi bi-instagram"></i>
+    </a>
+
+    <a href="https://www.youtube.com/@BIGSTORYNETWORK" target="_blank">
+        <i class="bi bi-youtube"></i>
+    </a>
+
+    <a href="https://www.linkedin.com/company/bigstorynetwork/" target="_blank">
+        <i class="bi bi-linkedin"></i>
+    </a>
+</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- STEP 2: Call this function to render the icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+<script>
+    const headlines = [
+        {% for a in latest_articles %}
+            {
+                title: "{{ a.title|escapejs }}",
+                url: "/content/{{ a.slug }}"
+            },
+        {% endfor %}
+    ];
+</script>
+<script>
+    const textEl = document.getElementById("typewriter");
+    const linkEl = document.getElementById("typewriter-link");
+
+    let index = 0;
+    let charIndex = 0;
+    let deleting = false;
+
+    function typeEffect() {
+        const { title, url } = headlines[index];
+        linkEl.href = url;   // ✅ Update URL dynamically
+
+        if (!deleting) {
+            textEl.textContent = title.substring(0, charIndex + 1);
+            charIndex++;
+
+            if (charIndex === title.length) {
+                deleting = true;
+                setTimeout(typeEffect, 2000); // pause before delete
+                return;
+            }
+        } else {
+            textEl.textContent = title.substring(0, charIndex - 1);
+            charIndex--;
+
+            if (charIndex === 0) {
+                deleting = false;
+                index = (index + 1) % headlines.length;
+            }
+        }
+
+        setTimeout(typeEffect, deleting ? 50 : 80);
+    }
+
+    typeEffect();
+</script>
+
+    {% block 'script' %}
+      
+    {% endblock 'script' %}
+
+</body>
+</html>
+
+

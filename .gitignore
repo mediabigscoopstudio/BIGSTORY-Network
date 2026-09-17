@@ -1,0 +1,101 @@
+# =========================
+# Python / Django
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+*.egg-info/
+*.egg
+
+# =========================
+# Virtual Environments
+# =========================
+.env
+.env.*
+env/
+venv/
+.venv/
+
+# =========================
+# Django Local Database
+# =========================
+*.sqlite3
+
+# =========================
+# Secrets / Credentials
+# =========================
+ga4_credentials.json
+credentials.json
+service-account*.json
+*.pem
+*.key
+
+# =========================
+# Static / Media
+# =========================
+staticfiles/
+media/
+
+# =========================
+# Database / Project Backups
+# =========================
+*.sql
+*.sql.gz
+*.dump
+*.rdb
+*.tar.gz
+*.zip
+
+dump.rdb
+media_backup.tar.gz
+bigstorydb_backup.sql.gz
+
+# =========================
+# Celery
+# =========================
+celerybeat-schedule
+
+# =========================
+# Logs / Runtime
+# =========================
+*.pid
+*.log
+
+# =========================
+# Coverage / Testing
+# =========================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# =========================
+# Node / JavaScript
+# =========================
+node_modules/
+npm-debug.log
+
+# =========================
+# IDEs / Editors
+# =========================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Build / Distribution
+# =========================
+build/
+dist/
+*.tgz
+
+
+# VPS / Nginx
+bigstory

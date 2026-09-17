@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green India - B2B Capabilities Brochure</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gi-forest': '#1A6B3A',
+                        'gi-leaf': '#2E8B57',
+                        'gi-sage': '#4CAF7D',
+                        'gi-mint': '#C8E6D4',
+                        'gi-cream': '#F7F4EF',
+                        'gi-parchment': '#EDE9E1',
+                        'gi-ink': '#1C1C1C',
+                        'gi-charcoal': '#3A3A3A',
+                        'gi-muted': '#7A7A7A',
+                        'gi-amber': '#C8860A',
+                        'gi-rule': '#D4CFC6',
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Reset & Typography */
+        body {
+            background-color: #e5e7eb;
+            margin: 0;
+            padding: 20px 0;
+            font-family: 'DM Sans', sans-serif;
+            color: #1C1C1C;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* A4 Page Setup */
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            background-color: #F7F4EF;
+            margin: 0 auto 40px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+        }
+
+        /* Print CSS */
+        @media print {
+            @page { size: A4; margin: 0; }
+            body { background-color: transparent; padding: 0; }
+            .a4-page { margin: 0; box-shadow: none; page-break-after: always; page-break-inside: avoid; }
+            .a4-page:last-child { page-break-after: auto; }
+        }
+
+        /* Design Accents for B2B */
+        .b2b-grid {
+            background-image: linear-gradient(rgba(212, 207, 198, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(212, 207, 198, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .content-layer { position: relative; z-index: 10; }
+        
+        /* Architecture Diagram CSS */
+        .hub-circle {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: #1A6B3A;
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700; text-align: center; line-height: 1.2;
+            position: relative; z-index: 2;
+            box-shadow: 0 10px 25px rgba(26,107,58,0.3);
+        }
+        .spoke {
+            position: absolute;
+            background: #4CAF7D;
+            height: 2px; z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="a4-page bg-gi-forest flex flex-col justify-between p-12 relative">
+        <div class="absolute inset-0 opacity-[0.03] flex items-center justify-center overflow-hidden pointer-events-none">
+            <img src="https://www.bigstorynetwork.com/static/main/Vector.png" alt="Background Texture" class="w-[800px] max-w-none filter invert">
+        </div>
+
+        <div class="content-layer flex justify-between items-start mt-6">
+            <img src="https://www.bigstorynetwork.com/static/main/GreenIndia.webp" alt="Green India" class="h-20 filter brightness-0 invert opacity-90">
+            <div class="text-right">
+                <span class="inline-block px-3 py-1 bg-white/10 border border-white/20 text-gi-mint text-[9px] uppercase tracking-[0.2em] font-bold rounded">
+                    Corporate Partnerships Deck
+                </span>
+            </div>
+        </div>
+
+        <div class="content-layer flex-grow flex flex-col justify-center">
+            <h1 class="text-white text-[3rem] leading-[1.1] font-black mb-8">
+                Your grassroots impact deserves <i class="text-[#9de8be] font-serif font-light">more than a PDF</i> on a corporate website.
+            </h1>
+            
+            <div class="w-16 h-1 bg-gi-sage mb-8"></div>
+            
+            <div class="grid grid-cols-2 gap-10">
+                <div>
+                    <h3 class="text-gi-mint text-lg font-bold mb-3">The Problem</h3>
+                    <p class="text-white/70 text-sm leading-relaxed font-light">
+                        Corporate Social Responsibility (CSR) reporting is largely invisible. Millions are spent on ground-breaking environmental and inclusive growth initiatives, yet the storytelling remains buried in dry annual reports that fail to inspire stakeholders or consumers.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-gi-mint text-lg font-bold mb-3">The Solution</h3>
+                    <p class="text-white/70 text-sm leading-relaxed font-light">
+                        Green India operates as your dedicated premium media, PR, and marketing wing. We translate your on-ground work into Nat-Geo caliber narratives. You execute the grassroots impact; we build the digital legacy.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-layer border-t border-white/10 pt-6 flex justify-between items-end">
+            <div>
+                <p class="text-gi-mint/70 text-[10px] uppercase tracking-widest mb-1">A Specialized Vertical By</p>
+                <img src="https://www.bigstorynetwork.com/static/main/Logo.png" alt="BIGSTORY Network" class="h-6 filter brightness-0 invert opacity-80">
+            </div>
+            <div class="text-right text-white/50 text-xs font-bold tracking-widest uppercase">
+                Media · PR · Mentoring
+            </div>
+        </div>
+    </div>
+
+
+    <div class="a4-page bg-gi-cream p-12">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gi-forest"></div>
+
+        <div class="content-layer h-full flex flex-col">
+            <div class="mb-10">
+                <span class="text-gi-sage text-[10px] font-bold tracking-[0.2em] uppercase mb-2 block">Our Capabilities</span>
+                <h2 class="text-4xl text-gi-forest font-bold mb-4 border-b border-gi-rule pb-4">The Production Wing</h2>
+                <p class="text-gi-charcoal text-sm max-w-2xl leading-relaxed">
+                    We don't just record events; we produce cinematic, high-fidelity storytelling designed to command attention and trigger emotional resonance across national audiences.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 flex-grow">
+                <div class="bg-white border border-gi-rule rounded p-6 shadow-sm flex flex-col">
+                    <div class="h-32 bg-gi-forest mb-5 relative overflow-hidden rounded">
+                         <img src="https://www.bigstorynetwork.com/static/main/interview/drought.webp" class="w-full h-full object-cover opacity-80 mix-blend-overlay">
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-3">
+                             <span class="text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg> Documentary Format
+                             </span>
+                         </div>
+                    </div>
+                    <h3 class="text-xl text-gi-forest font-bold mb-2">Premium Documentaries</h3>
+                    <p class="text-xs text-gi-muted leading-relaxed">
+                        Nat-Geo level, long-form visual storytelling. We send elite production crews to the grassroots to document the authentic human impact of your CSR funding. Perfect for ESG summits, board reviews, and primary PR pushes.
+                    </p>
+                </div>
+
+                <div class="bg-white border border-gi-rule rounded p-6 shadow-sm flex flex-col">
+                    <div class="h-32 bg-gi-ink mb-5 relative overflow-hidden rounded">
+                        <img src="https://www.bigstorynetwork.com/static/main/interview/Ria.webp" class="w-full h-full object-cover opacity-60 mix-blend-overlay grayscale">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-3">
+                             <span class="text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                                 🎙️ Green Dialogues
+                             </span>
+                         </div>
+                    </div>
+                    <h3 class="text-xl text-gi-forest font-bold mb-2">Executive Podcasts</h3>
+                    <p class="text-xs text-gi-muted leading-relaxed">
+                        Position your corporate leaders as sustainability thought leaders. We produce high-end, studio-quality podcast integrations, pairing your executives with policymakers and grassroots innovators.
+                    </p>
+                </div>
+
+                <div class="bg-white border border-gi-rule rounded p-6 shadow-sm flex flex-col">
+                    <div class="h-32 bg-gi-parchment border border-gi-rule/50 mb-5 relative flex items-center justify-center rounded">
+                        <h2 class="font-serif text-3xl text-gi-forest/30 italic">Editorial Deep-Dives</h2>
+                    </div>
+                    <h3 class="text-xl text-gi-forest font-bold mb-2">Digital PR & Journalism</h3>
+                    <p class="text-xs text-gi-muted leading-relaxed">
+                        Rigorous, data-backed environmental journalism. We write, publish, and distribute in-depth articles detailing the metrics and success stories of your CSR compliance and ESG goals.
+                    </p>
+                </div>
+
+                <div class="bg-white border border-gi-rule rounded p-6 shadow-sm flex flex-col">
+                    <div class="h-32 bg-gradient-to-r from-gi-leaf to-gi-sage mb-5 relative rounded">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="flex gap-2">
+                                <div class="w-8 h-12 bg-white/20 rounded-sm border border-white/50"></div>
+                                <div class="w-8 h-12 bg-white/20 rounded-sm border border-white/50 transform scale-110 shadow-lg"></div>
+                                <div class="w-8 h-12 bg-white/20 rounded-sm border border-white/50"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl text-gi-forest font-bold mb-2">Social Micro-Content</h3>
+                    <p class="text-xs text-gi-muted leading-relaxed">
+                        High-energy, highly shareable Reels and Shorts cut from the master narratives. Designed specifically for modern algorithmic consumption to guarantee your initiatives go viral among younger demographics.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="a4-page bg-white p-12 b2b-grid relative">
+        <div class="content-layer h-full flex flex-col">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-4xl text-gi-forest font-bold mb-3">The Distribution Engine</h2>
+                <p class="text-gi-charcoal text-sm max-w-lg mx-auto">
+                    A beautiful video is useless without an audience. By partnering with Green India, you gain direct access to BIGSTORY Network's proprietary digital architecture.
+                </p>
+            </div>
+
+            <div class="relative w-full h-64 mb-10 flex items-center justify-center">
+                <div class="spoke w-48 rotate-45 transform origin-left left-1/2 top-1/2"></div>
+                <div class="spoke w-48 -rotate-45 transform origin-left left-1/2 top-1/2"></div>
+                <div class="spoke w-48 rotate-[135deg] transform origin-left left-1/2 top-1/2"></div>
+                <div class="spoke w-48 -rotate-[135deg] transform origin-left left-1/2 top-1/2"></div>
+                
+                <div class="hub-circle text-lg relative z-10">
+                    Master<br>CSR Hub
+                </div>
+
+                <div class="absolute top-4 left-24 bg-gi-parchment p-3 text-[10px] font-bold text-gi-forest border border-gi-sage rounded z-20 shadow-sm uppercase tracking-wider">Awareness Articles</div>
+                <div class="absolute bottom-4 left-24 bg-gi-parchment p-3 text-[10px] font-bold text-gi-forest border border-gi-sage rounded z-20 shadow-sm uppercase tracking-wider">Social Reels</div>
+                <div class="absolute top-4 right-24 bg-gi-parchment p-3 text-[10px] font-bold text-gi-forest border border-gi-sage rounded z-20 shadow-sm uppercase tracking-wider">Podcasts</div>
+                <div class="absolute bottom-4 right-24 bg-gi-parchment p-3 text-[10px] font-bold text-gi-forest border border-gi-sage rounded z-20 shadow-sm uppercase tracking-wider">Documentary Video</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8 mt-auto">
+                <div>
+                    <div class="text-2xl mb-2 text-gi-leaf">🕸️</div>
+                    <h4 class="text-lg text-gi-forest font-bold mb-2">Master Hub-and-Spoke Model</h4>
+                    <p class="text-xs text-gi-muted leading-relaxed">
+                        We don't publish randomly. We structure your CSR content into strict digital silos. The master documentary serves as the central "Hub," while articles, podcasts, and reels act as "Spokes," driving unified authority and ensuring your campaigns rank high on search engines.
+                    </p>
+                </div>
+                <div>
+                    <div class="text-2xl mb-2 text-gi-leaf">⚖️</div>
+                    <h4 class="text-lg text-gi-forest font-bold mb-2">The 30/70 Rule of Authority</h4>
+                    <p class="text-xs text-gi-muted leading-relaxed">
+                        Our content strategy guarantees both reach and relevance. 30% of our distribution targets broad, high-volume awareness keywords to build your national brand visibility. The remaining 70% targets highly niche, localized topics to engage the exact policymakers and communities you wish to impact.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="a4-page bg-gi-ink p-12 text-center flex flex-col justify-between items-center relative">
+        <div class="absolute top-0 w-full h-2 bg-gi-sage"></div>
+        
+        <div class="content-layer mt-12 w-full max-w-2xl mx-auto text-left">
+            <h2 class="text-4xl text-white font-bold mb-10 border-b border-white/20 pb-4 text-center">The 12-Month Mandate</h2>
+            
+            <div class="space-y-8">
+                <div class="flex gap-6 items-start">
+                    <div class="w-12 h-12 rounded bg-gi-forest flex items-center justify-center text-gi-mint text-xl font-bold flex-shrink-0">01</div>
+                    <div>
+                        <h4 class="text-lg text-white font-bold mb-1">Custom Media Integration</h4>
+                        <p class="text-sm text-white/60 leading-relaxed font-light">We operate as an extension of your CSR department. Over a 12-month retainer, we handle the end-to-end research, scripting, and production of your impact initiatives.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-start">
+                    <div class="w-12 h-12 rounded bg-gi-leaf flex items-center justify-center text-gi-mint text-xl font-bold flex-shrink-0">02</div>
+                    <div>
+                        <h4 class="text-lg text-white font-bold mb-1">Performance & PR Visibility</h4>
+                        <p class="text-sm text-white/60 leading-relaxed font-light">Leveraging the BIGSTORY Network, your initiatives are guaranteed premium placement, transforming mandatory compliance spending into a powerful public relations asset.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-start">
+                    <div class="w-12 h-12 rounded bg-gi-sage flex items-center justify-center text-gi-ink text-xl font-bold flex-shrink-0">03</div>
+                    <div>
+                        <h4 class="text-lg text-white font-bold mb-1">Mentoring & Ecosystem Access</h4>
+                        <p class="text-sm text-white/60 leading-relaxed font-light">Beyond media, your organization gains integration into our "Women for Green" empowerment wings and exclusive Green Dialogues policy events, multiplying your on-ground impact.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-layer w-full mt-16 bg-white/5 border border-white/10 p-8 rounded-xl backdrop-blur-sm">
+            <h3 class="text-2xl text-white font-bold mb-2 font-serif italic">Let's map out your next 12 months of impact.</h3>
+            <p class="text-sm text-white/50 mb-6">Contact our leadership to structure an Official Partnership.</p>
+            
+            <div class="flex justify-center items-center gap-8">
+                <a href="mailto:ceo@bigstorynetwork.com" class="px-8 py-3 bg-gi-sage text-gi-ink font-bold text-sm tracking-widest uppercase rounded hover:bg-gi-mint transition-colors duration-300">
+                    ceo@bigstorynetwork.com
+                </a>
+                <div class="text-left">
+                    <p class="text-white text-sm font-bold tracking-wider">+91 95991 16555</p>
+                    <p class="text-white/50 text-[10px] uppercase tracking-widest mt-1">Partnerships Desk</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-layer mt-12">
+             <img src="https://www.bigstorynetwork.com/static/main/Logo.png" alt="BIGSTORY Network" class="h-6 filter brightness-0 invert opacity-40">
+        </div>
+    </div>
+
+</body>
+</html>

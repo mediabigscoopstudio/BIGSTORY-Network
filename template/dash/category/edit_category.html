@@ -1,0 +1,130 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Edit {{data.title}}{% endblock 'title' %}
+{% block 'css' %}{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid">
+    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+        <div class="flex-grow-1">
+            <h4 class="fs-18 fw-semibold m-0">Edit {{data.title}}</h4> 
+        </div>
+    </div>
+    <div class="row">
+        <!-- User Account Creation Form -->
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Edit {{data.title}}</h5>
+                </div>
+
+                <div class="card-body">
+                    <form class="row g-3" action="" method="POST">
+                        {% csrf_token %}
+                        <div class="col-12">
+                            <label for="categoryTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="categoryTitle" placeholder="Category Title" name="title" value="{{data.title}}" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="categoryDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="categoryDescription" rows="3" placeholder="Category Description" name="description">{{data.description}}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="categoryMetaTitle" class="form-label">Meta Title</label>
+                            <input type="text" class="form-control" id="categoryMetaTitle" placeholder="Meta Title" name="meta_title" value="{{data.meta_title}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="categoryMetaDescription" class="form-label">Meta Description</label>
+                            <textarea class="form-control" id="categoryMetaDescription" rows="2" placeholder="Meta Description" name="meta_description">{{data.meta_description}}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="categoryMetaKeywords" class="form-label">Meta Keywords</label>
+                            <input type="text" class="form-control" id="categoryMetaKeywords" placeholder="Comma-separated keywords" name="meta_keywords" value="{{data.meta_keywords}}">
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit">Create Category</button>
+                        </div>
+                    </form>
+                </div> 
+            </div>
+        </div> 
+        <!--FAQ Sections-->
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Help Desk</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="categoryEditFAQ">
+
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faqEdit1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEdit1" aria-expanded="true" aria-controls="collapseEdit1">
+                              1. What fields can I edit for a category?
+                            </button>
+                          </h2>
+                          <div id="collapseEdit1" class="accordion-collapse collapse show" aria-labelledby="faqEdit1" data-bs-parent="#categoryEditFAQ">
+                            <div class="accordion-body">
+                              You can edit the **Title**, **Description**, **Meta Title**, **Meta Description**, **Meta Keywords**, and **Status** of the category.
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faqEdit2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEdit2" aria-expanded="false" aria-controls="collapseEdit2">
+                              2. Is the Category Title required?
+                            </button>
+                          </h2>
+                          <div id="collapseEdit2" class="accordion-collapse collapse" aria-labelledby="faqEdit2" data-bs-parent="#categoryEditFAQ">
+                            <div class="accordion-body">
+                              Yes, the **Title** field is mandatory. You need to provide a title to identify the category.
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faqEdit3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEdit3" aria-expanded="false" aria-controls="collapseEdit3">
+                              3. What are Meta Title, Description, and Keywords for?
+                            </button>
+                          </h2>
+                          <div id="collapseEdit3" class="accordion-collapse collapse" aria-labelledby="faqEdit3" data-bs-parent="#categoryEditFAQ">
+                            <div class="accordion-body">
+                              These fields (**Meta Title**, **Meta Description**, and **Meta Keywords**) are important for Search Engine Optimization (SEO). They help search engines understand the content of pages associated with this category.
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faqEdit4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEdit4" aria-expanded="false" aria-controls="collapseEdit4">
+                              4. What does the 'Status' field control?
+                            </button>
+                          </h2>
+                          <div id="collapseEdit4" class="accordion-collapse collapse" aria-labelledby="faqEdit4" data-bs-parent="#categoryEditFAQ">
+                            <div class="accordion-body">
+                              The **Status** field allows you to control whether the category is currently active and visible on your website. You can set it to "Enabled" or "Disabled".
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faqEdit5">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEdit5" aria-expanded="false" aria-controls="collapseEdit5">
+                              5. Will changing the Title automatically update the Slug?
+                            </button>
+                          </h2>
+                          <div id="collapseEdit5" class="accordion-collapse collapse" aria-labelledby="faqEdit5" data-bs-parent="#categoryEditFAQ">
+                            <div class="accordion-body">
+                              Typically, the **Slug** (the URL-friendly version of the title) is generated automatically when the category is created. Depending on your system, changing the Title *might* not automatically update the Slug. You might have a separate process to regenerate slugs if needed.
+                            </div>
+                          </div>
+                        </div>
+                    
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock 'body' %}
+{% block 'scripts' %}{% endblock 'scripts' %}

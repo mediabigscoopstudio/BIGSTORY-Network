@@ -1,0 +1,430 @@
+{% extends "main/base.html" %}
+{% block 'title' %}BIGSTORY Network. Real Heroes. Real Impact{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="BIGSTORY Network is a modern digital media platform delivering India's perspective on global news, geopolitics, business, economy, and youth culture — through sharp, simple, and high-impact storytelling.">
+<meta name="keywords" content="BIGSTORY Network, Indian news, global explainers, youth media, geopolitics India, business news India, world news India perspective, daily news content, Indian youth content">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/">
+<meta property="og:title" content="BIGSTORY Network — India’s Perspective on the World">
+<meta property="og:description" content="A digital media platform built for India. Daily global news, geopolitics, business, economy, and youth-focused content — simplified with sharp storytelling.">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/">
+<meta name="twitter:title" content="BIGSTORY Network — India's Lens on Global Stories">
+<meta name="twitter:description" content="Global news through an Indian lens. Simple, sharp, youth-focused content that explains the world in minutes.">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema.org JSON-LD for Homepage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Bharat One",
+  "url": "https://bigstorynetwork.com/bharat-one/",
+  "description": "Bharat One is a flagship vertical of BIGSTORY Network delivering India's perspective on geopolitics, global economy, technology and international affairs.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Vector.png"
+    }
+  },
+  "image": "https://bigstorynetwork.com/static/main/Brandplate.webp",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "BIGSTORY Network",
+    "url": "https://bigstorynetwork.com/"
+  },
+  "sameAs": [
+    "https://instagram.com/bharatone_official"
+  ]
+}
+</script>
+
+
+{% endblock 'meta' %}
+{% block 'css' %}
+<link rel="stylesheet" href="/static/main/css/index.css">
+{% endblock 'css' %}
+
+{% block 'body' %}
+
+<!-- ===========================
+   TRENDING NOW SECTION
+=========================== -->
+<div class="container py-4">
+  <div class="main-section">
+    <!-- Trending Image -->
+    <div class="trending-column">
+      <img src="/static/main/Trending.webp" alt="Trending Image">
+    </div>
+    <!-- News Grid -->
+    <div class="news-section">
+      <div class="news-grid">
+      {% for i in selected_trending_articles %}
+        <div class="news-card">
+          <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+          <img src="/media/{{i.thumbnail_image}}" alt="{{i.title}}">
+          <div class="news-content">
+            <h5>{{i.title}}</h5>
+            <div class="news-meta">
+              <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none;">
+              <span class="text-danger fw-bold">{{i.category.title}}</span>
+              </a>
+              <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+              <span class="ms-1">{{i.created_at}}</span>
+              </a>
+            </div>
+          </div>
+          </a>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+   EDITOR'S CHOICE SECTION
+=========================== -->
+<div class="container">
+  <div class="row align-items-start g-4">
+
+    <!-- ===== LEFT (80%) - Editor's Choice ===== -->
+    <div class="col-lg-9 col-md-12">
+      <div class="section-title">
+        <img src="/static/main/Vector.png" alt="">
+        <span>Editor's Choice</span>
+      </div>
+
+      <div class="editors-choice mb-5">
+
+    <div class="editors-small">
+        {% for i in editors_first_two %}
+<div class="gloabl-mini-news-card flex-column">
+  <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+    <img src="/media/{{i.thumbnail_image}}" alt="{{i.title}}">
+    <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none;">
+      <div class="news-category">{{i.category.title}}</div>
+    </a>
+    <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+    <div class="news-title">{{i.title}}</div>
+    <div class="news-author">{{i.author.name}}</div>
+    </a>
+    </a>
+</div>
+{% endfor %}
+    </div>
+
+    {% if editors_last %}
+<div class="global-news-card flex-column">
+  <a href="/content/{{editors_last.slug}}" style="color: black;text-decoration: none;">
+    <img src="/media/{{editors_last.thumbnail_image}}" alt="{{editors_last.title}}">
+    <a href="/category/{{editors_last.category.slug}}" style="color: #d60000; text-decoration: none;">
+    <div class="news-category">{{editors_last.category.title}}</div>
+    </a>
+    <a href="/content/{{editors_last.slug}}" style="color: black;text-decoration: none;">
+    <div class="news-title fs-2">{{editors_last.title}}</div>
+    <p class="text-muted mb-1" style="font-size:0.95rem;">
+        {{editors_last.description|truncatewords:30}}
+    </p>
+    <div class="news-author">{{editors_last.author.name}}</div>
+    </a>
+    </a>
+</div>
+{% endif %}
+</div>
+    </div>
+
+    <!-- ===== RIGHT (20%) - Sidebar / Buzzin ===== -->
+    <div class="col-lg-3 col-md-12">
+      <div class="section-title">
+        <img src="/static/main/Vector.png" alt="">
+        <span>What's Buzzin?</span>
+      </div>
+
+      <div class="buzzin-sidebar">
+        {% for i in buzz_first_two %}
+        <div class="global-news-card flex-column">
+          <a href="{{i.link}}" target="_blank" style="color: black; text-decoration: none;">
+          <img src="/media/{{i.thumbnail_image}}" alt="{{i.title}}">
+          <div class="news-category" style="color: #d60000; ">{{i.category.title}}</div>
+          <div class="news-title fs-6">{{i.title}}</div>
+          <div class="news-meta text-muted" style="font-size:0.85rem;">Youtube</div>
+        </div>
+        </a>
+        {% endfor %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<br>
+<!-- BIGSTORY FEATURE SECTION -->
+<div class="container py-2 bigstory-feature">
+    <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="" >
+        <span>Exclusive Content</span>
+      </div>
+      <br>
+  <div class="bigstory-card">
+       
+    {% if exclusive_main  %}
+      <!-- Left Content -->
+    <div class="bigstory-content" 
+    {% if exclusive_main.banner_background_colour %}
+      style="background-color: {{exclusive_main.banner_background_colour}};"
+    {% endif %}
+    >
+      <a href="/content/{{exclusive_main.slug}}" 
+      {% if exclusive_main.remaining_text_colour %}
+         style="text-decoration: none; color: {{exclusive_main.remaining_text_colour}};"
+       {% else %}
+       style ="color:black;text-decoration: none;"
+       {% endif %}
+       >
+      <div class="bigstory-header d-flex justify-content-between align-items-center mt-2"
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+        <span class="bigstory-subtag">{{exclusive_main.category.title}}</span>
+        <span class="bigstory-date">{{exclusive_main.created_at}}</span>
+      </div>
+      <h2 class="bigstory-title mt-5"
+      {% if exclusive_main.title_colour %}
+         style="color: {{exclusive_main.title_colour}};"
+       {% endif %}
+      >{{exclusive_main.title}}</h2>
+      <p class="bigstory-text mt-2" 
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+        {{exclusive_main.description}}
+      </p>
+      <br><br>
+      </a>
+    </div>
+
+    <!-- Right Image -->
+    <div class="bigstory-image">
+      <a href="/content/{{exclusive_main.slug}}" style="text-decoration: none; color: black;">
+      <img src="/media/{{exclusive_main.thumbnail_image}}" alt="Bigstory Feature Image">
+      </a>
+    </div>
+    {% endif %}
+  </div>
+  <!-- MULTI NEWS SECTION -->
+<div class="multi-news">
+  {% for i in exclusive_suggestions  %}
+    <div class="news-card">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+    <img src="/media/{{i.thumbnail_image}}" alt="{{title}}">
+    
+    <div class="news-info">
+      <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration:none">
+      <span class="news-category" >{{i.category}}</span>
+      </a>
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <h3 class="news-title">{{i.title}}</h3>
+      </a>
+    </div>
+    </a>
+  </div>
+  {% endfor %}
+  
+</div>
+  
+</div>
+
+<div class="container py-2">
+    <!-- REELS SECTION -->
+<div class="container py-4">
+  <div class="row align-items-center">
+
+    <!-- Catch Up Section (Left on Desktop, Top on Mobile) -->
+    <div class="col-lg-4 col-12 mb-3 mb-lg-0">
+      <img src="/static/main/catchup.webp" class="img-fluid w-100" alt="Catch Up with our best">
+    </div>
+
+    <!-- Reels Section -->
+    <div class="col-lg-8 col-12">
+      <div class="row row-cols-3 g-3">
+        {% for i in reel_highlights %}
+          <div class="col">
+          <a href="{{i.link}}" target="_blank">
+            <img src="/media/{{i.thumbnail_image}}" class="img-fluid w-100 rounded" alt="{{i.title}}">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+<!-- FEATURED CONTENT & REELS SECTION -->
+<div class="container py-2" style="border-top: solid #d60000 2px;">
+    <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="" >
+        <span>Exclusive Content</span>
+      </div>
+      <br>
+  <div class="row g-4">
+    {% if ex2_article1 %}
+    
+<div class="col-lg-4 col-12">
+  <div class="d-flex flex-column gap-3">
+    
+    <div class="global-news-card flex-column">
+      <a href="/content/{{ex2_article1.slug}}" style="color: black;text-decoration: none;">
+      <img src="/media/{{ ex2_article1.thumbnail_image }}" alt="{{ ex2_article1.title }}">
+      <a href="/category/{{ex2_article1.category.slug}}" style="color: #d60000;text-decoration: none;">
+      <div class="news-category">
+        {{ ex2_article1.category.title }}
+      </div>
+      </a>
+      <a href="/content/{{ex2_article1.slug}}" style="color: black;text-decoration: none;">
+      <div class="news-title fs-2">
+        {{ ex2_article1.title }}
+      </div>
+
+      <p class="text-muted mb-1" style="font-size:0.95rem;">
+        {{ ex2_article1.description|truncatewords:30 }}
+      </p>
+
+      <div class="news-author">
+        {{ ex2_article1.author.name }}
+      </div>
+      </a>
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% if ex2_article2 %}
+<div class="col-lg-4 col-12">
+  <div class="d-flex flex-column gap-3">
+   
+    <div class="global-news-card flex-column">
+       <a href="/content/{{ex2_article2.slug}}" style="color: black;text-decoration: none;">
+      <img src="{{ ex2_article2.thumbnail_image.url }}" alt="{{ ex2_article2.title }}">
+      <a href="/category/{{ex2_article2.category.slug}}" style="color: #d60000;text-decoration: none;">
+      <div class="news-category">
+        {{ ex2_article2.category.title }}
+      </div>
+      </a>
+      <a href="/content/{{ex2_article2.slug}}" style="color: black;text-decoration: none;">
+      <div class="news-title fs-2">
+        {{ ex2_article2.title }}
+      </div>
+
+      <p class="text-muted mb-1" style="font-size:0.95rem;">
+        {{ ex2_article2.description|truncatewords:30 }}
+      </p>
+
+      <div class="news-author">
+        {{ ex2_article2.author.name }}
+      </div>
+      </a>
+      </a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+    <!-- ===== Column 3 (Content Cards + Reel) ===== -->
+    <div class="col-lg-4 col-12">
+      <div class="d-flex flex-column gap-3">
+        {% for i in ex2_reels %}
+        <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+          <div class="mini-content-card d-flex align-items-start gap-2">
+          <img src="/media/{{i.thumbnail_image}}" class="rounded" style="width:90px; height:60px; object-fit:cover;" alt="{{i.title}}">
+          <div>
+            <a href="/category/{{i.category.slug}}"style="color: #d60000;text-decoration: none;">
+            <span class="fw-bold text-danger d-block small">{{i.category.title}}</span>
+            </a>
+            <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+            <span class="fw-bold small lh-sm d-block">{{i.title}}</span>
+            </a>
+          </div>
+        </div>
+        </a>
+        {% endfor %}
+
+        <div class="mini-content-card d-flex align-items-start gap-2">
+          <a href="https://www.instagram.com/bigstorynetwork/">
+          <img src="/static/main/Ad_Block.webp" alt="" style="width: 100%; border-radius: 10px;">
+          </a>
+        </div>
+
+        
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- TRENDING SECTION -->
+<div class="container py-4" style="border-top: solid #d60000 2px;">
+
+  <!-- Section Header -->
+  <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="" >
+        <span>Trending Now!</span> in last 24hrs
+      </div>
+      <br>
+
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    
+    {% for i in Latest_Articles %}
+      <div class="col">
+        <a href="/content/{{i.slug}}" style="color: black; text-decoration: none;">
+      <div class="card border-0">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+          <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none; ">
+          <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+          </a>
+          <a href="/content/{{i.slug}} " style="color: black; text-decoration: none;">
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+          </a>
+        </div>
+      </div>
+    </div>
+    </a>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock 'script' %}

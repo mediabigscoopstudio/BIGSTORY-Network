@@ -1,0 +1,683 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}{{ project.name }} — Project Detail{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+* { box-sizing: border-box; }
+
+/* ── header ─────────────────────────────────────────────────── */
+.project-header {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+.accent-bar { height: 6px; }
+.header-body {
+  padding: 18px 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.header-body h2 { font-size: 20px; font-weight: 700; margin: 0 0 4px; color: #1a1a2e; }
+.header-meta { font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.status-pill { padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.pill-active   { background: #e6f9f1; color: #0e7a4e; }
+.pill-archived { background: #f3f3f3; color: #888; }
+.header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-hdr {
+  font-size: 12px; padding: 7px 14px; border-radius: 7px;
+  border: 1.5px solid #e0e0e0; background: #fff; color: #333;
+  text-decoration: none; font-weight: 600; transition: all 0.15s; cursor: pointer;
+}
+.btn-hdr:hover { background: #f5f5f5; color: #333; }
+.btn-hdr.primary { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+.btn-hdr.primary:hover { background: #16213e; }
+
+/* ── stat cards ─────────────────────────────────────────────── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 900px) { .stat-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 500px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
+.stat-card {
+  background: #fff; border-radius: 10px; padding: 14px 16px;
+  border: 1px solid #f0f0f0; text-align: center;
+}
+.stat-card .n { font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-card .l { font-size: 11px; color: #aaa; font-weight: 500; }
+.s-total .n      { color: #1a1a2e; }
+.s-todo .n       { color: #555; }
+.s-prog .n       { color: #b26a00; }
+.s-review .n     { color: #5e35b1; }
+.s-done .n       { color: #0e7a4e; }
+.s-overdue .n    { color: #c0392b; }
+
+/* ── section card ───────────────────────────────────────────── */
+.section-card {
+  background: #fff; border-radius: 12px; padding: 20px 22px;
+  border: 1px solid #f0f0f0; margin-bottom: 20px;
+}
+.section-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: #bbb; margin-bottom: 16px;
+}
+
+/* ── kanban board ───────────────────────────────────────────── */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@media (max-width: 900px) { .board-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .board-grid { grid-template-columns: 1fr; } }
+
+.board-col { display: flex; flex-direction: column; gap: 8px; }
+.col-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 11px; border-radius: 7px; font-size: 12px; font-weight: 700;
+}
+.col-todo       { background: #f5f5f5; color: #444; }
+.col-inprogress { background: #fff3e0; color: #b26a00; }
+.col-review     { background: #ede7fe; color: #5e35b1; }
+.col-done       { background: #e6f9f1; color: #0e7a4e; }
+.col-hdr a { text-decoration: none; font-size: 16px; opacity: 0.5; transition: opacity 0.15s; }
+.col-hdr a:hover { opacity: 1; }
+.col-todo a       { color: #444; }
+.col-inprogress a { color: #b26a00; }
+.col-review a     { color: #5e35b1; }
+.col-done a       { color: #0e7a4e; }
+
+.task-card {
+  background: #fff; border-radius: 8px; padding: 11px 13px;
+  border: 1px solid #f0f0f0;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.task-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.task-card-title { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 7px; line-height: 1.4; }
+.task-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 7px; }
+.badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+.badge-low    { background: #f0f0f0; color: #666; }
+.badge-medium { background: #fff3e0; color: #b26a00; }
+.badge-high   { background: #fdecea; color: #c0392b; }
+.badge-urgent { background: #c0392b; color: #fff; }
+
+.task-footer { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.assignee { display: flex; align-items: center; gap: 5px; }
+.av {
+  width: 22px; height: 22px; border-radius: 50%; object-fit: cover;
+  flex-shrink: 0; font-size: 10px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; color: #fff;
+}
+.aname { font-size: 11px; color: #888; }
+.due   { font-size: 11px; color: #bbb; }
+.overdue-due { color: #c0392b; font-weight: 600; }
+
+.task-actions { display: flex; gap: 3px; margin-top: 7px; flex-wrap: wrap; }
+.ta-btn {
+  font-size: 10px; padding: 3px 7px; border-radius: 4px;
+  border: 1px solid #e5e5e5; background: #fff; color: #666;
+  cursor: pointer; transition: all 0.12s; text-decoration: none;
+}
+.ta-btn:hover { background: #f5f5f5; color: #333; }
+.ta-btn.dup { border-color: #b5d4f4; color: #1565c0; background: #f0f7ff; }
+.ta-btn.dup:hover { background: #1565c0; color: #fff; border-color: #1565c0; }
+.ta-btn.del { border-color: #fca5a5; color: #c0392b; }
+.ta-btn.del:hover { background: #fdecea; }
+
+.empty-col { font-size: 12px; color: #ccc; text-align: center; padding: 16px 0; }
+
+/* ── calendars ──────────────────────────────────────────────── */
+.cal-header {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 12px;
+  flex-wrap: wrap; gap: 10px;
+}
+.cal-title-wrap p { margin: 0; }
+.cal-title { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+.cal-sub   { font-size: 11px; color: #aaa; margin-top: 1px; }
+.cal-controls { display: flex; align-items: center; gap: 6px; }
+.cal-month-lbl { font-size: 13px; font-weight: 700; color: #1a1a2e; min-width: 120px; }
+.cnav {
+  width: 26px; height: 26px; border-radius: 6px;
+  border: 1.5px solid #e5e5e5; background: #fff;
+  cursor: pointer; font-size: 13px; color: #555;
+  display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+.cnav:hover { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+.cnav.today-btn { width: auto; padding: 0 8px; font-size: 10px; font-weight: 700; }
+
+/* platform tabs */
+.ptabs { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.ptab {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 20px;
+  border: 1.5px solid #e5e5e5; background: #fff;
+  cursor: pointer; font-size: 11px; font-weight: 700; color: #666;
+  transition: all 0.12s; user-select: none;
+}
+.ptab:hover { border-color: #aaa; }
+.ptab.active { border-color: #1a1a2e; background: #1a1a2e; color: #fff; }
+.ptab svg { width: 12px; height: 12px; flex-shrink: 0; }
+.ptab img { width: 12px; height: 12px; object-fit: contain; flex-shrink: 0; }
+.ptab.active img { filter: brightness(0) invert(1); }
+
+/* legend */
+.cal-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.litem { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #666; }
+.ldot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+/* grid */
+.cal-grid-card { background: #fff; border-radius: 10px; border: 1px solid #f0f0f0; overflow: hidden; }
+.cal-day-names { display: grid; grid-template-columns: repeat(7, 1fr); background: #1a1a2e; }
+.cal-day-name  { padding: 7px 0; text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.5); }
+.cal-week      { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid #f5f5f5; }
+.cal-cell      { min-height: 72px; padding: 5px 4px; border-right: 1px solid #f5f5f5; background: #fff; }
+.cal-cell:last-child { border-right: none; }
+.cal-cell.empty    { background: #fafafa; }
+.cal-cell.is-today { background: #f4f4ff; }
+.day-num { font-size: 11px; font-weight: 700; color: #bbb; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; margin-bottom: 2px; }
+.day-num.tnow { background: #1a1a2e; color: #fff; }
+.tpill {
+  display: flex; align-items: center; gap: 3px;
+  padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: 700;
+  color: #fff; margin-bottom: 2px; text-decoration: none; overflow: hidden;
+  transition: opacity 0.12s;
+}
+.tpill:hover { opacity: 0.82; color: #fff; }
+.tpill span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tpill img, .tpill svg { width: 8px; height: 8px; flex-shrink: 0; object-fit: contain; filter: brightness(0) invert(1); }
+.more-p { font-size: 9px; color: #bbb; padding-left: 3px; }
+.cal-empty-msg { text-align: center; padding: 20px; font-size: 12px; color: #ccc; }
+
+/* ── team bars ──────────────────────────────────────────────── */
+.team-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid #f8f8f8; }
+.team-row:last-child { border-bottom: none; }
+.team-av { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: #fff; }
+.team-info { min-width: 120px; flex-shrink: 0; }
+.team-name { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+.team-role { font-size: 11px; color: #aaa; text-transform: capitalize; }
+.bar-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.bar-fill  { height: 100%; border-radius: 4px; }
+.team-count    { font-size: 12px; color: #888; min-width: 64px; text-align: right; flex-shrink: 0; }
+.team-breakdown { font-size: 11px; color: #aaa; min-width: 160px; text-align: right; flex-shrink: 0; }
+@media (max-width: 700px) { .team-breakdown { display: none; } }
+
+/* ── heatmap ────────────────────────────────────────────────── */
+.heatmap-wrap { overflow-x: auto; }
+.heatmap-grid { display: flex; gap: 3px; min-width: 500px; }
+.hm-week { display: flex; flex-direction: column; gap: 3px; }
+.hm-cell { width: 12px; height: 12px; border-radius: 2px; cursor: default; transition: transform 0.1s; }
+.hm-cell:hover { transform: scale(1.3); }
+.lv-0 { background: #f0f0f0; }
+.lv-1 { background: #CECBF6; }
+.lv-2 { background: #AFA9EC; }
+.lv-3 { background: #7F77DD; }
+.lv-4 { background: #534AB7; }
+.hm-legend { display: flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 11px; color: #bbb; }
+.hm-lc { width: 12px; height: 12px; border-radius: 2px; }
+
+/* ── modals ─────────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 14px; padding: 26px;
+  width: 340px; max-width: 95vw;
+}
+.modal-box h5 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin: 0 0 6px; }
+.modal-box p  { font-size: 13px; color: #aaa; margin: 0 0 18px; }
+.modal-label  { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; }
+.modal-select {
+  width: 100%; padding: 10px 14px; border: 1.5px solid #e5e5e5;
+  border-radius: 8px; font-size: 14px; background: #fafafa;
+  outline: none; appearance: none; margin-bottom: 14px; cursor: pointer;
+}
+.modal-select:focus { border-color: #1a1a2e; background: #fff; }
+.modal-btns { display: flex; gap: 10px; }
+.modal-submit {
+  flex: 1; background: #1a1a2e; color: #fff; border: none;
+  padding: 10px; border-radius: 8px; font-size: 14px;
+  font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.modal-submit:hover { background: #16213e; }
+.modal-cancel {
+  padding: 10px 16px; border: 1.5px solid #e5e5e5; border-radius: 8px;
+  font-size: 14px; background: #fff; color: #888; cursor: pointer; transition: all 0.15s;
+}
+.modal-cancel:hover { background: #f5f5f5; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="container-fluid py-4 px-4">
+
+  <!-- ── project header ── -->
+  <div class="project-header">
+    <div class="accent-bar" style="background: {{ project.color_hex }};"></div>
+    <div class="header-body">
+      <div>
+        <h2>{{ project.name }}</h2>
+        <div class="header-meta">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:{{ project.color_hex }};"></span>
+          {% if project.vertical %}{{ project.vertical.title }} &middot;{% endif %}
+          {{ project.members.count }} member{{ project.members.count|pluralize }}
+          <span class="status-pill {% if project.status == 'active' %}pill-active{% else %}pill-archived{% endif %}">
+            {{ project.get_status_display }}
+          </span>
+        </div>
+        {% if project.description %}<p style="font-size:13px; color:#888; margin:6px 0 0;">{{ project.description }}</p>{% endif %}
+      </div>
+      <div class="header-actions">
+        <a href="/add_task/{{ project.id }}" class="btn-hdr primary">+ Add task</a>
+        <a href="/edit_project/{{ project.id }}" class="btn-hdr">Edit</a>
+        {% if project.status == 'active' %}
+          <a href="/archive_project/{{ project.id }}" class="btn-hdr">Archive</a>
+        {% else %}
+          <a href="/activate_project/{{ project.id }}" class="btn-hdr">Activate</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── stat cards ── -->
+  <div class="stat-row">
+    <div class="stat-card s-total"><div class="n">{{ counts.total }}</div><div class="l">Total</div></div>
+    <div class="stat-card s-todo"><div class="n">{{ counts.todo }}</div><div class="l">To do</div></div>
+    <div class="stat-card s-prog"><div class="n">{{ counts.inprogress }}</div><div class="l">In progress</div></div>
+    <div class="stat-card s-review"><div class="n">{{ counts.review }}</div><div class="l">Review</div></div>
+    <div class="stat-card s-done"><div class="n">{{ counts.done }}</div><div class="l">Done</div></div>
+    <div class="stat-card s-overdue"><div class="n">{{ counts.overdue }}</div><div class="l">Overdue</div></div>
+  </div>
+
+  <!-- ── kanban board ── -->
+  <div class="section-card">
+    <p class="section-label">Task board</p>
+    <div class="board-grid">
+
+      {% for col_key, col_label, col_cls in board_cols %}
+      {% endfor %}
+
+      <!-- TO DO -->
+      <div class="board-col">
+        <div class="col-hdr col-todo">
+          <span>To Do ({{ counts.todo }})</span>
+          <a href="/add_task/{{ project.id }}">+</a>
+        </div>
+        {% for task in board.todo %}{% include "dash/tasks/_task_card.html" with task=task project=project %}{% empty %}<p class="empty-col">Nothing here</p>{% endfor %}
+      </div>
+
+      <!-- IN PROGRESS -->
+      <div class="board-col">
+        <div class="col-hdr col-inprogress">
+          <span>In Progress ({{ counts.inprogress }})</span>
+          <a href="/add_task/{{ project.id }}">+</a>
+        </div>
+        {% for task in board.inprogress %}{% include "dash/tasks/_task_card.html" with task=task project=project %}{% empty %}<p class="empty-col">Nothing here</p>{% endfor %}
+      </div>
+
+      <!-- REVIEW -->
+      <div class="board-col">
+        <div class="col-hdr col-review">
+          <span>Review ({{ counts.review }})</span>
+          <a href="/add_task/{{ project.id }}">+</a>
+        </div>
+        {% for task in board.review %}{% include "dash/tasks/_task_card.html" with task=task project=project %}{% empty %}<p class="empty-col">Nothing here</p>{% endfor %}
+      </div>
+
+      <!-- DONE -->
+      <div class="board-col">
+        <div class="col-hdr col-done">
+          <span>Done ({{ counts.done }})</span>
+          <a href="/add_task/{{ project.id }}">+</a>
+        </div>
+        {% for task in board.done %}{% include "dash/tasks/_task_card.html" with task=task project=project %}{% empty %}<p class="empty-col">Nothing here</p>{% endfor %}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── CALENDAR 1: Content Production Timeline ── -->
+  <div class="section-card">
+    <div class="cal-header">
+      <div class="cal-title-wrap">
+        <p class="cal-title">Content production timeline</p>
+        <p class="cal-sub">Tasks by due date · colour = status · this project only</p>
+      </div>
+      <div class="cal-controls">
+        <span class="cal-month-lbl" id="prod-lbl"></span>
+        <button class="cnav" onclick="prodNav(-1)">&#8249;</button>
+        <button class="cnav today-btn" onclick="prodNav(0)">Today</button>
+        <button class="cnav" onclick="prodNav(1)">&#8250;</button>
+      </div>
+    </div>
+    <div class="cal-legend">
+      <div class="litem"><div class="ldot" style="background:#888;"></div>To do</div>
+      <div class="litem"><div class="ldot" style="background:#b26a00;"></div>In progress</div>
+      <div class="litem"><div class="ldot" style="background:#5e35b1;"></div>Review</div>
+      <div class="litem"><div class="ldot" style="background:#0e7a4e;"></div>Done</div>
+    </div>
+    <div class="cal-grid-card">
+      <div class="cal-day-names">
+        <div class="cal-day-name">Mon</div><div class="cal-day-name">Tue</div>
+        <div class="cal-day-name">Wed</div><div class="cal-day-name">Thu</div>
+        <div class="cal-day-name">Fri</div><div class="cal-day-name">Sat</div>
+        <div class="cal-day-name">Sun</div>
+      </div>
+      <div id="prod-body"></div>
+    </div>
+  </div>
+
+  <!-- ── CALENDAR 2: Content Calendar (deploy dates) ── -->
+  <div class="section-card">
+    <div class="cal-header">
+      <div class="cal-title-wrap">
+        <p class="cal-title">Content calendar</p>
+        <p class="cal-sub">Tasks by deploy date · filter by platform</p>
+      </div>
+      <div class="cal-controls">
+        <span class="cal-month-lbl" id="deploy-lbl"></span>
+        <button class="cnav" onclick="deployNav(-1)">&#8249;</button>
+        <button class="cnav today-btn" onclick="deployNav(0)">Today</button>
+        <button class="cnav" onclick="deployNav(1)">&#8250;</button>
+      </div>
+    </div>
+
+    <div class="ptabs">
+      <div class="ptab active" data-p="all" onclick="deployTab(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        All
+      </div>
+      <div class="ptab" data-p="website" onclick="deployTab(this)">
+        <img src="https://bigstorynetwork.com/static/main/Vector.png" alt="">
+        Website
+      </div>
+      <div class="ptab" data-p="linkedin" onclick="deployTab(this)">
+        <svg viewBox="0 0 24 24" fill="#0077b5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </div>
+      <div class="ptab" data-p="meta" onclick="deployTab(this)">
+        <svg viewBox="0 0 24 24" fill="#1877f2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Meta
+      </div>
+      <div class="ptab" data-p="youtube" onclick="deployTab(this)">
+        <svg viewBox="0 0 24 24" fill="#ff0000"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="#fff" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+        YouTube
+      </div>
+    </div>
+
+    <div class="cal-legend">
+      <div class="litem"><div class="ldot" style="background:#1a1a2e;"></div>Website</div>
+      <div class="litem"><div class="ldot" style="background:#0077b5;"></div>LinkedIn</div>
+      <div class="litem"><div class="ldot" style="background:#1877f2;"></div>Meta</div>
+      <div class="litem"><div class="ldot" style="background:#ff0000;"></div>YouTube</div>
+      <div class="litem"><div class="ldot" style="background:#888;"></div>Unset</div>
+    </div>
+
+    <div class="cal-grid-card">
+      <div class="cal-day-names">
+        <div class="cal-day-name">Mon</div><div class="cal-day-name">Tue</div>
+        <div class="cal-day-name">Wed</div><div class="cal-day-name">Thu</div>
+        <div class="cal-day-name">Fri</div><div class="cal-day-name">Sat</div>
+        <div class="cal-day-name">Sun</div>
+      </div>
+      <div id="deploy-body"></div>
+    </div>
+  </div>
+
+  <!-- ── team contribution bars ── -->
+  <div class="section-card">
+    <p class="section-label">Team — contributions last 90 days</p>
+    {% for stat in member_stats %}
+    <div class="team-row">
+      {% if stat.author.image %}
+        <img src="{{ stat.author.image.url }}" class="team-av">
+      {% else %}
+        <div class="team-av" style="background:{{ project.color_hex }};">{{ stat.author.name|slice:":1" }}</div>
+      {% endif %}
+      <div class="team-info">
+        <div class="team-name">{{ stat.author.name }}</div>
+        <div class="team-role">{{ stat.role }}</div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:{{ stat.bar_width }}%; background:{{ project.color_hex }};"></div>
+      </div>
+      <div class="team-count">{{ stat.total }} actions</div>
+      <div class="team-breakdown">{{ stat.done }} done · {{ stat.draft }} draft · {{ stat.published }} published</div>
+    </div>
+    {% empty %}
+    <p style="color:#ccc; font-size:13px; text-align:center; padding:20px 0;">No contributions logged yet.</p>
+    {% endfor %}
+  </div>
+
+  <!-- ── activity heatmap ── -->
+  <div class="section-card">
+    <p class="section-label">Activity heatmap — last 90 days</p>
+    <div class="heatmap-wrap">
+      <div class="heatmap-grid" id="heatmapGrid"></div>
+    </div>
+    <div class="hm-legend">
+      <span>Less</span>
+      <div class="hm-lc lv-0"></div><div class="hm-lc lv-1"></div>
+      <div class="hm-lc lv-2"></div><div class="hm-lc lv-3"></div>
+      <div class="hm-lc lv-4"></div>
+      <span>More</span>
+      <span style="margin-left:10px; font-size:11px;">drafts + publishes + tasks done</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── STATUS MODAL ── -->
+<div class="modal-overlay" id="statusModal">
+  <div class="modal-box">
+    <h5>Move task to…</h5>
+    <form id="statusForm" method="POST">
+      {% csrf_token %}
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;">
+        <button type="submit" name="status" value="todo"       class="btn-hdr" style="text-align:left;">To Do</button>
+        <button type="submit" name="status" value="inprogress" class="btn-hdr" style="text-align:left;">In Progress</button>
+        <button type="submit" name="status" value="review"     class="btn-hdr" style="text-align:left;">Review</button>
+        <button type="submit" name="status" value="done"       class="btn-hdr primary" style="text-align:left;">Done</button>
+      </div>
+    </form>
+    <button class="modal-cancel" onclick="closeModal('statusModal')" style="width:100%;">Cancel</button>
+  </div>
+</div>
+
+<!-- ── DUPLICATE MODAL ── -->
+<div class="modal-overlay" id="dupModal">
+  <div class="modal-box">
+    <h5>Duplicate &amp; reassign</h5>
+    <p>Clones the task and assigns to someone else. Starts fresh as To Do.</p>
+    <form id="dupForm" method="POST">
+      {% csrf_token %}
+      <label class="modal-label">Assign to</label>
+      <select name="assigned_to" class="modal-select" required>
+        <option value="">— Select person —</option>
+        {% for author in authors %}
+        <option value="{{ author.id }}">{{ author.name }} — {{ author.designation }}</option>
+        {% endfor %}
+      </select>
+      <label class="modal-label">Task type for the clone</label>
+      <select name="task_type" class="modal-select">
+        {% for val, label in task_type_choices %}
+        <option value="{{ val }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+      <div class="modal-btns">
+        <button type="submit" class="modal-submit">Duplicate</button>
+        <button type="button" class="modal-cancel" onclick="closeModal('dupModal')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script>
+const TODAY = new Date();
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+/* ── task data (this project only) ─────────────────────────── */
+const PROD_TASKS = [
+  {% for task in all_project_tasks %}{% if task.due_date %}
+  { id:{{ task.id }}, title:"{{ task.title|escapejs }}", status:"{{ task.status }}", date:"{{ task.due_date|date:'Y-m-d' }}" }{% if not forloop.last %},{% endif %}
+  {% endif %}{% endfor %}
+];
+
+const DEPLOY_TASKS = [
+  {% for task in all_project_tasks %}{% if task.deploy_date %}
+  { id:{{ task.id }}, title:"{{ task.title|escapejs }}", platform:"{{ task.deploy_platform|default:'' }}", date:"{{ task.deploy_date|date:'Y-m-d' }}" }{% if not forloop.last %},{% endif %}
+  {% endif %}{% endfor %}
+];
+
+const S_COLORS = { todo:'#888', inprogress:'#b26a00', review:'#5e35b1', done:'#0e7a4e' };
+const P_COLORS = { website:'#1a1a2e', linkedin:'#0077b5', meta:'#1877f2', youtube:'#ff0000', '':'#888' };
+const P_ICONS  = {
+  website:  `<img src="https://bigstorynetwork.com/static/main/Vector.png" style="width:8px;height:8px;object-fit:contain;filter:brightness(0) invert(1);">`,
+  linkedin: `<svg width="8" height="8" viewBox="0 0 24 24" fill="#fff"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
+  meta:     `<svg width="8" height="8" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
+  youtube:  `<svg width="8" height="8" viewBox="0 0 24 24" fill="#fff"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/></svg>`,
+};
+
+/* ── calendar builder ───────────────────────────────────────── */
+function buildCal(year, month, tasks, bodyId, pillFn) {
+  const dim = new Date(year, month + 1, 0).getDate();
+  let fd = new Date(year, month, 1).getDay();
+  fd = fd === 0 ? 6 : fd - 1;
+
+  const byDay = {};
+  tasks.forEach(t => {
+    const d = new Date(t.date + 'T00:00:00');
+    if (d.getFullYear() !== year || d.getMonth() !== month) return;
+    const day = d.getDate();
+    if (!byDay[day]) byDay[day] = [];
+    byDay[day].push(t);
+  });
+
+  if (!Object.keys(byDay).length) {
+    document.getElementById(bodyId).innerHTML = '<div class="cal-empty-msg">No tasks this month.</div>';
+    return;
+  }
+
+  const rows = Math.ceil((fd + dim) / 7);
+  let html = '', dc = 1;
+  for (let r = 0; r < rows; r++) {
+    html += '<div class="cal-week">';
+    for (let c = 0; c < 7; c++) {
+      const idx = r * 7 + c;
+      if (idx < fd || dc > dim) { html += '<div class="cal-cell empty"></div>'; continue; }
+      const isT = dc === TODAY.getDate() && month === TODAY.getMonth() && year === TODAY.getFullYear();
+      const dt  = byDay[dc] || [];
+      html += `<div class="cal-cell${isT ? ' is-today' : ''}">`;
+      html += `<div class="day-num${isT ? ' tnow' : ''}">${dc}</div>`;
+      dt.slice(0, 3).forEach(t => { html += pillFn(t); });
+      if (dt.length > 3) html += `<div class="more-p">+${dt.length - 3}</div>`;
+      html += '</div>';
+      dc++;
+    }
+    html += '</div>';
+  }
+  document.getElementById(bodyId).innerHTML = html;
+}
+
+/* ── production calendar ────────────────────────────────────── */
+let pY = TODAY.getFullYear(), pM = TODAY.getMonth();
+function prodPill(t) {
+  const bg = S_COLORS[t.status] || '#888';
+  const lb = t.title.length > 16 ? t.title.substring(0,16)+'…' : t.title;
+  return `<a href="/edit_task/${t.id}" class="tpill" style="background:${bg};" title="${t.title}"><span>${lb}</span></a>`;
+}
+function renderProd() {
+  document.getElementById('prod-lbl').textContent = `${MONTHS[pM]} ${pY}`;
+  buildCal(pY, pM, PROD_TASKS, 'prod-body', prodPill);
+}
+function prodNav(d) {
+  if (d === 0) { pY = TODAY.getFullYear(); pM = TODAY.getMonth(); }
+  else { pM += d; if (pM > 11) { pM = 0; pY++; } if (pM < 0) { pM = 11; pY--; } }
+  renderProd();
+}
+
+/* ── deploy / content calendar ──────────────────────────────── */
+let dY = TODAY.getFullYear(), dM = TODAY.getMonth(), dPlatform = 'all';
+function deployPill(t) {
+  const bg   = P_COLORS[t.platform] || '#888';
+  const icon = P_ICONS[t.platform] || '';
+  const lb   = t.title.length > 14 ? t.title.substring(0,14)+'…' : t.title;
+  return `<a href="/edit_task/${t.id}" class="tpill" style="background:${bg};" title="${t.title}">${icon}<span>${lb}</span></a>`;
+}
+function renderDeploy() {
+  document.getElementById('deploy-lbl').textContent = `${MONTHS[dM]} ${dY}`;
+  const filtered = dPlatform === 'all' ? DEPLOY_TASKS : DEPLOY_TASKS.filter(t => t.platform === dPlatform);
+  buildCal(dY, dM, filtered, 'deploy-body', deployPill);
+}
+function deployNav(d) {
+  if (d === 0) { dY = TODAY.getFullYear(); dM = TODAY.getMonth(); }
+  else { dM += d; if (dM > 11) { dM = 0; dY++; } if (dM < 0) { dM = 11; dY--; } }
+  renderDeploy();
+}
+function deployTab(el) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  dPlatform = el.dataset.p;
+  renderDeploy();
+}
+
+/* ── heatmap ────────────────────────────────────────────────── */
+const HEATMAP = [{% for d in heatmap %}{ date:"{{ d.date }}", count:{{ d.count }}, level:{{ d.level }} }{% if not forloop.last %},{% endif %}{% endfor %}];
+function buildHeatmap() {
+  const g = document.getElementById('heatmapGrid');
+  let w = null;
+  HEATMAP.forEach((d, i) => {
+    if (i % 7 === 0) { w = document.createElement('div'); w.className = 'hm-week'; g.appendChild(w); }
+    const c = document.createElement('div');
+    c.className = `hm-cell lv-${d.level}`;
+    c.title = `${d.date}: ${d.count} action${d.count !== 1 ? 's' : ''}`;
+    w.appendChild(c);
+  });
+}
+
+/* ── modal helpers ──────────────────────────────────────────── */
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function openStatusModal(taskId) {
+  document.getElementById('statusForm').action = `/update_task_status/${taskId}`;
+  openModal('statusModal');
+}
+
+function openDupModal(taskId, taskType) {
+  document.getElementById('dupForm').action = `/duplicate_task/${taskId}`;
+  const sel = document.getElementById('dupForm').querySelector('select[name="task_type"]');
+  if (sel) {
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === taskType) { sel.selectedIndex = i; break; }
+    }
+  }
+  openModal('dupModal');
+}
+
+/* close on overlay click */
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
+});
+
+/* ── init ───────────────────────────────────────────────────── */
+renderProd();
+renderDeploy();
+buildHeatmap();
+</script>
+{% endblock 'script' %}

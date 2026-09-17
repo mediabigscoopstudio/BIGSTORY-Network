@@ -1,0 +1,186 @@
+{% extends "editor/base.html" %}
+{% block 'title' %}My Tasks{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .page-wrap { padding: 24px 28px 40px; }
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a2e; margin: 0; }
+
+  /* filters */
+  .filters-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+  .filter-select {
+    padding: 8px 14px; border: 1.5px solid #e5e5e5; border-radius: 8px;
+    font-size: 13px; background: #fff; color: #333; outline: none;
+    cursor: pointer; appearance: none; min-width: 140px;
+  }
+  .filter-select:focus { border-color: #1a1a2e; }
+  .filter-reset { font-size: 13px; color: #aaa; text-decoration: none; padding: 8px 10px; border-radius: 8px; }
+  .filter-reset:hover { background: #f5f5f5; color: #555; }
+
+  /* overdue banner */
+  .overdue-banner {
+    background: #fdecea; border: 1px solid #fca5a5; border-radius: 10px;
+    padding: 12px 18px; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px; font-size: 13px; color: #c0392b;
+  }
+  .overdue-banner strong { font-weight: 700; }
+
+  /* task cards */
+  .tasks-list { display: flex; flex-direction: column; gap: 8px; }
+  .task-card {
+    background: #fff; border-radius: 10px; padding: 14px 16px;
+    border: 1px solid #f0f0f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    display: flex; align-items: center; gap: 14px;
+    transition: box-shadow 0.15s;
+  }
+  .task-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+  .task-card.overdue-row { background: #fff8f8; border-color: #fca5a5; }
+
+  .task-accent { width: 4px; height: 44px; border-radius: 2px; flex-shrink: 0; }
+  .task-body { flex: 1; min-width: 0; }
+  .task-title { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .task-meta  { display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px; color: #aaa; align-items: center; }
+
+  .badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; }
+  .badge-todo       { background: #f0f0f0; color: #555; }
+  .badge-inprogress { background: #fff3e0; color: #b26a00; }
+  .badge-review     { background: #ede7fe; color: #5e35b1; }
+  .badge-done       { background: #e6f9f1; color: #0e7a4e; }
+  .badge-low        { background: #f0f0f0; color: #666; }
+  .badge-medium     { background: #fff3e0; color: #b26a00; }
+  .badge-high       { background: #fdecea; color: #c0392b; }
+  .badge-urgent     { background: #c0392b; color: #fff; }
+
+  .due-overdue { color: #c0392b; font-weight: 600; }
+
+  /* status update inline */
+  .status-actions { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; align-items: center; }
+
+  .status-btn {
+    font-size: 11px; padding: 5px 11px; border-radius: 6px;
+    border: 1.5px solid #e5e5e5; background: #fff; color: #555;
+    cursor: pointer; font-weight: 500; transition: all 0.12s;
+  }
+  .status-btn:hover { background: #f5f5f5; }
+  .status-btn.active-todo       { border-color: #ccc; background: #f0f0f0; color: #555; font-weight: 700; }
+  .status-btn.active-inprogress { border-color: #f0a500; background: #fff3e0; color: #b26a00; font-weight: 700; }
+  .status-btn.active-review     { border-color: #7F77DD; background: #ede7fe; color: #5e35b1; font-weight: 700; }
+  .status-btn.done-locked       { border-color: #e5e5e5; background: #f9f9f9; color: #ccc; cursor: not-allowed; }
+
+  .view-btn {
+    font-size: 11px; padding: 5px 11px; border-radius: 6px;
+    border: 1px solid #e5e5e5; background: #fff; color: #888;
+    text-decoration: none; font-weight: 500; transition: all 0.12s;
+  }
+  .view-btn:hover { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+
+  .empty-state { text-align: center; padding: 50px 20px; color: #ccc; }
+  .empty-state h4 { color: #aaa; font-size: 16px; margin-bottom: 6px; }
+
+  /* done tasks are muted */
+  .task-card.done-task { opacity: 0.55; }
+  .task-card.done-task:hover { opacity: 1; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="page-wrap">
+
+  <div class="page-header">
+    <h2>My Tasks</h2>
+  </div>
+
+  <!-- filters -->
+  <form method="GET" action="/my_tasks" class="filters-bar">
+    <select name="status" class="filter-select" onchange="this.form.submit()">
+      <option value="">All statuses</option>
+      <option value="todo"       {% if request.GET.status == 'todo' %}selected{% endif %}>To Do</option>
+      <option value="inprogress" {% if request.GET.status == 'inprogress' %}selected{% endif %}>In Progress</option>
+      <option value="review"     {% if request.GET.status == 'review' %}selected{% endif %}>Review</option>
+      <option value="done"       {% if request.GET.status == 'done' %}selected{% endif %}>Done</option>
+    </select>
+    <select name="project" class="filter-select" onchange="this.form.submit()">
+      <option value="">All projects</option>
+      {% for p in my_projects %}
+      <option value="{{ p.id }}" {% if request.GET.project == p.id|stringformat:"s" %}selected{% endif %}>
+        {{ p.name }}
+      </option>
+      {% endfor %}
+    </select>
+    {% if request.GET %}
+    <a href="/my_tasks" class="filter-reset">Clear filters</a>
+    {% endif %}
+  </form>
+
+  <!-- overdue banner -->
+  {% if overdue %}
+  <div class="overdue-banner">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <strong>{{ overdue.count }} task{{ overdue.count|pluralize }} overdue</strong> — please update their status or flag to your editor.
+  </div>
+  {% endif %}
+
+  {% if tasks %}
+  <div class="tasks-list">
+    {% for task in tasks %}
+    <div class="task-card {% if task.is_overdue %}overdue-row{% endif %} {% if task.status == 'done' %}done-task{% endif %}">
+
+      <div class="task-accent" style="background: {{ task.project.color_hex }};"></div>
+
+      <div class="task-body">
+        <div class="task-title">{{ task.title }}</div>
+        <div class="task-meta">
+          <span>{{ task.project.name }}</span>
+          <span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span>
+          <span class="badge badge-{{ task.task_type }}">{{ task.get_task_type_display }}</span>
+          {% if task.due_date %}
+          <span class="{% if task.is_overdue %}due-overdue{% endif %}">
+            {% if task.is_overdue %}Overdue · {% endif %}Due {{ task.due_date|date:"M j, Y" }}
+          </span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- status update buttons — editors cannot set Done -->
+      <div class="status-actions">
+        {% if task.status != 'done' %}
+          <form method="POST" action="/update_task_status/{{ task.id }}" style="display:contents;">
+            {% csrf_token %}
+            <button type="submit" name="status" value="todo"
+              class="status-btn {% if task.status == 'todo' %}active-todo{% endif %}">
+              To Do
+            </button>
+            <button type="submit" name="status" value="inprogress"
+              class="status-btn {% if task.status == 'inprogress' %}active-inprogress{% endif %}">
+              In Progress
+            </button>
+            <button type="submit" name="status" value="review"
+              class="status-btn {% if task.status == 'review' %}active-review{% endif %}">
+              Review
+            </button>
+          </form>
+          <span class="status-btn done-locked" title="Only admin can mark as Done">Done</span>
+        {% else %}
+          <span class="badge badge-done">Done ✓</span>
+        {% endif %}
+        <a href="/task_detail/{{ task.id }}" class="view-btn">View</a>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <h4>No tasks found</h4>
+    <p>{% if request.GET %}Try clearing the filters.{% else %}You have no tasks assigned yet.{% endif %}</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}{% endblock 'script' %}

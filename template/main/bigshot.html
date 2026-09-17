@@ -1,0 +1,168 @@
+{% extends "main/base.html" %}
+{% block 'title' %}BIGSHOT — Business Strategy & Brand Breakdowns{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="BIGSHOT by BIGSTORY Network decodes business breakthroughs, failures, strategies, and case studies in depth. Learn how brands rise, fall, and execute game-changing moves across Indian and global markets.">
+<meta name="keywords" content="BIGSHOT, business case studies, brand strategy India, business analysis, company breakdowns, market insights, business failures, business success stories, BIGSTORY Network business series, Think School style analysis">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/bigshot">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/bigshot">
+<meta property="og:title" content="BIGSHOT — Business Strategy & Brand Breakdowns">
+<meta property="og:description" content="Decode business success and failure with BIGSHOT — BIGSTORY Network’s deep-dive series analyzing brands, market strategy, competition, and the moves that change everything.">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/bigshot">
+<meta name="twitter:title" content="BIGSHOT — In-Depth Business Case Studies">
+<meta name="twitter:description" content="From sudden falls to breakthrough success — BIGSHOT breaks down business strategies, brand decisions, and lessons every entrepreneur should know.">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema.org JSON-LD for BIGSHOT Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "BIGSHOT — Business Deep Dive Series",
+  "description": "BIGSHOT is BIGSTORY Network’s flagship business analysis series featuring detailed breakdowns of company strategies, market moves, successes, failures, and case studies across India and the world.",
+  "url": "https://bigstorynetwork.com/bigshot",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Vector.png"
+    }
+  },
+  "image": "https://bigstorynetwork.com/static/main/Brandplate.webp",
+  "about": {
+    "@type": "ItemList",
+    "name": "Business Case Study Series",
+    "description": "Detailed business analyses covering brand strategy, competition, market dynamics, failures, turnarounds, and breakthrough decisions."
+  }
+}
+</script>
+
+{% endblock 'meta' %}
+{% block 'css' %}
+<link rel="stylesheet" href="/static/main/css/index.css">
+{% endblock 'css' %}
+{% block 'body' %}
+<!-- BIGSTORY FEATURE SECTION -->
+<div class="container py-2 bigstory-feature">
+    <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="BIGSTORY" >
+        <span>BIG SHOT</span>
+      </div>
+      <br>
+  <div class="bigstory-card">
+       
+    {% if exclusive_main  %}
+      <!-- Left Content -->
+    <div class="bigstory-content" 
+    {% if exclusive_main.banner_background_colour %}
+      style="background-color: {{exclusive_main.banner_background_colour}};"
+    {% else %}
+      style="background-color: white;"
+    {% endif %}
+    >
+      <a href="/content/{{exclusive_main.slug}}" 
+      {% if exclusive_main.remaining_text_colour %}
+         style="text-decoration: none; color: {{exclusive_main.remaining_text_colour}};"
+       {% else %}
+       style ="color:black;text-decoration: none;"
+       {% endif %}
+       >
+      <div class="bigstory-header d-flex justify-content-between align-items-center mt-2"
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+        <span class="bigstory-subtag">{{exclusive_main.category.title}}</span>
+        <span class="bigstory-date">{{exclusive_main.created_at}}</span>
+      </div>
+      <h2 class="bigstory-title mt-5"
+      {% if exclusive_main.title_colour %}
+         style="color: {{exclusive_main.title_colour}};"
+       {% endif %}
+      >{{exclusive_main.title}}</h2>
+      <p class="bigstory-text mt-2" 
+      {% if exclusive_main.remaining_text_colour %}
+         style="color: {{exclusive_main.remaining_text_colour}};"
+       {% endif %}
+      >
+        {{exclusive_main.description}}
+      </p>
+      <br><br>
+      </a>
+    </div>
+
+    <!-- Right Image -->
+    <div class="bigstory-image" style="background-color: transparent;">
+      <a href="/content/{{exclusive_main.slug}}" style="text-decoration: none; color: black;">
+      <img src="/media/{{exclusive_main.thumbnail_image}}" alt="Bigstory Feature Image">
+      </a>
+    </div>
+    {% endif %}
+  </div>
+  <!-- MULTI NEWS SECTION -->
+<div class="multi-news">
+  {% for i in exclusive_suggestions  %}
+    <div class="news-card">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+    <img src="/media/{{i.thumbnail_image}}" alt="{{title}}">
+    
+    <div class="news-info">
+      <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration:none">
+      <span class="news-category" >{{i.category}}</span>
+      </a>
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <h3 class="news-title">{{i.title}}</h3>
+      </a>
+    </div>
+    </a>
+  </div>
+  {% endfor %}
+  
+</div>
+  
+</div>
+<!-- TRENDING SECTION -->
+<div class="container py-4" style="border-top: solid #d60000 2px;">
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    
+    {% for i in Latest_Articles %}
+      <div class="col">
+      <div class="card border-0">
+      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+          <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+        </div>
+      </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

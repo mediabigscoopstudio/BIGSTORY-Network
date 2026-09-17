@@ -1,0 +1,412 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Analytics — Bigstory Network{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+* { box-sizing: border-box; }
+.analytics-wrap { padding: 24px 28px 48px; }
+
+/* ── page header ─────────────────────────────────────────────── */
+.page-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+.page-top h2 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin: 0; }
+.fetched-at  { font-size: 12px; color: #aaa; }
+
+/* ── platform section headers ────────────────────────────────── */
+.platform-header {
+  display: flex; align-items: center; gap: 12px;
+  margin: 28px 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+.platform-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.platform-header h3 { font-size: 17px; font-weight: 700; color: #1a1a2e; margin: 0; }
+.platform-header p  { font-size: 12px; color: #aaa; margin: 2px 0 0; }
+
+/* ── error banner ────────────────────────────────────────────── */
+.error-banner {
+  background: #fdecea; border: 1px solid #fca5a5; border-radius: 10px;
+  padding: 14px 18px; font-size: 13px; color: #c0392b;
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 16px;
+}
+.error-banner code { font-size: 12px; background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; }
+
+/* ── stat cards grid ─────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: #fff; border-radius: 12px; padding: 16px 18px;
+  border: 1px solid #f0f0f0;
+}
+.stat-card .lbl { font-size: 11px; color: #aaa; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+.stat-card .val { font-size: 26px; font-weight: 700; color: #1a1a2e; line-height: 1; margin-bottom: 2px; }
+.stat-card .sub { font-size: 11px; color: #aaa; }
+
+/* ── two col layout ──────────────────────────────────────────── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 900px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── card ────────────────────────────────────────────────────── */
+.card {
+  background: #fff; border-radius: 12px; padding: 18px 20px;
+  border: 1px solid #f0f0f0;
+}
+.card-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: #bbb; margin-bottom: 14px;
+}
+
+/* ── sparkline chart ─────────────────────────────────────────── */
+.chart-wrap { position: relative; height: 180px; }
+
+/* ── top pages table ─────────────────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.04em; color: #bbb; padding: 0 0 10px;
+  text-align: left; border-bottom: 1px solid #f0f0f0;
+}
+.data-table td { padding: 9px 0; border-bottom: 1px solid #f8f8f8; font-size: 13px; color: #333; vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table td.num { text-align: right; font-weight: 600; color: #1a1a2e; font-variant-numeric: tabular-nums; }
+.page-path { color: #1565c0; font-size: 12px; display: block; margin-top: 2px; }
+.page-title-text { font-weight: 600; }
+
+/* ── traffic source bars ─────────────────────────────────────── */
+.source-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.source-row:last-child { margin-bottom: 0; }
+.source-name { font-size: 12px; color: #555; min-width: 110px; flex-shrink: 0; font-weight: 500; }
+.source-bar  { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.source-fill { height: 100%; border-radius: 4px; background: #1a1a2e; }
+.source-pct  { font-size: 12px; color: #888; min-width: 38px; text-align: right; flex-shrink: 0; }
+
+/* ── country rows ────────────────────────────────────────────── */
+.country-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f8f8f8; }
+.country-row:last-child { border-bottom: none; }
+.country-name { flex: 1; font-size: 13px; color: #333; font-weight: 500; }
+.country-bar  { width: 80px; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.country-fill { height: 100%; border-radius: 3px; background: #378ADD; }
+.country-pct  { font-size: 12px; color: #888; min-width: 36px; text-align: right; flex-shrink: 0; }
+
+/* ── youtube video grid ──────────────────────────────────────── */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.video-card { border-radius: 8px; overflow: hidden; border: 1px solid #f0f0f0; background: #fff; }
+.video-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.video-info  { padding: 10px 12px; }
+.video-title { font-size: 12px; font-weight: 600; color: #1a1a2e; line-height: 1.4; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.video-stats { display: flex; gap: 10px; }
+.video-stat  { font-size: 11px; color: #aaa; display: flex; align-items: center; gap: 3px; }
+
+/* ── instagram grid ──────────────────────────────────────────── */
+.ig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.ig-post { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; background: #f0f0f0; }
+.ig-post img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ig-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.ig-post:hover .ig-overlay { opacity: 1; }
+.ig-stat { color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+/* ── ig profile card ─────────────────────────────────────────── */
+.ig-profile { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.ig-avatar  { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #e5e5e5; }
+.ig-profile-info h4 { font-size: 15px; font-weight: 700; color: #1a1a2e; margin: 0 0 2px; }
+.ig-profile-info p  { font-size: 12px; color: #888; margin: 0; }
+
+/* ── channel card ────────────────────────────────────────────── */
+.yt-profile { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.yt-avatar  { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #f0f0f0; }
+.yt-profile-info h4 { font-size: 15px; font-weight: 700; color: #1a1a2e; margin: 0 0 2px; }
+.yt-profile-info p  { font-size: 12px; color: #888; margin: 0; }
+
+/* ── number formatting ───────────────────────────────────────── */
+.big-num { font-size: 26px; font-weight: 700; color: #1a1a2e; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="analytics-wrap">
+
+  <div class="page-top">
+    <div>
+      <h2>Analytics</h2>
+      <p class="fetched-at">Live data · fetched at {{ fetched_at }}</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       GOOGLE ANALYTICS 4
+  ══════════════════════════════════════ -->
+  <div class="platform-header">
+    <div class="platform-icon" style="background:#e8f0fe;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#4285F4"/>
+      </svg>
+    </div>
+    <div>
+      <h3>Google Analytics</h3>
+      <p>bigstorynetwork.com · last 30 days</p>
+    </div>
+  </div>
+
+  {% if ga4.error %}
+  <div class="error-banner">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div>
+      <strong>GA4 error:</strong> {{ ga4.error }}<br>
+      <code>Add GA4_PROPERTY_ID and GA4_SERVICE_ACCOUNT_JSON to settings.py</code>
+    </div>
+  </div>
+  {% else %}
+
+  <!-- GA4 stat cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="lbl">Sessions</div>
+      <div class="val" id="ga-sessions">{{ ga4.summary.sessions }}</div>
+      <div class="sub">last 30 days</div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl">Users</div>
+      <div class="val">{{ ga4.summary.users }}</div>
+      <div class="sub">{{ ga4.summary.new_users }} new</div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl">Pageviews</div>
+      <div class="val">{{ ga4.summary.pageviews }}</div>
+      <div class="sub">last 30 days</div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl">Bounce rate</div>
+      <div class="val">{{ ga4.summary.bounce_rate }}%</div>
+      <div class="sub">lower is better</div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl">Avg session</div>
+      <div class="val" style="font-size:20px;">{{ ga4.summary.avg_session_fmt }}</div>
+      <div class="sub">per user</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+
+    <!-- sessions sparkline -->
+    <div class="card">
+      <div class="card-title">Daily sessions — last 30 days</div>
+      <div class="chart-wrap">
+        <canvas id="gaSessionsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- traffic sources -->
+    <div class="card">
+      <div class="card-title">Traffic sources</div>
+      {% for src in ga4.traffic_sources %}
+      <div class="source-row">
+        <div class="source-name">{{ src.channel }}</div>
+        <div class="source-bar"><div class="source-fill" style="width:{{ src.pct }}%;"></div></div>
+        <div class="source-pct">{{ src.pct }}%</div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <div class="two-col">
+
+    <!-- top pages -->
+    <div class="card">
+      <div class="card-title">Top pages</div>
+      <table class="data-table">
+        <thead><tr><th>Page</th><th style="text-align:right;">Views</th></tr></thead>
+        <tbody>
+          {% for page in ga4.top_pages %}
+          <tr>
+            <td>
+              <span class="page-title-text">{{ page.title }}</span>
+              <span class="page-path">{{ page.path|truncatechars:45 }}</span>
+            </td>
+            <td class="num">{{ page.views }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- top countries -->
+    <div class="card">
+      <div class="card-title">Top countries</div>
+      {% for c in ga4.top_countries %}
+      <div class="country-row">
+        <div class="country-name">{{ c.country }}</div>
+        <div class="country-bar"><div class="country-fill" style="width:{{ c.pct }}%;"></div></div>
+        <div class="country-pct">{{ c.pct }}%</div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  {% endif %}
+
+
+  <!-- ══════════════════════════════════════
+       YOUTUBE
+  ══════════════════════════════════════ -->
+  <div class="platform-header">
+    <div class="platform-icon" style="background:#fdecea;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff0000">
+        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+        <polygon fill="#fff" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+      </svg>
+    </div>
+    <div>
+      <h3>YouTube</h3>
+      <p>Channel analytics · public data</p>
+    </div>
+  </div>
+
+  {% if youtube.error %}
+  <div class="error-banner">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div>
+      <strong>YouTube error:</strong> {{ youtube.error }}<br>
+      <code>Add YOUTUBE_API_KEY and YOUTUBE_CHANNEL_ID to settings.py</code>
+    </div>
+  </div>
+  {% else %}
+
+  <!-- YouTube channel summary -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="yt-profile">
+      {% if youtube.summary.channel_thumbnail %}
+      <img src="{{ youtube.summary.channel_thumbnail }}" class="yt-avatar" alt="Channel">
+      {% endif %}
+      <div class="yt-profile-info">
+        <h4>{{ youtube.summary.channel_name }}</h4>
+        <p>{{ youtube.summary.description }}</p>
+      </div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:0;">
+      <div class="stat-card">
+        <div class="lbl">Subscribers</div>
+        <div class="val">{{ youtube.summary.subscribers }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Total views</div>
+        <div class="val">{{ youtube.summary.total_views }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Total videos</div>
+        <div class="val">{{ youtube.summary.total_videos }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent videos -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">Recent videos — sorted by views</div>
+    <div class="video-grid">
+      {% for v in youtube.top_videos %}
+      <a href="{{ v.url }}" target="_blank" style="text-decoration:none;">
+        <div class="video-card">
+          {% if v.thumbnail %}
+          <img src="{{ v.thumbnail }}" class="video-thumb" alt="{{ v.title }}">
+          {% endif %}
+          <div class="video-info">
+            <div class="video-title">{{ v.title }}</div>
+            <div class="video-stats">
+              <span class="video-stat">
+                <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                {{ v.views }}
+              </span>
+              <span class="video-stat">
+                <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                {{ v.likes }}
+              </span>
+            </div>
+            <div style="font-size:10px; color:#ccc; margin-top:4px;">{{ v.published }}</div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+{% if not ga4.error %}
+const dailySessions = [
+  {% for d in ga4.daily_sessions %}
+  { date: "{{ d.date }}", sessions: {{ d.sessions }} }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+];
+
+if (dailySessions.length) {
+  const ctx = document.getElementById('gaSessionsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dailySessions.map(d => {
+        const dt = new Date(d.date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
+        return dt.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+      }),
+      datasets: [{
+        label: 'Sessions',
+        data: dailySessions.map(d => d.sessions),
+        borderColor: '#1a1a2e',
+        backgroundColor: 'rgba(26,26,46,0.06)',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.4,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y.toLocaleString()} sessions`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 11 }, color: '#bbb', maxTicksLimit: 8 }
+        },
+        y: {
+          grid: { color: '#f5f5f5' },
+          ticks: { font: { size: 11 }, color: '#bbb' },
+          beginAtZero: true,
+        }
+      }
+    }
+  });
+}
+{% endif %}
+</script>
+{% endblock 'script' %}

@@ -1,0 +1,103 @@
+<!-- ═══════════════════════════════════════════════════════════════
+     PASTE THIS inside project_detail.html — below the status modal
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- ── duplicate + reassign modal ── -->
+<div id="duplicateModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:14px; padding:28px; width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.18);">
+    <h5 style="margin:0 0 6px; font-size:16px; font-weight:700; color:#1a1a2e;">Duplicate &amp; reassign</h5>
+    <p style="font-size:13px; color:#aaa; margin:0 0 18px;">Same brief, different person. Clones the task and starts it fresh as To Do.</p>
+
+    <form id="duplicateForm" method="POST">
+      {% csrf_token %}
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:#333; margin-bottom:6px;">Assign to</label>
+        <select name="assigned_to" style="width:100%; padding:10px 14px; border:1.5px solid #e5e5e5; border-radius:8px; font-size:14px; background:#fafafa; outline:none; appearance:none;" required>
+          <option value="">— Select person —</option>
+          {% for author in authors %}
+          <option value="{{ author.id }}">{{ author.name }} — {{ author.designation }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:block; font-size:13px; font-weight:600; color:#333; margin-bottom:6px;">Task type for the clone</label>
+        <select name="task_type" style="width:100%; padding:10px 14px; border:1.5px solid #e5e5e5; border-radius:8px; font-size:14px; background:#fafafa; outline:none; appearance:none;">
+          <option value="article">Article Assignment</option>
+          <option value="seo">SEO Task</option>
+          <option value="social">Social Media</option>
+          <option value="video_shoot">Video — Shoot</option>
+          <option value="video_edit">Video — Edit</option>
+          <option value="video_upload">Video — Upload</option>
+          <option value="reel">Reel</option>
+          <option value="youtube">YouTube</option>
+          <option value="calendar">Content Calendar</option>
+          <option value="general">General</option>
+        </select>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button type="submit" style="flex:1; background:#1a1a2e; color:#fff; border:none; padding:10px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer;">Duplicate</button>
+        <button type="button" onclick="closeDuplicateModal()" style="padding:10px 16px; border:1.5px solid #e5e5e5; border-radius:8px; font-size:14px; background:#fff; color:#888; cursor:pointer;">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     REPLACE your existing {% block 'script' %} in project_detail.html
+     with this full version
+     ═══════════════════════════════════════════════════════════════ -->
+
+{% block 'script' %}
+<script>
+  // ── heatmap ──────────────────────────────────────────────────────
+  const heatmapData = [
+    {% for day in heatmap %}
+    { date: "{{ day.date }}", count: {{ day.count }}, level: {{ day.level }} }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+  function buildHeatmap() {
+    const grid = document.getElementById('heatmapGrid');
+    let week = null;
+    heatmapData.forEach((day, i) => {
+      if (i % 7 === 0) {
+        week = document.createElement('div');
+        week.className = 'heatmap-week';
+        grid.appendChild(week);
+      }
+      const cell = document.createElement('div');
+      cell.className = `heatmap-cell level-${day.level}`;
+      cell.title = `${day.date}: ${day.count} action${day.count !== 1 ? 's' : ''}`;
+      week.appendChild(cell);
+    });
+  }
+  buildHeatmap();
+
+  // ── status modal ─────────────────────────────────────────────────
+  function openStatusModal(taskId) {
+    document.getElementById('statusForm').action = `/update_task_status/${taskId}`;
+    document.getElementById('statusModal').style.display = 'flex';
+  }
+  function closeModal() {
+    document.getElementById('statusModal').style.display = 'none';
+  }
+  document.getElementById('statusModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ── duplicate modal ──────────────────────────────────────────────
+  function openDuplicateModal(taskId) {
+    document.getElementById('duplicateForm').action = `/duplicate_task/${taskId}`;
+    document.getElementById('duplicateModal').style.display = 'flex';
+  }
+  function closeDuplicateModal() {
+    document.getElementById('duplicateModal').style.display = 'none';
+  }
+  document.getElementById('duplicateModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDuplicateModal();
+  });
+</script>
+{% endblock 'script' %}

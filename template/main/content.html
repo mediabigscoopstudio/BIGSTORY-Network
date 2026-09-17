@@ -1,0 +1,501 @@
+{% extends "main/base.html" %}
+{% load custom_filters %}
+{% block 'title' %}{{data.meta_title}}{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="{{data.meta_description}}">
+<meta name="keywords" content="{{data.meta_keywords}}">
+<meta name="author" content="{{data.author.name}}">
+<link rel="author" href="https://bigstorynetwork.com/author/{{data.author.slug}}">
+<meta name="robots" content="index, follow">
+<!-- Article Category -->
+<meta property="article:section" content="{{data.category.title}}">
+
+<!-- Dates -->
+<meta property="article:published_time" content="{{data.created_at|date:'c'}}">
+<meta property="article:modified_time" content="{{data.updated_at|default:data.created_at|date:'c'}}">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/content/{{data.slug}}">
+
+<!-- News Keywords (Tags) -->
+<meta name="news_keywords" content="{% for tag in data.tags.all %}{{tag.title}}{% if not forloop.last %}, {% endif %}{% endfor %}">
+<meta name="wordcount" content="{{ word_count }}">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bigstorynetwork.com/content/{{data.slug}}">
+<meta property="og:title" content="{{data.meta_title}}">
+<meta property="og:description" content="{{data.meta_description}}">
+<meta property="og:image" content="https://bigstorynetwork.com/media/{{data.banner_image}}">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/content/{{data.slug}}">
+<meta name="twitter:title" content="{{data.meta_title}}">
+<meta name="twitter:description" content="{{data.meta_description}}">
+<meta name="twitter:image" content="https://bigstorynetwork.com/media/{{data.banner_image}}">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema: NewsArticle -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "{{data.meta_title|striptags|escapejs}}",
+  "description": "{{data.meta_description|striptags|escapejs}}",
+  "articleSection": "{{data.category.title|striptags|escapejs}}",
+  "url": "https://bigstorynetwork.com/content/{{data.slug}}",
+  "datePublished": "{{data.created_at|date:'c'}}",
+  "dateModified": "{{data.updated_at|default:data.created_at|date:'c'}}",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://bigstorynetwork.com{{data.banner_image.url}}",
+    "width": 1200,
+    "height": 628
+  },
+  "author": {
+    "@type": "Person",
+    "name": "{{data.author.name|striptags|escapejs}}",
+    "jobTitle": "{{data.author.designation|default:'Journalist'|striptags|escapejs}}",
+    "url": "https://bigstorynetwork.com/author/{{data.author.slug}}",
+    "image": "https://bigstorynetwork.com{{data.author.image.url}}"
+    {% if data.author.linkedin_url or data.author.twitter_url or data.author.instagram_url or data.author.facebook_url %}
+    ,"sameAs": [
+      {% if data.author.linkedin_url %}"{{data.author.linkedin_url}}"{% if data.author.twitter_url or data.author.instagram_url or data.author.facebook_url %},{% endif %}{% endif %}
+      {% if data.author.twitter_url %}"{{data.author.twitter_url}}"{% if data.author.instagram_url or data.author.facebook_url %},{% endif %}{% endif %}
+      {% if data.author.instagram_url %}"{{data.author.instagram_url}}"{% if data.author.facebook_url %},{% endif %}{% endif %}
+      {% if data.author.facebook_url %}"{{data.author.facebook_url}}"{% endif %}
+    ]
+    {% endif %}
+  },
+  "publisher": {
+    "@type": "NewsMediaOrganization",
+    "name": "BIGSTORY Network",
+    "url": "https://bigstorynetwork.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Logo.png",
+      "width": 600,
+      "height": 60
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://bigstorynetwork.com/content/{{data.slug}}"
+  },
+  "keywords": "{{data.meta_keywords|striptags|escapejs}}",
+  "inLanguage": "en-IN",
+  "about": [
+    {% for tag in data.tags.all %}
+    {
+      "@type": "Thing",
+      "name": "{{tag.title|striptags|escapejs}}",
+      "url": "https://bigstorynetwork.com/tags/{{tag.slug}}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+  {% if data.howto_steps.exists %}
+  ,"hasPart": [
+    {
+      "@type": "HowTo",
+      "name": "{{data.title|striptags|escapejs}}",
+      "step": [
+        {% for step in data.howto_steps.all %}
+        {
+          "@type": "HowToStep",
+          "name": "{{step.step_name|striptags|escapejs}}",
+          "text": "{{step.step_text|striptags|escapejs}}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ]
+    }
+  ]
+  {% endif %}
+}
+</script>
+
+<!-- Schema: BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://bigstorynetwork.com"},
+    {"@type": "ListItem", "position": 2, "name": "{{data.category.title|striptags|escapejs}}", "item": "https://bigstorynetwork.com/category/{{data.category.slug}}"},
+    {"@type": "ListItem", "position": 3, "name": "{{data.title|truncatechars:80|striptags|escapejs}}", "item": "https://bigstorynetwork.com/content/{{data.slug}}"}
+  ]
+}
+</script>
+
+<!-- Schema: FAQPage standalone -->
+{% if data.faqs.exists %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in data.faqs.all %}
+    {
+      "@type": "Question",
+      "name": "{{faq.question|striptags|escapejs}}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{faq.answer|striptags|escapejs}}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+
+<!-- Schema: Speakable -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "url": "https://bigstorynetwork.com/content/{{data.slug}}",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [".article-tldr", ".key-takeaway", "h1"]
+  }
+}
+</script>
+
+{% endblock 'meta' %}
+
+{% block 'css' %}
+<link rel="stylesheet" href="/static/main/css/justin.css">
+<link rel="stylesheet" href="/static/main/css/index.css">
+<link rel="stylesheet" href="/static/main/css/content.css">
+<style>
+  .global-news-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.bigstory-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+}
+.bigstory-tag img {
+  width: 24px;
+  height: 24px;
+}
+.text-levrage
+{
+  color: #333;
+}
+.text-levrage :is(h1, h2, h3, h4, h5, h6) {
+    color: #d60000;
+    font-family: 'Lato', sans-serif;
+}
+.text-levrage p
+{
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+}
+.text-levrage a
+{
+  color: #d60000;
+  text-decoration: underline solid #F4C430;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+.text-levrage img 
+{
+  max-height: 400px;
+  width: 100%;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;   /* Allows tags to go to next line */
+  gap: 8px;          /* Space between tags */
+}
+
+.tag {
+  background-color: red;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  white-space: nowrap; /* Remove this if you want tags to break inside a word */
+}
+</style>
+{% endblock 'css' %}
+{% block 'body' %}
+<!--Hero Section-->
+<br>
+<br>
+<section class="justin-hero-section container py-4" 
+
+>
+  <div class="row align-items-center g-4" style="background-color: {{data.banner_background_colour}}; color: {{data.remaining_text_colour}};">
+    <!--  CONTENT -->
+    <div class="col-lg-6 col-12" 
+    
+    >
+
+      <div class="d-flex justify-content-between align-items-center mb-3 w-100">
+        <span class="textfw-bold" >{{data.category.title}}</span>
+        <span class="textfw-bold text-nowrap"style="color: {{data.remaining_text_colour}};" >{{data.created_at}}</span>
+      </div>
+
+      <h1 class="fw-bold mb-3" style="line-height:1.2;color: {{data.title_colour}};">
+        {{data.title}}
+      </h1>
+
+      <p class="mb-4" style="font-size:1rem;"> {{data.description}}</p>
+
+      <div class="d-flex align-items-center gap-3 mt-3" onclick="location.href='/author/{{data.author.slug}}'">
+        <span class="fw-bold" style="text-decoration: none;" >by</span>
+        <img src="/media/{{data.author.image}}" 
+             alt="Author" 
+             style="width:45px; height:45px; border-radius: 50%;">
+        <span class="fw-bold fs-5" style="text-decoration: none;">{{data.author.name}}</span>
+      </div>
+
+    </div>
+    <!--  IMAGE -->
+    <div class="col-lg-6 col-12">
+      <img src="/media/{{data.banner_image}}" 
+           class="img-fluid w-100" 
+           alt="Hero Image">
+    </div>
+
+  </div>
+</section>
+<section class="container py-4">
+  <div class="row g-4">
+
+    <!-- ✅ LEFT COLUMN (ARTICLE CONTENT) -->
+    <div class="col-lg-8 col-md-12" id="content_section"  >
+      <div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-danger text-white p-4 d-flex justify-content-between align-items-center" 
+             style="cursor: pointer;" 
+             data-bs-toggle="collapse" 
+             data-bs-target="#tldrContent">
+             {% if data.tldr_title %}
+                <h4 class="mb-0 fw-bold">{{data.tldr_title}}</h4>
+             {% else %}
+               <h4 class="mb-0 fw-bold">⏱️ 30-Second Brief</h4>
+             {% endif %}
+            <span class="badge bg-white text-danger rounded-pill px-3">Expand to Read</span>
+        </div>
+
+        <div id="tldrContent" class="collapse">
+            <div class="card-body bg-light p-4">
+                <div class="row g-4 article-tldr key-takeawa p-2">
+                  <br>
+                   {{data.tldr|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+     <div class="text-levrage">
+          {{data.content|safe}}
+     </div>
+      <div class="tags" style="width: display: flex;
+  flex-wrap: wrap;   /* Allows tags to go to next line */
+  gap: 8px; ;">
+        {% for tag in tags %}
+            <a href="{{ tag.get_absolute_url }}" class="tag-chip" style="
+            background-color: red;
+            color: #F4C430;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            white-space: nowrap; 
+            ">{{ tag.title }}</a>
+        {% endfor %}
+      </div>
+
+      <!-- ✅ Author Section -->
+<div class="author-box d-flex flex-column flex-md-row align-items-center gap-3 p-3 rounded mt-4" onclick="location.href='/author/{{data.author.slug}}'">
+    <img src="/media/{{data.author.image}}" alt="{{data.author.name}}" class="author-img">
+
+    <div class="flex-grow-1 text-center text-md-start">
+        <h5 class="fw-bold mb-1">
+            {{data.author.name}}
+            <span class="badge bg-warning text-dark ms-2">{{data.author.designation}}</span>
+        </h5>
+
+        <p class="author-text mb-2">
+            {{data.author.description}}
+        </p>
+
+        <div class="d-flex gap-3 justify-content-center justify-content-md-start">
+            {% if data.author.facebook_url %}
+                <div class="socials"><a href="{{data.author.facebook_url}}" target="_blank"><i class="bi bi-facebook"></i></a></div>
+            {% endif %}
+            {% if data.author.instagram_url %}
+                <div class="socials"><a href="{{data.author.instagram_url}}" target="_blank"><i class="bi bi-instagram"></i></a></div>
+            {% endif %}
+            {% if data.author.linkedin_url %}
+                <div class="socials"><a href="{{data.author.linkedin_url}}" target="_blank"><i class="bi bi-linkedin"></i></a></div>
+            {% endif %}
+            {% if data.author.twitter_url %}
+                <div class="socials"><a href="{{data.author.twitter_url}}" target="_blank"><i class="bi bi-twitter"></i></a></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+    </div>
+
+    <!-- ✅ RIGHT SIDEBAR -->
+    <div class="col-lg-4 col-md-12">
+
+      <!-- RECENT STORIES TITLE -->
+      <div class="sidebar-title mb-3">
+        <img src="/static/main/Vector.png" width="20"> 
+        <span>Exclusive Content</span>
+      </div>
+
+      <!-- ✅ 6 RECENT STORIES (3 rows × 2 cols ALWAYS) -->
+<div class="row row-cols-2 g-3">
+
+  <!-- Story 1-6 -->
+   {% for i in new_edits %}
+   <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+    <div class="col">
+
+      <div class="recent-card">
+      <img src="/media/{{i.thumbnail_image}}" class="recent-img" alt="{{i.title}}">
+      <div class="text-danger fw-bold small mt-2">{{i.category.title}}</div>
+      <div class="fw-bold lh-sm small">
+       {{i.title}}
+      </div>
+    </div>
+  </div>
+  </a>
+   {% endfor %}
+</div>
+
+
+      <!-- ✅ SUBSCRIPTION BOX -->
+      <div class="subscribe-box text-center p-3 rounded mt-4">
+
+        <h3 class="fw-bold mb-2">Don’t just keep up.<br>Get Ahead</h3>
+
+        <p class="small text-muted">
+          Sign up for the Daily newsletter to get your biggest stories,
+          handpicked for you each day.
+        </p>
+        <form action="/join_newsletter_form" method="POST">
+          {% csrf_token %}
+        <input type="email" class="form-control mb-2" placeholder="Enter Email ID">
+        <button class="btn btn-dark w-100" type="submit" name="email">Subscribe Now!</button>
+        </form>
+      </div>
+
+      <div class="col" style="border-top: soli red;" >
+      <div class="sidebar-title mb-3">
+        <img src="/static/main/Vector.png" width="20"> 
+        <span>What's Buzzin?</span>
+      </div>
+
+      <div class="buzzin-sidebar">
+        {% for i in buzz_first_two %}
+        <a href="{{i.link}}" style="text-decoration: none; color: black;">
+        <div class="global-news-card flex-column">
+          <img src="/media/{{i.thumbnail_image}}" alt="{{i.title}}">
+          <div class="news-category">{{i.category.title}}</div>
+          <div class="news-title fs-6">{{i.title}}</div>
+          <div class="news-meta text-muted" style="font-size:0.85rem;">Youtube</div>
+        </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    </div>
+
+  </div>
+</section>
+<section class="container py-4">
+<div class="container py-2">
+    <!-- REELS SECTION -->
+<div class="container py-4">
+  <div class="row align-items-center">
+
+    <!-- Catch Up Section (Left on Desktop, Top on Mobile) -->
+    <div class="col-lg-4 col-12 mb-3 mb-lg-0">
+      <img src="/static/main/catchup.webp" class="img-fluid w-100" alt="Catch Up with our best">
+    </div>
+
+    <!-- Reels Section -->
+    <div class="col-lg-8 col-12">
+      <div class="row row-cols-3 g-3">
+        
+        {% for i in reel_highlights %}
+          <div class="col">
+          <a href="{{i.link}}" target="_blank">
+            <img src="/media/{{i.thumbnail_image}}" class="img-fluid w-100 rounded" alt="{{i.title}}">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</section>
+<section class="container py-4">
+    <!-- TRENDING SECTION -->
+<div class="container py-4" style="border-top: solid #d60000 2px;">
+
+  <!-- Section Header -->
+  <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="BIGSTORY Trending News!" >
+        <span>Trending Now!</span> in last 24hrs
+      </div>
+      <br>
+  </div>
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    
+    {% for i in similar %}
+    <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <div class="col">
+      <div class="card border-0">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+          <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+        </div>
+      </div>
+    </div>
+    </a>
+    {% endfor %}
+  </div>
+
+</div>
+</section>
+
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

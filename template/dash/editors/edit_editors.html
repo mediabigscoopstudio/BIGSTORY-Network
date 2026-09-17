@@ -1,0 +1,162 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Edit {{data.name}}{% endblock 'title' %}
+{% block 'css' %}{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid">
+    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+        <div class="flex-grow-1">
+            <h4 class="fs-18 fw-semibold m-0">Edit Editor Profile</h4> 
+        </div>
+    </div>
+    <div class="row">
+        <!-- User Account Creation Form -->
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Edit {{data.name}}</h5>
+                </div>
+
+                <div class="card-body">
+                  <form class="row g-3" action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        <label for="authorName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="authorName" placeholder="Author's Full Name" name="name" value="{{data.name}}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="authorDesignation" class="form-label">Designation</label>
+                        <input type="text" class="form-control" id="authorDesignation" placeholder="e.g., Senior Editor, Columnist" value="{{data.designation}}" name="designation" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="authorDescription" class="form-label">email</label>
+                        <input type="email" class="form-control" id="authorName" placeholder="Author's email id" name="email" value="{{data.email}}" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="authorDescription" class="form-label">Date of Birth</label>
+                      <input type="date" class="form-control" id="authorName" placeholder="Author's date of birth" name="DOB" value="{{data.DOB}}" required>
+                  </div>
+                  <div class="col-12">
+                    <label for="authorDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="authorDescription" rows="3" placeholder="A brief description about the author" name="description">{{data.description}}</textarea>
+                  </div>
+                  <div class="col-12">
+                    <label for="authorDescription" class="form-label">Location</label>
+                    <textarea class="form-control" id="authorDescription" rows="2" placeholder="Just the state and city of the editor" name="location">{{data.location}}</textarea>
+                  </div>
+                    <div class="col-md-6">
+                        <label for="authorImage" class="form-label">Image</label>
+                        <img src="/media/{{data.image}}" alt="{{data.name}}" style="height: 50px; border-radius: 50%;" >
+                        <br><br>
+                        <input type="file" class="form-control" id="authorImage" accept="image/png, image/webp, image/jpeg, image/jpg" name="image" >
+                        <div class="form-text">Recommended image dimensions is 500*500 px and format is .webp</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="authorFacebook" class="form-label">Facebook URL (Optional)</label>
+                        <input type="url" class="form-control" id="authorFacebook" placeholder="https://www.facebook.com/profile" name="facebook_url" value="{{data.facebook_url}}" >
+                    </div>
+                    <div class="col-md-6">
+                        <label for="authorInstagram" class="form-label">Instagram URL (Optional)</label>
+                        <input type="url" class="form-control" id="authorInstagram" placeholder="https://www.instagram.com/username" name="instagram_url" value="{{data.instagram_url}}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="authorLinkedIn" class="form-label">LinkedIn URL (Optional)</label>
+                        <input type="url" class="form-control" id="authorLinkedIn" placeholder="https://www.linkedin.com/in/username" name="linkedin_url" value="{{data.linkedin_url}}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="authorTwitter" class="form-label">Twitter URL (Optional)</label>
+                        <input type="url" class="form-control" id="authorTwitter" placeholder="https://twitter.com/username" name="twitter_url" value="{{data.twitter_url}}">
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Add Author</button>
+                    </div>
+                </form>
+                </div> 
+            </div>
+        </div> 
+        <!--FAQ Sections-->
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Help Desk</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="authorFAQ">
+
+                        <!-- FAQ 1 -->
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faq1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                              1. How do I create an author account?
+                            </button>
+                          </h2>
+                          <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#authorFAQ">
+                            <div class="accordion-body">
+                              Go to the registration page, choose “Author” as your role, and complete the form with your details like name, email, and password.
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <!-- FAQ 2 -->
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faq2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                              2. Is email verification required?
+                            </button>
+                          </h2>
+                          <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#authorFAQ">
+                            <div class="accordion-body">
+                              Yes, an email verification link will be sent after you sign up. Your account must be verified to access the author dashboard.
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <!-- FAQ 3 -->
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faq3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                              3. What details are needed to sign up?
+                            </button>
+                          </h2>
+                          <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#authorFAQ">
+                            <div class="accordion-body">
+                              You’ll need to provide your full name, a valid email address, a secure password, and optionally a profile picture or author bio.
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <!-- FAQ 4 -->
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faq4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                              4. Can I edit my profile after signing up?
+                            </button>
+                          </h2>
+                          <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#authorFAQ">
+                            <div class="accordion-body">
+                              Yes, once logged in, you can go to your profile settings to update your information anytime.
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <!-- FAQ 5 -->
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="faq5">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                              5. What should I do if I forget my password?
+                            </button>
+                          </h2>
+                          <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#authorFAQ">
+                            <div class="accordion-body">
+                              Use the “Forgot Password?” option on the login page. A reset link will be emailed to your registered address.
+                            </div>
+                          </div>
+                        </div>
+                    
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock 'body' %}
+{% block 'scripts' %}{% endblock 'scripts' %}

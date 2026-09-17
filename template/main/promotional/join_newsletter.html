@@ -1,0 +1,62 @@
+{% extends "main/base.html" %}
+{% block 'title' %}Join Our News Letter{% endblock 'title' %}
+{% block 'meta' %}{% endblock 'meta' %}
+{% block 'css' %}
+<link rel="stylesheet" href="/static/main/css/index.css">
+{% endblock 'css' %}
+{% block 'body' %}
+<div class="container py-5">
+
+    <!-- HEADING -->
+    <div class="text-center mb-3">
+        <h1 class="fw-bold" style="font-size: 2.8rem;">
+            This page is <span class="text-danger">yet to come</span>
+        </h1>
+    </div>
+
+    <!-- SUBTEXT -->
+    <div class="text-center mx-auto" style="max-width: 750px;">
+        <p class="text-muted fs-5">
+            This page is currently under construction and will be live soon. Until then, explore our latest stories and updates from across BIGSTORY Network.
+        </p>
+    </div>
+</div>
+<!-- TRENDING SECTION -->
+<div class="container py-4" style="border-top: solid #d60000 2px;">
+
+  <!-- Section Header -->
+  <div class="bigstory-tag" >
+        <img src="/static/main/Vector.png" alt="" >
+        <span>Trending Now!</span> in last 24hrs
+      </div>
+      <br>
+
+  <!-- Trending Grid -->
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <!-- Card 1 -->
+    
+    {% for i in Latest_Articles %}
+      <div class="col">
+    <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+      <div class="card border-0">
+        <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
+        <div class="card-body px-0">
+            <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none;" >
+                <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
+            </a>
+          
+          <h5 class="fw-bold lh-sm fs-6">
+            {{i.title}}
+          </h5>
+        </div>
+      </div>
+      </a>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

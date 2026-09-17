@@ -1,0 +1,116 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Articles{% endblock 'title' %}
+{% block 'css' %}
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+{% endblock 'css' %}
+{% block 'body' %}
+<div class="container-fluid">
+    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+        <div class="flex-grow-1">
+            <h4 class="fs-18 fw-semibold m-0">Articles</h4> 
+        </div>
+        <a aria-label="Add Editor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Add Articles" href="/add_article">Add Articles</a>
+    </div>
+    <!-- Search input -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <select id="Article" name="articles_data" placeholder="Search article" required>
+            <option value="">Search Article</option>
+            {% for i in articles %}
+                <option value="{{ i.id }}">{{ i.title }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+    
+        <div class="col-12">
+            
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table datatable" id="datatable_1">
+                            <thead>
+                              <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Editor</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in articles %}
+                                <tr>
+                                    <td class="ps-0">
+                                        <p class="d-inline-block align-middle mb-0">
+                                            <span>{{i.title}}</span> 
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="d-inline-block align-middle mb-0">
+                                            <span>{{i.created_at}}</span> 
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="d-inline-block align-middle mb-0">
+                                            <span>{{i.author.name}}</span> 
+                                        </p>
+                                    </td>
+                                    {% if i.status == "Enabled" %}
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-warning">Enabled</span>
+                                    </td>
+                                    {% elif i.status == "Disabled" %}
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-success">Disabled</span>
+                                    </td>
+                                    {% endif %}
+                                    
+                                    {% if i.status == "Enabled" %}
+                                    <td>
+                                        <a aria-label="anchor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Disable Article" href="/disable_article/{{i.id}}">Disable</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-success-subtle" data-bs-toggle="tooltip" data-bs-original-title="Edit Article" href="/edit_article/{{i.id}}">Edit</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete Article" href="/delete_article/{{i.id}}">Delete</a>
+                                    </td>
+                                    {% elif i.status == "Disabled" %}
+                                    <td>
+                                        <a aria-label="anchor" class="btn btn-sm bg-primary-subtle" data-bs-toggle="tooltip" data-bs-original-title="Enable Article" href="/enable_article/{{i.id}}">Enable</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-success-subtle" data-bs-toggle="tooltip" data-bs-original-title="Edit Article" href="/edit_article/{{i.id}}">Edit</a>
+                                        <a aria-label="anchor" class="btn btn-sm bg-danger-subtle" data-bs-toggle="tooltip" data-bs-original-title="Delete Article" href="/delete_article/{{i.id}}">Delete</a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+const articleSelect = document.getElementById('Article');
+const choices = new Choices(articleSelect, {
+    searchEnabled: true,
+    itemSelectText: '',  // remove the “Press Enter to select” tooltip
+    removeItemButton: false,
+    shouldSort: false
+});
+
+// Listen for selection
+articleSelect.addEventListener('change', function(event) {
+    const selectedValue = event.target.value;
+    if (selectedValue) {
+        // Redirect to edit page
+        window.location.href = '/edit_article/' + selectedValue;
+    }
+});
+</script>
+{% endblock 'body' %}
+{% block 'script' %}{% endblock 'script' %}

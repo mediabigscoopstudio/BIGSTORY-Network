@@ -1,0 +1,204 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}Edit Project — {{ project.name }}{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .page-header { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+  .page-header a { color:#888; font-size:13px; text-decoration:none; }
+  .page-header a:hover { color:#333; }
+  .page-header h2 { font-size:22px; font-weight:600; margin:0; color:#1a1a2e; }
+  .breadcrumb-sep { color:#ccc; }
+
+  .form-card {
+    background:#fff; border-radius:14px;
+    box-shadow:0 1px 6px rgba(0,0,0,0.07);
+    border:1px solid #f0f0f0; padding:32px; max-width:780px;
+  }
+  .form-section-title {
+    font-size:13px; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.06em; color:#999; margin-bottom:16px;
+    padding-bottom:8px; border-bottom:1px solid #f0f0f0;
+  }
+  .form-group { margin-bottom:20px; }
+  .form-group label { display:block; font-size:13px; font-weight:600; color:#333; margin-bottom:6px; }
+  .form-group label span { color:#999; font-weight:400; margin-left:4px; }
+  .form-control {
+    width:100%; padding:10px 14px; border:1.5px solid #e5e5e5;
+    border-radius:8px; font-size:14px; color:#333; background:#fafafa;
+    transition:border-color 0.15s, background 0.15s; outline:none;
+  }
+  .form-control:focus { border-color:#1a1a2e; background:#fff; }
+  select.form-control { appearance:none; cursor:pointer; }
+  textarea.form-control { resize:vertical; min-height:90px; }
+
+  /* color picker */
+  .color-picker-wrap { display:flex; flex-direction:column; gap:12px; }
+  .color-presets { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .color-swatch {
+    width:34px; height:34px; border-radius:8px; cursor:pointer;
+    border:3px solid transparent; transition:transform 0.15s, border-color 0.15s; flex-shrink:0;
+  }
+  .color-swatch:hover { transform:scale(1.12); }
+  .color-swatch.selected { border-color:#1a1a2e; transform:scale(1.1); }
+  .color-custom-row { display:flex; align-items:center; gap:10px; }
+  .color-custom-row label { font-size:12px; color:#888; margin:0; font-weight:500; white-space:nowrap; }
+  #color_hex_input { width:110px; font-family:monospace; font-size:13px; }
+  #color_preview { width:34px; height:34px; border-radius:8px; border:1px solid #e5e5e5; flex-shrink:0; }
+
+  /* member multi-select */
+  .member-list {
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+    gap:10px; max-height:260px; overflow-y:auto; padding:4px 2px;
+  }
+  .member-item {
+    display:flex; align-items:center; gap:10px;
+    padding:8px 12px; border:1.5px solid #e5e5e5;
+    border-radius:8px; cursor:pointer;
+    transition:border-color 0.15s, background 0.15s; background:#fafafa;
+  }
+  .member-item:hover { border-color:#aaa; background:#f5f5f5; }
+  .member-item.selected { border-color:#1a1a2e; background:#f0f0fa; }
+  .member-item img { width:32px; height:32px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .member-initials {
+    width:32px; height:32px; border-radius:50%; background:#1a1a2e; color:#fff;
+    font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .member-info { min-width:0; }
+  .member-info strong { display:block; font-size:13px; color:#222; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .member-info span { font-size:11px; color:#888; }
+  .member-checkbox { display:none; }
+
+  .form-footer {
+    display:flex; align-items:center; gap:12px;
+    margin-top:28px; padding-top:20px; border-top:1px solid #f0f0f0;
+  }
+  .btn-submit {
+    background:#1a1a2e; color:#fff; border:none; padding:11px 28px;
+    border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; transition:background 0.2s;
+  }
+  .btn-submit:hover { background:#16213e; }
+  .btn-cancel { color:#888; font-size:14px; text-decoration:none; padding:11px 16px; border-radius:8px; transition:background 0.15s; }
+  .btn-cancel:hover { background:#f5f5f5; color:#333; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="container-fluid py-4 px-4">
+
+  <div class="page-header">
+    <a href="/projects">Projects</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="/project_detail/{{ project.id }}">{{ project.name }}</a>
+    <span class="breadcrumb-sep">›</span>
+    <h2>Edit</h2>
+  </div>
+
+  <div class="form-card">
+    <form method="POST" action="/edit_project/{{ project.id }}">
+      {% csrf_token %}
+
+      <p class="form-section-title">Project details</p>
+
+      <div class="form-group">
+        <label>Project name</label>
+        <input type="text" name="name" class="form-control" value="{{ project.name }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Description <span>(optional)</span></label>
+        <textarea name="description" class="form-control">{{ project.description }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Vertical <span>(optional)</span></label>
+        <select name="vertical" class="form-control">
+          <option value="">— No vertical —</option>
+          {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if project.vertical and project.vertical.id == cat.id %}selected{% endif %}>
+            {{ cat.title }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- color picker -->
+      <div class="form-group">
+        <label>Project color</label>
+        <div class="color-picker-wrap">
+          <div class="color-presets">
+            {% for hex, label in color_presets %}
+            <div class="color-swatch {% if project.color_hex == hex %}selected{% endif %}"
+                 style="background: {{ hex }};"
+                 title="{{ label }}"
+                 data-hex="{{ hex }}"
+                 onclick="selectColor(this)">
+            </div>
+            {% endfor %}
+          </div>
+          <div class="color-custom-row">
+            <label>Custom hex</label>
+            <input type="text" id="color_hex_input" class="form-control" value="{{ project.color_hex }}" maxlength="7" placeholder="#RRGGBB" oninput="onCustomHex(this.value)">
+            <div id="color_preview" style="background: {{ project.color_hex }};"></div>
+          </div>
+        </div>
+        <input type="hidden" name="color_hex" id="color_hex_value" value="{{ project.color_hex }}">
+      </div>
+
+      <!-- members -->
+      <p class="form-section-title mt-4">Team members</p>
+      <div class="form-group">
+        <label>Assign authors <span>(select all that apply)</span></label>
+        <div class="member-list">
+          {% for author in authors %}
+          {% with is_member=author.id|stringformat:"s" %}
+          <label class="member-item {% if author.id in current_member_ids %}selected{% endif %}" for="member_{{ author.id }}">
+            {% if author.image %}
+              <img src="{{ author.image.url }}" alt="{{ author.name }}">
+            {% else %}
+              <div class="member-initials">{{ author.name|slice:":1" }}</div>
+            {% endif %}
+            <div class="member-info">
+              <strong>{{ author.name }}</strong>
+              <span>{{ author.designation }}</span>
+            </div>
+            <input type="checkbox" class="member-checkbox" id="member_{{ author.id }}" name="members" value="{{ author.id }}"
+              {% if author.id in current_member_ids %}checked{% endif %}
+              onchange="toggleMemberStyle(this)">
+          </label>
+          {% endwith %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button type="submit" class="btn-submit">Save changes</button>
+        <a href="/project_detail/{{ project.id }}" class="btn-cancel">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script>
+  function selectColor(el) {
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    const hex = el.dataset.hex;
+    document.getElementById('color_hex_value').value = hex;
+    document.getElementById('color_hex_input').value = hex;
+    document.getElementById('color_preview').style.background = hex;
+  }
+  function onCustomHex(val) {
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+      document.getElementById('color_hex_value').value = val;
+      document.getElementById('color_preview').style.background = val;
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+    }
+  }
+  function toggleMemberStyle(cb) {
+    cb.closest('.member-item').classList.toggle('selected', cb.checked);
+  }
+</script>
+{% endblock 'script' %}

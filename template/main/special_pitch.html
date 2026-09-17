@@ -1,0 +1,669 @@
+{% extends "main/base.html" %}
+{% block 'title' %}BIGSTORY Network | Premium Partnership{% endblock 'title' %}
+{% block 'meta' %}
+<!-- Primary Meta Tags -->
+<meta name="description" content="Partner with BIGSTORY Network's flagship series Bharat One — 100K+ daily viewers, high-impact editorial storytelling, brand placements, and measurable ROI for D2C, PR, and businesses.">
+<meta name="keywords" content="BIGSTORY Network, Bharat One, brand partnerships, influencer marketing, premium ad placements, editorial integration, D2C marketing, India global news, digital marketing, business pitch">
+<meta name="author" content="BIGSTORY Network">
+<meta name="robots" content="index, follow">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://bigstorynetwork.com/special_pitch">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+
+<!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bigstorynetwork.com/special_pitch">
+<meta property="og:title" content="Bharat One — Premium Brand Partnership by BIGSTORY Network">
+<meta property="og:description" content="Reach engaged audiences with daily high-impact content. 6.6M monthly views, 230K interactions, premium editorial placements, and measurable ROI.">
+<meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://bigstorynetwork.com/special_pitch">
+<meta name="twitter:title" content="Bharat One — Premium Brand Partnership by BIGSTORY Network">
+<meta name="twitter:description" content="Engage your brand with BIGSTORY Network’s daily content series — Bharat One. High visibility, strong performance, and premium placements.">
+<meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+
+<!-- Schema.org JSON-LD for Brand Partnership Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Bharat One — Premium Partnership by BIGSTORY Network",
+  "description": "A premium brand partnership opportunity with BIGSTORY Network’s flagship daily content series Bharat One. Designed for D2C brands, PR agencies, and fast-growing companies seeking high engagement and ROI.",
+  "url": "https://bigstorynetwork.com/special_pitch",
+  "publisher": {
+    "@type": "Organization",
+    "name": "BIGSTORY Network",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://bigstorynetwork.com/static/main/Vector.png"
+    }
+  },
+  "image": "https://bigstorynetwork.com/static/main/Brandplate.webp",
+  "about": {
+    "@type": "CreativeWork",
+    "name": "Bharat One",
+    "description": "India’s perspective on global news — daily reels with 22K+ average views and 100K+ daily reach."
+  },
+  "mainEntity": {
+    "@type": "Offer",
+    "name": "Brand Partnerships with Bharat One",
+    "description": "Premium brand integration, editorial placement, measurable engagement, and cross-platform amplification.",
+    "areaServed": "Worldwide"
+  }
+}
+</script>
+{% endblock 'meta' %}
+{% block 'css' %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+  :root{
+    --primary-red:#E31E24;
+    --accent-yellow:#FFD700;
+    --background:#FFFFFF;
+    --text-dark:#1a1a1a;
+    --text-darker:#0a0a0a;
+    --glass: rgba(0,0,0,0.04);
+    --glass-strong: rgba(0,0,0,0.06);
+    --teal: #0ea5a4;
+    --deep-blue: #0b3d91;
+    --transition: 300ms cubic-bezier(.2,.9,.2,1);
+  }
+
+  html, body {
+    height:100%;
+    background: var(--background);
+    color: var(--text-dark);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    scroll-behavior: smooth;
+  }
+
+  /* Utilities */
+  .container-xl{ max-width:1280px; }
+  h1,h2,h3{ font-weight:800; letter-spacing:0.6px; color:var(--text-darker) }
+  h1{ font-size:clamp(48px,8vw,92px); line-height:0.95 }
+  h2{ font-size:clamp(28px,4.2vw,48px) }
+  .muted{ opacity:0.72; color:var(--text-dark) }
+
+  /* Hero */
+  .hero{ min-height:100vh; display:grid; align-items:center; position:relative; overflow:hidden; padding:6rem 0; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(250,250,250,0.02)); }
+  .hero-inner{ z-index:5; }
+
+  .glow-title{
+    background:linear-gradient(90deg,var(--primary-red),#ff6b6b,var(--accent-yellow),var(--teal));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:shiftGradient 6s linear infinite; background-size:300% 300%;
+    display:inline-block;
+  }
+  @keyframes shiftGradient{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+  .glitch{ position:relative; display:inline-block; }
+  .glitch:before, .glitch:after{ content:attr(data-text); position:absolute; left:0; top:0; mix-blend-mode:screen; opacity:0.25; pointer-events:none; }
+  .glitch:before{ transform:translate(6px,-3px); color:rgba(227,30,36,0.12); filter:blur(3px); }
+  .glitch:after{ transform:translate(-6px,5px); color:var(--teal); opacity:0.15; }
+
+  .hero-sub{ font-size:clamp(16px,1.2vw,20px); opacity:0.9; margin-top:1rem; color:var(--text-dark) }
+  .hero-tag{ font-size:18px; margin-top:1.25rem; color:var(--accent-yellow); font-weight:700 }
+
+  .cta-pill{ display:inline-flex; align-items:center; gap:.9rem; padding:1rem 1.6rem; border-radius:999px; background: linear-gradient(120deg, rgba(0,0,0,0.03), rgba(0,0,0,0.01)); transition:var(--transition); border:1px solid rgba(0,0,0,0.06); color:var(--text-dark) }
+  .cta-pill:hover{ transform:translateY(-6px) scale(1.02); box-shadow:0 12px 30px rgba(0,0,0,0.06); }
+  .cta-glow{ position:relative; }
+  .cta-glow:after{ content:''; position:absolute; inset:-6px; border-radius:999px; filter:blur(18px); opacity:0.35; background:linear-gradient(90deg,var(--primary-red),var(--accent-yellow)); z-index:-1 }
+
+  /* Background orbs (vector + decorative) */
+  .orb{ position:absolute; border-radius:50%; filter:blur(36px); opacity:0.14; mix-blend-mode:screen; pointer-events:none; }
+  .orb.one{ width:520px; height:520px; right:-120px; top:-80px; background:radial-gradient(circle at 30% 30%,var(--primary-red),transparent 40%); }
+  .orb.two{ width:360px; height:360px; left:-80px; bottom:40px; background:radial-gradient(circle at 60% 60%,var(--teal),transparent 40%); }
+
+  /* Live stats ticker */
+  .live-ticker{ position:sticky; top:18px; z-index:9999; margin:0 auto; padding:0.3rem; border-radius:10px; backdrop-filter:blur(6px); background:linear-gradient(90deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01)); border:1px solid rgba(0,0,0,0.04); }
+  .ticker-item{ display:inline-flex; align-items:center; gap:.7rem; padding:.45rem .9rem; margin-right:.25rem; border-radius:8px; color:var(--text-dark) }
+  .ticker-item i{ font-size:18px }
+  .counter{ font-weight:800; font-size:18px; color:var(--text-darker) }
+
+  /* Impact Numbers */
+  .stats-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.2rem; }
+  .stat-card{ padding:2rem; border-radius:18px; background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01)); border:1px solid rgba(0,0,0,0.04); display:flex; flex-direction:column; align-items:flex-start; justify-content:center; min-height:180px; }
+  .stat-num{ font-size:clamp(28px,4vw,48px); font-weight:900; color:var(--text-darker) }
+  .stat-sub{ opacity:0.8; color:var(--text-dark) }
+
+  /* About / split */
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center; }
+  .glass-card{ padding:2rem; border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01)); border:1px solid rgba(0,0,0,0.04) }
+
+  /* Audience bars */
+  .progress-wrap{ background:linear-gradient(90deg, rgba(0,0,0,0.02), transparent); padding:12px; border-radius:12px }
+  .prog{ height:14px; border-radius:99px; overflow:hidden; background:rgba(0,0,0,0.04) }
+  .prog > div{ height:100%; border-radius:99px }
+
+  /* Gallery thumbnails */
+  .thumb{ border-radius:12px; overflow:hidden; position:relative; cursor:pointer; display:block; box-shadow: 0 6px 20px rgba(0,0,0,0.04); }
+  .thumb img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform var(--transition), filter var(--transition); }
+  .thumb:hover img{ transform:scale(1.04); }
+  .thumb .cover-meta{ position:absolute; left:14px; bottom:14px; right:14px; color:#fff; text-shadow:0 6px 18px rgba(0,0,0,0.5) }
+  .play-btn{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); background:rgba(255,255,255,0.9); padding:14px; border-radius:50%; border:1px solid rgba(0,0,0,0.06); }
+
+  /* Partnership cards */
+  .feature-card{ padding:1.6rem; border-radius:14px; background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01)); border:1px solid rgba(0,0,0,0.04); transition:var(--transition); min-height:160px }
+  .feature-card:hover{ transform:translateY(-8px) scale(1.01); box-shadow:0 20px 60px rgba(0,0,0,0.06) }
+
+  /* final CTA */
+  .final-cta{ padding:4rem 2rem; border-radius:18px; background:linear-gradient(135deg, var(--primary-red), #a50b0f 40%, #ff8a00 100%); color:#fff; }
+  .btn-cta{ padding:1.2rem 2rem; border-radius:12px; font-weight:800; box-shadow:0 20px 60px rgba(227,30,36,0.12); transform:translateZ(0); }
+
+  /* micro interactions */
+  .btn-ripple{ position:relative; overflow:hidden; }
+  .btn-ripple:after{ content:""; position:absolute; background:rgba(255,255,255,0.18); width:100px; height:100px; border-radius:50%; transform:scale(0); opacity:0; transition:transform .6s,opacity .8s }
+  .btn-ripple:active:after{ transform:scale(5); opacity:1; transition:0s }
+
+  /* responsive */
+  @media (max-width:991px){
+    .stats-grid{ grid-template-columns:repeat(2,1fr) }
+    .split{ grid-template-columns:1fr }
+    .hero{ padding:4rem 0 }
+    .orb.one{ display:none }
+  }
+  @media (max-width:576px){
+    .stats-grid{ grid-template-columns:1fr }
+    h1{ font-size:56px }
+  }
+
+</style>
+<style>
+  .brand-title {
+    font-size: 72px;
+    font-weight: 700;
+  }
+  .gradient-box {
+    background: linear-gradient(90deg, #E31E24, #f08070);
+    border-radius: 28px;
+    padding: 50px 20px;
+    color: #fff;
+  }
+  .contact-icon {
+    width: 70px;
+    height: 70px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin: 0 auto 15px;
+  }
+  .hindi-text {
+    font-size: 65px;
+    font-weight:700;
+    color:#E31E24;
+  }
+  .one-text {
+    font-size: 65px;
+    font-weight:700;
+    color:#FFD646;
+  }
+  @media(max-width:768px){
+    .brand-title,.hindi-text,.one-text{
+      font-size:45px;
+      text-align:center;
+    }
+    .gradient-box{
+      padding:35px 15px;
+    }
+  }
+</style>
+
+{% endblock 'css' %}
+
+{% block 'body' %}
+<main>
+    <section class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- LEFT SIDE IMAGE -->
+      <div class="col-md-7 mb-4 mb-md-0">
+        <img src="/static/main/pitch1.png" 
+             class="img-fluid w-100" 
+             alt="Bharat One Left Side">
+      </div>
+
+      <!-- RIGHT SIDE IMAGE -->
+      <div class="col-md-5">
+        <img src="/static/main/pitch2.png" 
+             class="img-fluid w-100" 
+             alt="Bharat One Right Side" style="border-radius: 40px;">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Impact Numbers -->
+  <section class="py-5">
+    <div class="container-xl">
+      <div class="mb-4" data-aos="fade-up"><h2>Impact Numbers</h2><p class="muted">A quick look at our performance and growth.</p></div>
+      <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card" data-aos="zoom-in" data-aos-delay="150">
+          <div class="muted">Total Views (30d)</div>
+          <div class="stat-num" data-target="6600000">6,600,000</div>
+          <div class="stat-sub">Across platforms | Rapid growth</div>
+        </div>
+
+        <div class="stat-card" data-aos="zoom-in" data-aos-delay="220">
+          <div class="muted">Engagements</div>
+          <div class="stat-num" data-target="230000">230,000</div>
+          <div class="stat-sub">Comments, saves, shares</div>
+        </div>
+
+        <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+          <div class="muted">Avg Views / Video</div>
+          <div class="stat-num" data-target="22000">22,000</div>
+          <div class="stat-sub">Short-form and long-form content</div>
+        </div>
+
+        <div class="stat-card" data-aos="zoom-in" data-aos-delay="360">
+          <div class="muted">Brand Placements</div>
+          <div class="stat-num" data-target="120">120</div>
+          <div class="stat-sub">Premium partnerships live</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About BIGSTORY -->
+  <section class="py-5" id="about">
+    <div class="container-xl">
+      <div class="split">
+        <div data-aos="fade-right">
+          <h2>About <span class="text-uppercase" style="color:var(--accent-yellow)">BIGSTORY Network</span></h2>
+          <p class="muted">BIGSTORY Network brings India's perspective to the world — editorial rigor with the pace of digital publishing. We craft daily stories that resonate across generations and spark conversations globally.</p>
+
+          <ul class="list-unstyled mt-4">
+            <li data-aos="fade-up" data-aos-delay="100" class="mb-3"><i class="fab fa-youtube fa-lg me-2"></i> Editorial-first storytelling with distribution muscle</li>
+            <li data-aos="fade-up" data-aos-delay="160" class="mb-3"><i class="fab fa-instagram fa-lg me-2"></i> Multi-format content: Reels, Longform, Podcasts</li>
+            <li data-aos="fade-up" data-aos-delay="220" class="mb-3"><i class="fas fa-bullhorn fa-lg me-2"></i> Audience-first partnerships and creator collaborations</li>
+          </ul>
+
+          <div class="mt-4">
+            <a class="cta-pill" href="#watch">See Our Work <i class="fas fa-arrow-right ms-2"></i></a>
+          </div>
+        </div>
+
+        <div data-aos="fade-left">
+          <div class="glass-card">
+            <h5 class="mb-3">Platform Reach</h5>
+            <div class="mb-3 muted">Where our audience spends their time</div>
+            <div class="d-flex gap-2 flex-column">
+              <div class="progress-wrap">
+                <div class="d-flex justify-content-between small"><span>India</span><span>49%</span></div>
+                <div class="prog mt-2"><div style="width:49%;background:linear-gradient(90deg,var(--primary-red),var(--accent-yellow))" aria-hidden></div></div>
+              </div>
+              <div class="progress-wrap">
+                <div class="d-flex justify-content-between small"><span>USA</span><span>21%</span></div>
+                <div class="prog mt-2"><div style="width:21%;background:linear-gradient(90deg,var(--deep-blue),var(--teal))" aria-hidden></div></div>
+              </div>
+              <div class="progress-wrap">
+                <div class="d-flex justify-content-between small"><span>UK</span><span>11%</span></div>
+                <div class="prog mt-2"><div style="width:11%;background:linear-gradient(90deg,#7c4dff,#00c6ff)" aria-hidden></div></div>
+              </div>
+              <div class="progress-wrap">
+                <div class="d-flex justify-content-between small"><span>Other (GER/SEA/Middle East)</span><span>19%</span></div>
+                <div class="prog mt-2"><div style="width:19%;background:linear-gradient(90deg,#ff6b6b,#ffd700)" aria-hidden></div></div>
+              </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+              <a class="btn btn-dark btn-sm text-white" href="#inquiry" role="button">Partner Inquiry</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Audience Intelligence -->
+  <section class="py-5" id="audience">
+    <div class="container-xl">
+      <div class="mb-4" data-aos="fade-up"><h2>Audience Intelligence</h2><p class="muted">Deep data, clear opportunities — who watches Bharat One.</p></div>
+
+      <div class="row g-4">
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="glass-card">
+            <h5>Age Demographics</h5>
+            <p class="muted small">Primary: 18-25 | Secondary: 35-45 | Tertiary: 12-18</p>
+            <div class="mt-3">
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small"><span>18-25</span><span>42%</span></div>
+                <div class="prog mt-2"><div style="width:42%;background:linear-gradient(90deg,var(--primary-red),var(--accent-yellow))"></div></div>
+              </div>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small"><span>35-45</span><span>28%</span></div>
+                <div class="prog mt-2"><div style="width:28%;background:linear-gradient(90deg,var(--deep-blue),var(--teal))"></div></div>
+              </div>
+              <div>
+                <div class="d-flex justify-content-between small"><span>12-18</span><span>30%</span></div>
+                <div class="prog mt-2"><div style="width:30%;background:linear-gradient(90deg,#7c4dff,#00c6ff)"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="150">
+          <div class="glass-card">
+            <h5>Geographic Reach</h5>
+            <p class="muted small">Interactive snapshot of our global footprint.</p>
+            <div class="row g-3 mt-3">
+              <div class="col-6">
+                <div class="glass-card p-3 text-center">
+                  <div class="h3">49%</div>
+                  <div class="muted small">India</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="glass-card p-3 text-center">
+                  <div class="h3">21%</div>
+                  <div class="muted small">USA</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="glass-card p-3 text-center">
+                  <div class="h3">11%</div>
+                  <div class="muted small">UK</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="glass-card p-3 text-center">
+                  <div class="h3">19%</div>
+                  <div class="muted small">Other</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bharat One Concept / Video Showcase -->
+  <section class="py-5" id="watch">
+    <div class="container-xl">
+      <div class="mb-4" data-aos="fade-up"><h2>Catch Up with our best</h2><p class="muted">Short-form reels, in-depth explainers and stories that travel far.</p></div>
+
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-right" data-aos-delay="120">
+          <div class="feature-card">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <div class="display-6">22K</div>
+              <div class="muted small">avg views / video</div>
+            </div>
+            <p class="muted">50-second reels, daily publishing — biteable, shareable, backed by editorial insight.</p>
+          </div>
+        </div>
+
+        <div class="col-md-8" data-aos="fade-left" data-aos-delay="140">
+          <div class="glass-card">
+            <h5>Formats &amp; Placement</h5>
+            <div class="row g-3 mt-3">
+              <div class="col-sm-6">
+                <div class="glass-card p-3 text-center">
+                  <i class="fas fa-film fa-2x mb-2"></i>
+                  <div class="muted small">Reels | Shorts</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="glass-card p-3 text-center">
+                  <i class="fas fa-newspaper fa-2x mb-2"></i>
+                  <div class="muted small">Editorial Placements</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Live Content Showcase (Gallery) -->
+  <section class="py-5" id="gallery">
+    <div class="container-xl">
+      <div class="d-flex justify-content-between align-items-center mb-3" data-aos="fade-up">
+        <h2>Bharat One in Action</h2>
+      </div>
+
+      <div class="overflow-auto" style="white-space:nowrap;padding-bottom:6px;">
+        {% for i in bharat_one_videos %}
+          <div class="d-inline-block me-3" style="width:320px" data-aos="fade-right" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+            <a class="thumb" href="{{ i.link }}" target="_blank" rel="noopener noreferrer">
+              {% if i.thumbnail_image %}
+                <img src="{{ i.thumbnail_image.url }}" alt="{{ i.title|escape }}" loading="lazy">
+              {% else %}
+                <img src="https://via.placeholder.com/800x450?text=Video+Thumbnail" alt="{{ i.title|escape }}" loading="lazy">
+              {% endif %}
+              <div class="cover-meta">
+                <div class="badge" style="background:var(--primary-red);color:#fff;padding:.2rem .6rem;border-radius:6px;font-weight:700;font-size:12px">BIGSTORY</div>
+                <h5 class="mt-2" style="color:#fff;text-shadow:0 6px 18px rgba(0,0,0,0.6)">{{ i.title|truncatechars:80 }}</h5>
+              </div>
+              <div class="play-btn"><i class="fas fa-play" style="color:var(--text-darker)"></i></div>
+            </a>
+          </div>
+        {% empty %}
+          <div class="d-inline-block me-3" style="width:320px" data-aos="fade-right" data-aos-delay="100">
+            <div class="thumb">
+              <img src="https://via.placeholder.com/800x450?text=No+Videos+Yet" alt="No videos" loading="lazy">
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="mt-4" data-aos="fade-up"><a href="https://www.instagram.com/bigstorynetwork/" target="_blank" class="btn btn-danger">View More on Instagram</a></div>
+
+    </div>
+  </section>
+
+  <!-- Partnership Value Proposition -->
+  <section class="py-5" id="value">
+    <div class="container-xl">
+      <div class="mb-4" data-aos="fade-up"><h2>Partnership Value Proposition</h2><p class="muted">Why brands partner with Bharat One.</p></div>
+
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100"><div class="feature-card"><i class="fas fa-handshake fa-2x mb-3" style="color:var(--primary-red)"></i><h5>Brand Integration</h5><p class="muted">Seamless narrative-driven integration into our editorial content—feel native, not intrusive.</p></div></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="160"><div class="feature-card"><i class="fas fa-chart-line fa-2x mb-3" style="color:var(--primary-red)"></i><h5>Measurable ROI</h5><p class="muted">Performance tracking and post-campaign analytics aligned to business KPIs.</p></div></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="220"><div class="feature-card"><i class="fas fa-users fa-2x mb-3" style="color:var(--primary-red)"></i><h5>Engaged Audiences</h5><p class="muted">Higher CTR and organic engagement vs typical branded ads.</p></div></div>
+
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="280"><div class="feature-card"><i class="fas fa-bullhorn fa-2x mb-3" style="color:var(--primary-red)"></i><h5>Amplified Reach</h5><p class="muted">Cross-platform push with creator collaborations and sponsored placements.</p></div></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="340"><div class="feature-card"><i class="fas fa-lock fa-2x mb-3" style="color:var(--primary-red)"></i><h5>Premium Placement</h5><p class="muted">Exclusive limited slots—maintaining brand safety and editorial integrity.</p></div></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="400"><div class="feature-card"><i class="fas fa-globe fa-2x mb-3" style="color:var(--primary-red)"></i><h5>Global Context</h5><p class="muted">Delivering India’s perspective to an international audience.</p></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BIGSTORY Advantage (Checklist) -->
+  <section class="py-5" id="advantage">
+    <div class="container-xl">
+      <div class="mb-4" data-aos="fade-up"><h2>The BIGSTORY Advantage</h2><p class="muted">A premium checklist for partners.</p></div>
+      <div class="row g-4">
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="120">
+          <ul class="list-unstyled">
+            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i><strong>Editorial-first approach</strong> — Ensures authenticity and trust.</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i><strong>Dedicated account team</strong> — End-to-end campaign execution.</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i><strong>Custom creative formats</strong> — Tailored to brand voice.</li>
+          </ul>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="220">
+          <ul class="list-unstyled">
+            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i><strong>Transparent reporting</strong> — Weekly and final reports with insights.</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i><strong>Cross-platform amplification</strong> — Social + web + newsletter placement.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT BOX -->
+<div class="container my-5">
+  <div class="gradient-box text-center">
+
+    <h2 class="fw-bold mb-4" style="color:#FFD646;">Get In Touch</h2>
+
+    <div class="row">
+
+      <!-- Email -->
+      <div class="col-md-6 mb-4 mb-md-0">
+        <div class="contact-icon">
+          <i class="fa-solid fa-envelope fa-2x text-white"></i>
+        </div>
+        <a href="mailto:business@bigstorynetwork.com" 
+           class="text-white"
+           style="font-size:18px; text-decoration:underline;">
+          business@bigstorynetwork.com
+        </a>
+      </div>
+
+      <!-- Phone -->
+      <div class="col-md-6">
+        <div class="contact-icon">
+          <i class="fa-solid fa-phone fa-2x text-white"></i>
+        </div>
+        <a href="tel:+919789091524" 
+           class="text-white"
+           style="font-size:18px;">
+          +91 9789091524
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+</main>
+{% endblock 'body' %}
+
+{% block 'script' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+
+<script>
+  AOS.init({ duration:900, once:true, offset:120, delay:50, easing:'ease-out-cubic' });
+
+  // Animated counters (IntersectionObserver + counting)
+  const counters = document.querySelectorAll('.counter, .stat-num');
+  const speed = 200;
+  const formatNumber = n => n.toLocaleString('en-IN');
+
+  const countObserver = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const el = entry.target;
+        if(el.dataset.animated) return;
+        const target = parseInt(el.dataset.target || el.innerText.replace(/[^0-9]/g,'')) || 0;
+        let start = 0;
+        const step = Math.max(1, Math.ceil(target / speed));
+        const ticker = setInterval(()=>{
+          start += step;
+          if(start >= target){
+            el.innerText = formatNumber(target);
+            el.dataset.animated = true;
+            clearInterval(ticker);
+          } else {
+            el.innerText = formatNumber(start);
+          }
+        }, 20);
+      }
+    });
+  }, { threshold: 0.6 });
+
+  counters.forEach(c => countObserver.observe(c));
+
+  // Horizontal scrolling UX for gallery (mouse wheel)
+  const gallery = document.querySelector('#gallery .overflow-auto');
+  if(gallery){
+    gallery.addEventListener('wheel', (e)=>{
+      if(window.innerWidth > 768){
+        e.preventDefault();
+        gallery.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+  }
+
+  // tsParticles on canvas
+  tsParticles.load("heroCanvas", {
+    fullScreen: { enable:false },
+    background: { color: "transparent" },
+    fpsLimit: 60,
+    particles: {
+      number: { value: 40, density: { enable:false } },
+      color: { value: ["#E31E24","#FFD700","#0ea5a4"] },
+      shape: { type: "circle" },
+      opacity: { value: 0.08 },
+      size: { value: { min: 2, max: 8 } },
+      move: { enable:true, speed:0.8, direction:"none", random:true, straight:false, outModes:{default:"out"} }
+    },
+    interactivity: { events: { onHover: { enable: true, mode: "repulse" }, onClick:{enable:true,mode:"push"} }, modes: { repulse: { distance:120 } } }
+  });
+
+  // Cursor parallax for orbs
+  document.addEventListener('mousemove', (e)=>{
+    const orbs = document.querySelectorAll('.orb');
+    orbs.forEach((o,i)=>{
+      const speed = (i+1) * 0.02;
+      const x = (e.clientX - window.innerWidth/2) * speed;
+      const y = (e.clientY - window.innerHeight/2) * speed;
+      o.style.transform = `translate(${x}px,${y}px)`;
+    });
+  });
+
+  // GSAP float
+  gsap.to('.orb.one',{ y:20, x:-20, duration:8, repeat:-1, yoyo:true, ease:'sine.inOut' });
+  gsap.to('.orb.two',{ y:-20, x:20, duration:10, repeat:-1, yoyo:true, ease:'sine.inOut' });
+
+  // Button micro-interactions (shine)
+  document.querySelectorAll('.btn-cta, .cta-pill').forEach(btn=>{
+    btn.addEventListener('mousemove', (e)=>{
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+      btn.style.setProperty('--mx', x + 'px');
+      btn.style.setProperty('--my', y + 'px');
+    });
+  });
+
+  // Respect reduced-motion preferences
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(prefersReduced.matches){
+    AOS.refreshHard();
+    document.querySelectorAll('[data-aos]').forEach(el=>el.removeAttribute('data-aos'));
+  }
+
+  // Smooth anchor scrolling with offset
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', function(e){
+      const id = this.getAttribute('href');
+      if(id && id.length > 1){
+        e.preventDefault();
+        const target = document.querySelector(id);
+        if(target){
+          const offset = 80;
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+</script>
+{% endblock 'script' %}

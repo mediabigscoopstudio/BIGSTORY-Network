@@ -1,0 +1,228 @@
+{% extends "dash/base.html" %}
+{% block 'title' %}All Tasks — Bigstory Network{% endblock 'title' %}
+
+{% block 'css' %}
+<style>
+  .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+  .page-header h2 { font-size:22px; font-weight:600; margin:0; color:#1a1a2e; }
+
+  .filters-bar {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;
+  }
+  .filter-select {
+    padding: 8px 14px; border: 1.5px solid #e5e5e5; border-radius: 8px;
+    font-size: 13px; background: #fff; color: #333; outline: none; cursor: pointer;
+    appearance: none; min-width: 140px;
+  }
+  .filter-select:focus { border-color: #1a1a2e; }
+  .filter-reset { font-size:13px; color:#aaa; text-decoration:none; padding:8px 10px; border-radius:8px; }
+  .filter-reset:hover { background:#f5f5f5; color:#555; }
+
+  .overdue-banner {
+    background: #fdecea; border: 1px solid #fca5a5; border-radius: 10px;
+    padding: 12px 18px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px; font-size: 13px; color: #c0392b;
+  }
+  .overdue-banner strong { font-weight: 700; }
+
+  .tasks-table-wrap {
+    background: #fff; border-radius: 12px; border: 1px solid #f0f0f0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden;
+  }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { background: #fafafa; border-bottom: 1.5px solid #f0f0f0; }
+  th {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.05em; color: #aaa; padding: 12px 16px; text-align: left;
+  }
+  td { padding: 12px 16px; font-size: 13px; color: #333; border-bottom: 1px solid #f8f8f8; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  tr.row-overdue td { background: #fff8f8; }
+
+  .project-dot {
+    display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; flex-shrink: 0;
+  }
+  .project-link { color:#333; text-decoration:none; display:flex; align-items:center; }
+  .project-link:hover { color:#1a1a2e; }
+
+  .task-title-link { color:#1a1a2e; font-weight:600; text-decoration:none; }
+  .task-title-link:hover { color:#3a3a6e; }
+
+  .badge {
+    font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 5px; display:inline-block;
+  }
+  .badge-todo       { background:#f0f0f0; color:#555; }
+  .badge-inprogress { background:#fff3e0; color:#b26a00; }
+  .badge-review     { background:#ede7fe; color:#5e35b1; }
+  .badge-done       { background:#e6f9f1; color:#0e7a4e; }
+  .badge-low        { background:#f0f0f0; color:#666; }
+  .badge-medium     { background:#fff3e0; color:#b26a00; }
+  .badge-high       { background:#fdecea; color:#c0392b; }
+  .badge-urgent     { background:#c0392b; color:#fff; }
+  .badge-overdue    { background:#fdecea; color:#c0392b; }
+
+  .assignee-wrap { display:flex; align-items:center; gap:7px; }
+  .assignee-avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; }
+  .assignee-initials {
+    width:24px; height:24px; border-radius:50%; background:#1a1a2e;
+    color:#fff; font-size:10px; font-weight:600;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  .due-date { font-size:12px; color:#aaa; }
+  .due-overdue { color:#c0392b; font-weight:600; }
+
+  .action-btns { display:flex; gap:5px; }
+  .action-btns a {
+    font-size:12px; padding:4px 10px; border-radius:6px;
+    border:1px solid #e5e5e5; background:#fff; color:#555;
+    text-decoration:none; transition:all 0.12s;
+  }
+  .action-btns a:hover { background:#f5f5f5; color:#333; }
+  .action-btns .del { border-color:#fca5a5; color:#c0392b; }
+  .action-btns .del:hover { background:#fdecea; }
+
+  .empty-state { text-align:center; padding:50px 20px; color:#aaa; }
+  .empty-state h4 { font-size:17px; color:#666; }
+
+  .btn-add {
+    background:#1a1a2e; color:#fff; border:none; padding:10px 20px;
+    border-radius:8px; font-size:14px; font-weight:500; text-decoration:none;
+    display:inline-flex; align-items:center; gap:7px; transition:background 0.2s;
+  }
+  .btn-add:hover { background:#16213e; color:#fff; }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="container-fluid py-4 px-4">
+
+  <div class="page-header">
+    <h2>All Tasks</h2>
+    <a href="/add_task" class="btn-add">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New task
+    </a>
+  </div>
+
+  <!-- filters -->
+  <form method="GET" action="/tasks" class="filters-bar">
+    <select name="status" class="filter-select" onchange="this.form.submit()">
+      <option value="">All statuses</option>
+      <option value="todo"       {% if request.GET.status == 'todo' %}selected{% endif %}>To Do</option>
+      <option value="inprogress" {% if request.GET.status == 'inprogress' %}selected{% endif %}>In Progress</option>
+      <option value="review"     {% if request.GET.status == 'review' %}selected{% endif %}>Review</option>
+      <option value="done"       {% if request.GET.status == 'done' %}selected{% endif %}>Done</option>
+    </select>
+    <select name="priority" class="filter-select" onchange="this.form.submit()">
+      <option value="">All priorities</option>
+      <option value="low"    {% if request.GET.priority == 'low' %}selected{% endif %}>Low</option>
+      <option value="medium" {% if request.GET.priority == 'medium' %}selected{% endif %}>Medium</option>
+      <option value="high"   {% if request.GET.priority == 'high' %}selected{% endif %}>High</option>
+      <option value="urgent" {% if request.GET.priority == 'urgent' %}selected{% endif %}>Urgent</option>
+    </select>
+    <select name="project" class="filter-select" onchange="this.form.submit()">
+      <option value="">All projects</option>
+      {% for p in projects %}
+      <option value="{{ p.id }}" {% if request.GET.project == p.id|stringformat:"s" %}selected{% endif %}>
+        {{ p.name }}
+      </option>
+      {% endfor %}
+    </select>
+    {% if request.GET %}
+    <a href="/tasks" class="filter-reset">Clear filters</a>
+    {% endif %}
+  </form>
+
+  <!-- overdue banner -->
+  {% if overdue %}
+  <div class="overdue-banner">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <strong>{{ overdue.count }} overdue task{{ overdue.count|pluralize }}</strong> — past their due date and not yet done.
+  </div>
+  {% endif %}
+
+  <!-- tasks table -->
+  {% if tasks %}
+  <div class="tasks-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Project</th>
+          <th>Assigned to</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Due</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+        <tr class="{% if task.is_overdue %}row-overdue{% endif %}">
+          <td>
+            <a href="/edit_task/{{ task.id }}" class="task-title-link">{{ task.title }}</a>
+            {% if task.task_articles.count > 0 %}
+            <span class="badge" style="background:#e3f0ff; color:#1565c0; margin-left:5px;">
+              {{ task.task_articles.count }} art.
+            </span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="/project_detail/{{ task.project.id }}" class="project-link">
+              <span class="project-dot" style="background: {{ task.project.color_hex }};"></span>
+              {{ task.project.name }}
+            </a>
+          </td>
+          <td>
+            {% if task.assigned_to %}
+            <div class="assignee-wrap">
+              {% if task.assigned_to.image %}
+                <img src="{{ task.assigned_to.image.url }}" class="assignee-avatar">
+              {% else %}
+                <div class="assignee-initials">{{ task.assigned_to.name|slice:":1" }}</div>
+              {% endif %}
+              {{ task.assigned_to.name }}
+            </div>
+            {% else %}
+            <span style="color:#ccc;">—</span>
+            {% endif %}
+          </td>
+          <td><span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span></td>
+          <td><span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span></td>
+          <td>
+            {% if task.due_date %}
+            <span class="due-date {% if task.is_overdue %}due-overdue{% endif %}">
+              {{ task.due_date|date:"M j, Y" }}
+            </span>
+            {% else %}
+            <span style="color:#ccc;">—</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="action-btns">
+              <a href="/edit_task/{{ task.id }}">Edit</a>
+              <a href="/project_detail/{{ task.project.id }}">View</a>
+              <a href="/delete_task/{{ task.id }}" class="del" onclick="return confirm('Delete this task?')">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <h4>No tasks found</h4>
+    <p>{% if request.GET %}Try clearing the filters.{% else %}Create your first task to get started.{% endif %}</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock 'body' %}
+
+{% block 'script' %}{% endblock 'script' %}
