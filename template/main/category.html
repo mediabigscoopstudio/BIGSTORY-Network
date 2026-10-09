@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow">
 
 <!-- Canonical URL -->
-<link rel="canonical" href="https://bigstorynetwork.com/category/{{category.slug}}">
+<link rel="canonical" href="https://www.bigstorynetwork.com/{{category.slug}}">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
@@ -16,14 +16,14 @@
 
 <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://bigstorynetwork.com/category/{{category.slug}}">
+<meta property="og:url" content="https://www.bigstorynetwork.com/{{category.slug}}">
 <meta property="og:title" content="{{category.meta_title}}">
 <meta property="og:description" content="{{category.meta_description}}">
 <meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
 
 <!-- Twitter Meta -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://bigstorynetwork.com/category/{{category.slug}}">
+<meta name="twitter:url" content="https://www.bigstorynetwork.com/{{category.slug}}">
 <meta name="twitter:title" content="{{category.meta_title}}">
 <meta name="twitter:description" content="{{category.meta_description}}">
 <meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
@@ -38,7 +38,7 @@
   "@type": "CollectionPage",
   "name": "{{category.meta_title}}",
   "description": "{{category.meta_description}}",
-  "url": "https://bigstorynetwork.com/category/{{category.slug}}",
+  "url": "https://www.bigstorynetwork.com/{{category.slug}}",
   "publisher": {
     "@type": "Organization",
     "name": "BIGSTORY Network",
@@ -92,7 +92,7 @@ line-height: 1.2;
     <!-- Card 1 -->
     {% for i in page_obj %}
     <div class="col">
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
       <div class="card border-0">
         <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
         <div class="card-body px-0">
@@ -110,7 +110,7 @@ line-height: 1.2;
   <div class="d-flex justify-content-between mt-4">
 
     {% if page_obj.has_previous %}
-      <a href="?https://bigstorynetwork.com/category/{{category.slug}}?page={{page_obj.previous_page_number}}" class="btn btn-dark">
+      <a href="?page={{page_obj.previous_page_number}}" class="btn btn-dark">
         ← Previous
       </a>
     {% else %}
@@ -118,7 +118,7 @@ line-height: 1.2;
     {% endif %}
 
     {% if page_obj.has_next %}
-      <a href="https://bigstorynetwork.com/category/{{category.slug}}?page={{page_obj.next_page_number}}" class="btn btn-dark">
+      <a href="?page={{page_obj.next_page_number}}" class="btn btn-dark">
         Next →
       </a>
     {% endif %}

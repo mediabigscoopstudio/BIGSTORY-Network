@@ -16,29 +16,29 @@
 <meta property="article:modified_time" content="{{data.updated_at|default:data.created_at|date:'c'}}">
 
 <!-- Canonical URL -->
-<link rel="canonical" href="https://bigstorynetwork.com/content/{{data.slug}}">
+<link rel="canonical" href="https://www.bigstorynetwork.com{{data.get_absolute_url}}">
 
 <!-- News Keywords (Tags) -->
 <meta name="news_keywords" content="{% for tag in data.tags.all %}{{tag.title}}{% if not forloop.last %}, {% endif %}{% endfor %}">
 <meta name="wordcount" content="{{ word_count }}">
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://bigstorynetwork.com/static/main/Vector.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.bigstorynetwork.com/static/main/Vector.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://www.bigstorynetwork.com/static/main/Vector.png">
 
 <!-- Open Graph / Facebook / LinkedIn -->
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://bigstorynetwork.com/content/{{data.slug}}">
+<meta property="og:url" content="https://www.bigstorynetwork.com{{data.get_absolute_url}}">
 <meta property="og:title" content="{{data.meta_title}}">
 <meta property="og:description" content="{{data.meta_description}}">
-<meta property="og:image" content="https://bigstorynetwork.com/media/{{data.banner_image}}">
+<meta property="og:image" content="{% if data.banner_image %}https://www.bigstorynetwork.com/media/{{data.banner_image}}{% else %}https://www.bigstorynetwork.com/static/main/Brandplate.webp{% endif %}">
 
 <!-- Twitter Meta -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://bigstorynetwork.com/content/{{data.slug}}">
+<meta name="twitter:url" content="https://www.bigstorynetwork.com{{data.get_absolute_url}}">
 <meta name="twitter:title" content="{{data.meta_title}}">
 <meta name="twitter:description" content="{{data.meta_description}}">
-<meta name="twitter:image" content="https://bigstorynetwork.com/media/{{data.banner_image}}">
+<meta name="twitter:image" content="{% if data.banner_image %}https://www.bigstorynetwork.com/media/{{data.banner_image}}{% else %}https://www.bigstorynetwork.com/static/main/Brandplate.webp{% endif %}">
 
 <!-- Font Awesome -->
 <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
@@ -51,12 +51,12 @@
   "headline": "{{data.meta_title|striptags|escapejs}}",
   "description": "{{data.meta_description|striptags|escapejs}}",
   "articleSection": "{{data.category.title|striptags|escapejs}}",
-  "url": "https://bigstorynetwork.com/content/{{data.slug}}",
+  "url": "https://www.bigstorynetwork.com{{data.get_absolute_url}}",
   "datePublished": "{{data.created_at|date:'c'}}",
   "dateModified": "{{data.updated_at|default:data.created_at|date:'c'}}",
   "image": {
     "@type": "ImageObject",
-    "url": "https://bigstorynetwork.com{{data.banner_image.url}}",
+    "url": "{% if data.banner_image %}https://www.bigstorynetwork.com/media/{{data.banner_image}}{% else %}https://www.bigstorynetwork.com/static/main/Brandplate.webp{% endif %}",
     "width": 1200,
     "height": 628
   },
@@ -64,8 +64,8 @@
     "@type": "Person",
     "name": "{{data.author.name|striptags|escapejs}}",
     "jobTitle": "{{data.author.designation|default:'Journalist'|striptags|escapejs}}",
-    "url": "https://bigstorynetwork.com/author/{{data.author.slug}}",
-    "image": "https://bigstorynetwork.com{{data.author.image.url}}"
+    "url": "https://www.bigstorynetwork.com/author/{{data.author.slug}}",
+    "image": "{% if data.author.image %}https://www.bigstorynetwork.com/media/{{data.author.image}}{% else %}https://www.bigstorynetwork.com/static/main/Vector.png{% endif %}"
     {% if data.author.linkedin_url or data.author.twitter_url or data.author.instagram_url or data.author.facebook_url %}
     ,"sameAs": [
       {% if data.author.linkedin_url %}"{{data.author.linkedin_url}}"{% if data.author.twitter_url or data.author.instagram_url or data.author.facebook_url %},{% endif %}{% endif %}
@@ -88,7 +88,7 @@
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://bigstorynetwork.com/content/{{data.slug}}"
+    "@id": "https://www.bigstorynetwork.com{{data.get_absolute_url}}"
   },
   "keywords": "{{data.meta_keywords|striptags|escapejs}}",
   "inLanguage": "en-IN",
@@ -127,9 +127,9 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://bigstorynetwork.com"},
-    {"@type": "ListItem", "position": 2, "name": "{{data.category.title|striptags|escapejs}}", "item": "https://bigstorynetwork.com/category/{{data.category.slug}}"},
-    {"@type": "ListItem", "position": 3, "name": "{{data.title|truncatechars:80|striptags|escapejs}}", "item": "https://bigstorynetwork.com/content/{{data.slug}}"}
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.bigstorynetwork.com"},
+    {"@type": "ListItem", "position": 2, "name": "{{data.category.title|striptags|escapejs}}", "item": "https://www.bigstorynetwork.com{{data.category.get_absolute_url}}"},
+    {"@type": "ListItem", "position": 3, "name": "{{data.title|truncatechars:80|striptags|escapejs}}", "item": "https://www.bigstorynetwork.com{{data.get_absolute_url}}"}
   ]
 }
 </script>
@@ -161,7 +161,7 @@
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "url": "https://bigstorynetwork.com/content/{{data.slug}}",
+  "url": "https://www.bigstorynetwork.com{{data.get_absolute_url}}",
   "speakable": {
     "@type": "SpeakableSpecification",
     "cssSelector": [".article-tldr", ".key-takeaway", "h1"]
@@ -408,7 +408,7 @@
 
   <!-- Story 1-6 -->
    {% for i in new_edits %}
-   <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+   <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
     <div class="col">
 
       <div class="recent-card">
@@ -510,7 +510,7 @@
     <!-- Card 1 -->
     
     {% for i in similar %}
-    <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+    <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
       <div class="col">
       <div class="card border-0">
         <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">

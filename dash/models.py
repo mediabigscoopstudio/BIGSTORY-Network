@@ -29,7 +29,12 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('category', kwargs={'slug': self.slug})
+        if self.slug:
+            try:
+                return reverse('category_direct', kwargs={'slug': self.slug})
+            except Exception:
+                return reverse('category_direct', urlconf='main.urls', kwargs={'slug': self.slug})
+        return f"/category/{self.id}"
 
     def __str__(self):
         return self.title
@@ -50,7 +55,10 @@ class Tags(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('tags', kwargs={'slug': self.slug})
+        try:
+            return reverse('tags', kwargs={'slug': self.slug})
+        except Exception:
+            return reverse('tags', urlconf='main.urls', kwargs={'slug': self.slug})
 
     def __str__(self):
         return self.title
@@ -90,7 +98,10 @@ class Author(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('author', kwargs={'slug': self.slug})
+        try:
+            return reverse('author', kwargs={'slug': self.slug})
+        except Exception:
+            return reverse('author', urlconf='main.urls', kwargs={'slug': self.slug})
 
     def __str__(self):
         return self.name
@@ -142,7 +153,23 @@ class Article(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('content', kwargs={'slug': self.slug})
+        if self.category and getattr(self.category, 'slug', None) and self.slug:
+            try:
+                return reverse('article_detail', kwargs={
+                    'category_slug': self.category.slug,
+                    'article_slug': self.slug
+                })
+            except Exception:
+                return reverse('article_detail', urlconf='main.urls', kwargs={
+                    'category_slug': self.category.slug,
+                    'article_slug': self.slug
+                })
+        if self.slug:
+            try:
+                return reverse('content', kwargs={'slug': self.slug})
+            except Exception:
+                return reverse('content', urlconf='main.urls', kwargs={'slug': self.slug})
+        return f"/content/{self.id}"
 
     def __str__(self):
         return self.title

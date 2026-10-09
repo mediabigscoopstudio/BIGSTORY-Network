@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow">
 
 <!-- Canonical -->
-<link rel="canonical" href="https://bigstorynetwork.com/bharat-one">
+<link rel="canonical" href="https://www.bigstorynetwork.com/bharat_one">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
@@ -16,14 +16,14 @@
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://bigstorynetwork.com/bharat-one">
+<meta property="og:url" content="https://www.bigstorynetwork.com/bharat_one">
 <meta property="og:title" content="Bharat One — India’s Lens on Global Power | BIGSTORY Network">
 <meta property="og:description" content="Bharat One by BIGSTORY Network explains the world from India’s perspective — geopolitics, economy, technology and global power shifts in sharp, simple storytelling.">
 <meta property="og:image" content="https://bigstorynetwork.com/static/main/Bharat_One_by_BIGSTORY.webp">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://bigstorynetwork.com/bharat-one">
+<meta name="twitter:url" content="https://www.bigstorynetwork.com/bharat_one">
 <meta name="twitter:title" content="Bharat One — India’s Perspective on the World | BIGSTORY Network">
 <meta name="twitter:description" content="Global power explained for India. Bharat One delivers geopolitics, economy and strategy in simple, high-impact stories.">
 <meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Bharat_One_by_BIGSTORY.webp">
@@ -34,7 +34,7 @@
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "Bharat One",
-  "url": "https://bigstorynetwork.com/bharat_one",
+  "url": "https://www.bigstorynetwork.com/bharat_one",
   "description": "Bharat One is a flagship vertical of BIGSTORY Network delivering India's perspective on geopolitics, global economy, technology and international affairs.",
   "image": {
     "@type": "ImageObject",
@@ -91,7 +91,7 @@
       <!-- Articles Grid -->
       <div class="row g-4">
         {% for i in articles %}
-          <div class="col-lg-3 col-md-6 col-6" onclick="location.href='/content/{{i.slug}}'">
+          <div class="col-lg-3 col-md-6 col-6" onclick="location.href='{{i.get_absolute_url}}'">
             <div class="article-card">
               <img src="/media/{{i.banner_image}}" class="img-fluid w-100" style="border-radius:10px;">
               <div class="pt-2">

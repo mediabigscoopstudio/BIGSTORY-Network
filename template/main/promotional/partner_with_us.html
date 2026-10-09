@@ -37,11 +37,11 @@
     
     {% for i in Latest_Articles %}
       <div class="col">
-    <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+    <a href="{{i.get_absolute_url}}" style="color: black;text-decoration: none;">
       <div class="card border-0">
         <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
         <div class="card-body px-0">
-            <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none;" >
+            <a href="{{i.category.get_absolute_url}}" style="color: #d60000; text-decoration: none;" >
                 <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
             </a>
           

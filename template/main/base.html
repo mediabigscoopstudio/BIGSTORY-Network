@@ -146,7 +146,7 @@
                                     {% for i in thechallengers_articles_header %}
                                       <div class="col">
                                         <div class="article-card card">
-                                            <a href="/content/{{i.slug}}">
+                                            <a href="{{i.get_absolute_url}}">
                                                 <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                                                 <div class="card-body">
                                                     <h5 class="card-title"><strong>{{i.title}}</strong></h5>
@@ -171,7 +171,7 @@
                                     {% for i in unthink_articles_header %}
                                       <div class="col">
                                         <div class="article-card card">
-                                            <a href="/content/{{i.slug}}">
+                                            <a href="{{i.get_absolute_url}}">
                                                 <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
@@ -196,7 +196,7 @@
                                     {% for i in bigshot_articles_header %}
                                       <div class="col">
                                         <div class="article-card card">
-                                            <a href="/content/{{i.slug}}">
+                                            <a href="{{i.get_absolute_url}}">
                                                 <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{i.title}}</h5>
@@ -210,7 +210,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown dropdown-mega">
-                        <a class="nav-link" href="/category/expert-diaries" role="button" aria-expanded="false">
+                        <a class="nav-link" href="/expert-diaries" role="button" aria-expanded="false">
                             EXPERT DIARIES
                         </a>
                         <!-- The Mega Menu -->
@@ -220,7 +220,7 @@
                                     {% for i in expertdiaries_articles_header %}
                                       <div class="col">
                                         <div class="article-card card">
-                                            <a href="/content/{{i.slug}}">
+                                            <a href="{{i.get_absolute_url}}">
                                                 <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
@@ -234,7 +234,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown dropdown-mega">
-                        <a class="nav-link" href="/category/gov-360" role="button" aria-expanded="false">
+                        <a class="nav-link" href="/gov-360" role="button" aria-expanded="false">
                             GOV 360
                         </a>
                         <!-- The Mega Menu -->
@@ -244,7 +244,7 @@
                                     {% for i in gov360_articles_header %}
                                       <div class="col">
                                         <div class="article-card card">
-                                            <a href="/content/{{i.slug}}">
+                                            <a href="{{i.get_absolute_url}}">
                                                 <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
@@ -268,7 +268,7 @@
                                     {% for i in bharat_one_articles %}
                                       <div class="col">
                                         <div class="article-card card">
-                                            <a href="/content/{{i.slug}}">
+                                            <a href="{{i.get_absolute_url}}">
                                                 <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
@@ -307,7 +307,7 @@
             <div class="collapse mobile-submenu" id="challengersCollapse">
                 {% for i in thechallengers_articles_header|slice:":3" %}
                  <div class="article-card card mt-3">
-                    <a href="/content/{{i.slug}}">
+                    <a href="{{i.get_absolute_url}}">
                         <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                         <div class="card-body">
                              <h5 class="card-title"><strong>{{i.title}}</strong></h5>
@@ -327,7 +327,7 @@
             <div class="collapse mobile-submenu" id="unthinkCollapse">
                 {% for i in unthink_articles_header|slice:":3" %}
                 <div class="article-card card mt-3">
-                    <a href="/content/{{i.slug}}">
+                    <a href="{{i.get_absolute_url}}">
                         <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                         <div class="card-body">
                              <h5 class="card-title"><strong>{{i.title}}</strong></h5>
@@ -344,7 +344,7 @@
             <div class="collapse mobile-submenu" id="bigshotCollapse">
                 {% for i in bigshot_articles_header|slice:":3" %}
                 <div class="article-card card mt-3">
-                    <a href="/content/{{i.slug}}">
+                    <a href="{{i.get_absolute_url}}">
                         <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
                         <div class="card-body">
                             <h5 class="card-title">{{i.title}}</h5>
@@ -355,7 +355,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/category/gov-360">GOV 360</a>
+            <a class="nav-link" href="/gov-360">GOV 360</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/bharat_one">Bharat One</a>
@@ -402,9 +402,9 @@
                     <ul class="footer-links">
                         <li><a href="/bigshot">BIGSHOT</a></li>
                         <li><a href="/the_challengers">The Challengers</a></li>
-                        <li><a href="/category/expert-diaries">Expert Diaries</a></li>
+                        <li><a href="/expert-diaries">Expert Diaries</a></li>
                         <li><a href="/unthink">UN THiNk</a></li>
-                        <li><a href="/category/gov-360">GOV 360</a></li>
+                        <li><a href="/gov-360">GOV 360</a></li>
                         <li><a href="/age_india">AGE India</a></li>
                     </ul>
                 </div>
@@ -487,7 +487,7 @@
         {% for a in latest_articles %}
             {
                 title: "{{ a.title|escapejs }}",
-                url: "/content/{{ a.slug }}"
+                url: "{{ a.get_absolute_url }}"
             },
         {% endfor %}
     ];

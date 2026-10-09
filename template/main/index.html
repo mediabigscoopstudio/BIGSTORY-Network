@@ -79,17 +79,17 @@
     <!-- News Grid -->
     <div class="news-section">
       <div class="news-grid">
-      {% for i in selected_trending_articles %}
+       {% for i in selected_trending_articles %}
         <div class="news-card">
-          <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+          <a href="{{i.get_absolute_url}}" style="color: black;text-decoration: none;">
           <img src="/media/{{i.thumbnail_image}}" alt="{{i.title}}">
           <div class="news-content">
             <h5>{{i.title}}</h5>
             <div class="news-meta">
-              <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none;">
+              <a href="{{i.category.get_absolute_url}}" style="color: #d60000; text-decoration: none;">
               <span class="text-danger fw-bold">{{i.category.title}}</span>
               </a>
-              <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+              <a href="{{i.get_absolute_url}}" style="color: black;text-decoration: none;">
               <span class="ms-1">{{i.created_at}}</span>
               </a>
             </div>
@@ -120,12 +120,12 @@
     <div class="editors-small">
         {% for i in editors_first_two %}
 <div class="gloabl-mini-news-card flex-column">
-  <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+  <a href="{{i.get_absolute_url}}" style="color: black;text-decoration: none;">
     <img src="/media/{{i.thumbnail_image}}" alt="{{i.title}}">
-    <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none;">
+    <a href="{{i.category.get_absolute_url}}" style="color: #d60000; text-decoration: none;">
       <div class="news-category">{{i.category.title}}</div>
     </a>
-    <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+    <a href="{{i.get_absolute_url}}" style="color: black;text-decoration: none;">
     <div class="news-title">{{i.title}}</div>
     <div class="news-author">{{i.author.name}}</div>
     </a>
@@ -136,12 +136,12 @@
 
     {% if editors_last %}
 <div class="global-news-card flex-column">
-  <a href="/content/{{editors_last.slug}}" style="color: black;text-decoration: none;">
+  <a href="{{editors_last.get_absolute_url}}" style="color: black;text-decoration: none;">
     <img src="/media/{{editors_last.thumbnail_image}}" alt="{{editors_last.title}}">
-    <a href="/category/{{editors_last.category.slug}}" style="color: #d60000; text-decoration: none;">
+    <a href="{{editors_last.category.get_absolute_url}}" style="color: #d60000; text-decoration: none;">
     <div class="news-category">{{editors_last.category.title}}</div>
     </a>
-    <a href="/content/{{editors_last.slug}}" style="color: black;text-decoration: none;">
+    <a href="{{editors_last.get_absolute_url}}" style="color: black;text-decoration: none;">
     <div class="news-title fs-2">{{editors_last.title}}</div>
     <p class="text-muted mb-1" style="font-size:0.95rem;">
         {{editors_last.description|truncatewords:30}}
@@ -195,7 +195,7 @@
       style="background-color: {{exclusive_main.banner_background_colour}};"
     {% endif %}
     >
-      <a href="/content/{{exclusive_main.slug}}" 
+      <a href="{{exclusive_main.get_absolute_url}}" 
       {% if exclusive_main.remaining_text_colour %}
          style="text-decoration: none; color: {{exclusive_main.remaining_text_colour}};"
        {% else %}
@@ -228,7 +228,7 @@
 
     <!-- Right Image -->
     <div class="bigstory-image">
-      <a href="/content/{{exclusive_main.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{exclusive_main.get_absolute_url}}" style="text-decoration: none; color: black;">
       <img src="/media/{{exclusive_main.thumbnail_image}}" alt="Bigstory Feature Image">
       </a>
     </div>
@@ -238,14 +238,14 @@
 <div class="multi-news">
   {% for i in exclusive_suggestions  %}
     <div class="news-card">
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
     <img src="/media/{{i.thumbnail_image}}" alt="{{title}}">
     
     <div class="news-info">
-      <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration:none">
+      <a href="{{i.category.get_absolute_url}}" style="color: #d60000; text-decoration:none">
       <span class="news-category" >{{i.category}}</span>
       </a>
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
       <h3 class="news-title">{{i.title}}</h3>
       </a>
     </div>
@@ -298,14 +298,14 @@
   <div class="d-flex flex-column gap-3">
     
     <div class="global-news-card flex-column">
-      <a href="/content/{{ex2_article1.slug}}" style="color: black;text-decoration: none;">
+      <a href="{{ex2_article1.get_absolute_url}}" style="color: black;text-decoration: none;">
       <img src="/media/{{ ex2_article1.thumbnail_image }}" alt="{{ ex2_article1.title }}">
-      <a href="/category/{{ex2_article1.category.slug}}" style="color: #d60000;text-decoration: none;">
+      <a href="{{ex2_article1.category.get_absolute_url}}" style="color: #d60000;text-decoration: none;">
       <div class="news-category">
         {{ ex2_article1.category.title }}
       </div>
       </a>
-      <a href="/content/{{ex2_article1.slug}}" style="color: black;text-decoration: none;">
+      <a href="{{ex2_article1.get_absolute_url}}" style="color: black;text-decoration: none;">
       <div class="news-title fs-2">
         {{ ex2_article1.title }}
       </div>
@@ -329,14 +329,14 @@
   <div class="d-flex flex-column gap-3">
    
     <div class="global-news-card flex-column">
-       <a href="/content/{{ex2_article2.slug}}" style="color: black;text-decoration: none;">
+       <a href="{{ex2_article2.get_absolute_url}}" style="color: black;text-decoration: none;">
       <img src="{{ ex2_article2.thumbnail_image.url }}" alt="{{ ex2_article2.title }}">
-      <a href="/category/{{ex2_article2.category.slug}}" style="color: #d60000;text-decoration: none;">
+      <a href="{{ex2_article2.category.get_absolute_url}}" style="color: #d60000;text-decoration: none;">
       <div class="news-category">
         {{ ex2_article2.category.title }}
       </div>
       </a>
-      <a href="/content/{{ex2_article2.slug}}" style="color: black;text-decoration: none;">
+      <a href="{{ex2_article2.get_absolute_url}}" style="color: black;text-decoration: none;">
       <div class="news-title fs-2">
         {{ ex2_article2.title }}
       </div>
@@ -359,14 +359,14 @@
     <div class="col-lg-4 col-12">
       <div class="d-flex flex-column gap-3">
         {% for i in ex2_reels %}
-        <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+        <a href="{{i.get_absolute_url}}" style="color: black;text-decoration: none;">
           <div class="mini-content-card d-flex align-items-start gap-2">
           <img src="/media/{{i.thumbnail_image}}" class="rounded" style="width:90px; height:60px; object-fit:cover;" alt="{{i.title}}">
           <div>
-            <a href="/category/{{i.category.slug}}"style="color: #d60000;text-decoration: none;">
+            <a href="{{i.category.get_absolute_url}}" style="color: #d60000;text-decoration: none;">
             <span class="fw-bold text-danger d-block small">{{i.category.title}}</span>
             </a>
-            <a href="/content/{{i.slug}}" style="color: black;text-decoration: none;">
+            <a href="{{i.get_absolute_url}}" style="color: black;text-decoration: none;">
             <span class="fw-bold small lh-sm d-block">{{i.title}}</span>
             </a>
           </div>
@@ -402,14 +402,14 @@
     
     {% for i in Latest_Articles %}
       <div class="col">
-        <a href="/content/{{i.slug}}" style="color: black; text-decoration: none;">
+        <a href="{{i.get_absolute_url}}" style="color: black; text-decoration: none;">
       <div class="card border-0">
         <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
         <div class="card-body px-0">
-          <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration: none; ">
+          <a href="{{i.category.get_absolute_url}}" style="color: #d60000; text-decoration: none; ">
           <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
           </a>
-          <a href="/content/{{i.slug}} " style="color: black; text-decoration: none;">
+          <a href="{{i.get_absolute_url}}" style="color: black; text-decoration: none;">
           <h5 class="fw-bold lh-sm fs-6">
             {{i.title}}
           </h5>

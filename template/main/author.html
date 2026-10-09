@@ -10,12 +10,12 @@
     "name": "{{author.name|escapejs}}",
     "jobTitle": "{{author.designation|escapejs}}",
     "description": "{{author.description|truncatechars:200|escapejs}}",
-    "image": "https://bigstorynetwork.com{{author.image.url}}",
-    "url": "https://bigstorynetwork.com/author/{{author.slug}}",
+    "image": "https://www.bigstorynetwork.com{{author.image.url}}",
+    "url": "https://www.bigstorynetwork.com/author/{{author.slug}}",
     "worksFor": {
       "@type": "Organization",
       "name": "BIGSTORY Network",
-      "url": "https://bigstorynetwork.com"
+      "url": "https://www.bigstorynetwork.com"
     }
     {% if author.linkedin_url or author.twitter_url or author.instagram_url or author.facebook_url %}
     ,"sameAs": [
@@ -144,7 +144,7 @@
     {% for i in articles %}
       <div class="col">
       <div class="card border-0">
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
         <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
         <div class="card-body px-0">
           <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>

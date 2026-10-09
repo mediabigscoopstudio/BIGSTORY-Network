@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow">
 
 <!-- Canonical URL -->
-<link rel="canonical" href="https://bigstorynetwork.com/expert-diaries">
+<link rel="canonical" href="https://www.bigstorynetwork.com/expert-diaries">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
@@ -16,14 +16,14 @@
 
 <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://bigstorynetwork.com/expert-diaries">
+<meta property="og:url" content="https://www.bigstorynetwork.com/expert-diaries">
 <meta property="og:title" content="Expert Diaries — Insights & Opinions by Industry Experts">
 <meta property="og:description" content="An exclusive space on BIGSTORY Network where experts share perspectives on geopolitics, economy, policy, business, and emerging global trends.">
 <meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
 
 <!-- Twitter Meta -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://bigstorynetwork.com/expert-diaries">
+<meta name="twitter:url" content="https://www.bigstorynetwork.com/expert-diaries">
 <meta name="twitter:title" content="Expert Diaries — Deep-Dive Analysis & Expert Columns">
 <meta name="twitter:description" content="Industry leaders and specialists break down complex topics with clarity. Explore expert perspectives across global and Indian issues.">
 <meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
@@ -77,7 +77,7 @@
       style="background-color: {{exclusive_main.banner_background_colour}};"
     {% endif %}
     >
-      <a href="/content/{{exclusive_main.slug}}" 
+      <a href="{{exclusive_main.get_absolute_url}}" 
       {% if exclusive_main.remaining_text_colour %}
          style="text-decoration: none; color: {{exclusive_main.remaining_text_colour}};"
        {% else %}
@@ -110,7 +110,7 @@
 
     <!-- Right Image -->
     <div class="bigstory-image">
-      <a href="/content/{{exclusive_main.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{exclusive_main.get_absolute_url}}" style="text-decoration: none; color: black;">
       <img src="/media/{{exclusive_main.thumbnail_image}}" alt="Bigstory Feature Image">
       </a>
     </div>
@@ -120,14 +120,14 @@
 <div class="multi-news">
   {% for i in exclusive_suggestions  %}
     <div class="news-card">
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
     <img src="/media/{{i.thumbnail_image}}" alt="{{title}}">
     
     <div class="news-info">
-      <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration:none">
+      <a href="{{i.category.get_absolute_url}}" style="color: #d60000; text-decoration:none">
       <span class="news-category" >{{i.category}}</span>
       </a>
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
       <h3 class="news-title">{{i.title}}</h3>
       </a>
     </div>
@@ -147,7 +147,7 @@
     {% for i in Latest_Articles %}
       <div class="col">
       <div class="card border-0">
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
         <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
         <div class="card-body px-0">
           <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>

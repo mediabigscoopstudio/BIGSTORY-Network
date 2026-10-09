@@ -22,7 +22,14 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from dash.models import TrendingArticles,Unthink,Bigshot,TheChallengers,EditorsChoice,TrendingBuzz,Exclusives,ReelsHighlights,Exclusives2,LatestArticles
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404
+from .utils import (
+    email_executor,
+    send_green_india_email,
+    JUST_IN_EXCLUDED_CATEGORY_IDS,
+    RESERVED_SLUGS,
+    get_just_in_articles_queryset,
+)
 
 def robots_txt(request):
     content = """User-agent: *
@@ -85,8 +92,8 @@ Allow: /
 User-agent: YouBot
 Allow: /
 
-Sitemap: https://bigstorynetwork.com/sitemap.xml
-Sitemap: https://bigstorynetwork.com/sitemap-news.xml
+Sitemap: https://www.bigstorynetwork.com/sitemap.xml
+Sitemap: https://www.bigstorynetwork.com/sitemap-news.xml
 """
     return HttpResponse(content, content_type="text/plain")
 
@@ -384,46 +391,79 @@ def Green_India(request):
 def thank_you_green_india(request):    
     return render(request, "main/green_india/thank_you.html")
 
-def category(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    articles = Article.objects.filter(category=category).order_by('-created_at')
+def category_detail(request, slug):
+    if slug in RESERVED_SLUGS:
+        raise Http404("Reserved slug")
+    category_obj = get_object_or_404(Category, slug=slug, status__in=['Enabled', None])
+    articles = Article.objects.filter(category=category_obj, status="Enabled").order_by('-created_at')
     paginator = Paginator(articles, 12)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
     context = {
-        'category': category,
+        'category': category_obj,
         'articles': articles,
         'page_obj': page_obj,
     }
     return render(request, 'main/category.html', context)
 
+# Backwards-compatible alias
+category = category_detail
+
+def legacy_category_redirect(request, slug):
+    category_obj = get_object_or_404(Category, slug=slug, status__in=['Enabled', None])
+    return HttpResponsePermanentRedirect(category_obj.get_absolute_url())
+
 from django.db import models
 from django.utils.html import strip_tags
 
-def content(request,slug):
-    data = get_object_or_404(Article, slug=slug, status="Enabled") 
+def render_article_detail(request, data):
     Article.objects.filter(pk=data.pk).update(views=models.F('views') + 1)
     categories = data.category 
-    similar = Article.objects.filter(category=categories,status="Enabled").order_by('-created_at')[:4]
+    similar = Article.objects.filter(category=categories, status="Enabled").order_by('-created_at')[:4]
     reel_highlights_obj, _ = ReelsHighlights.objects.get_or_create(id=1)
     reel_highlights = reel_highlights_obj.reels.all().order_by('-id')[:3]
     category_ids = [7, 19, 23, 24, 25]
-    new_edits = Article.objects.filter(category__id__in=category_ids,status="Enabled").order_by('-created_at')[:6]
+    new_edits = Article.objects.filter(category__id__in=category_ids, status="Enabled").order_by('-created_at')[:6]
     trending_buzz, _ = TrendingBuzz.objects.get_or_create(id=1)
     selected_buzz_videos = trending_buzz.videos.all().order_by('-id')
     buzz_first_two = selected_buzz_videos[:4]
     tags = data.tags.all()
     word_count = len(strip_tags(data.content or '').split())
-    context={
-        'data':data,
-        'similar':similar,
-        'reel_highlights':reel_highlights,
-        'new_edits':new_edits,
-        'buzz_first_two':buzz_first_two,
-        'tags':tags,
-        'word_count':word_count,
+    context = {
+        'data': data,
+        'similar': similar,
+        'reel_highlights': reel_highlights,
+        'new_edits': new_edits,
+        'buzz_first_two': buzz_first_two,
+        'tags': tags,
+        'word_count': word_count,
     }
-    return render(request,'main/content.html',context)
+    return render(request, 'main/content.html', context)
+
+def article_detail(request, category_slug, article_slug):
+    if category_slug in RESERVED_SLUGS:
+        raise Http404("Invalid category slug")
+    data = get_object_or_404(
+        Article.objects.select_related('category', 'author'),
+        slug=article_slug,
+        status="Enabled"
+    )
+    if not data.category or data.category.slug != category_slug:
+        raise Http404("Article does not belong to requested category")
+    return render_article_detail(request, data)
+
+def legacy_content_redirect(request, slug):
+    data = get_object_or_404(
+        Article.objects.select_related('category'),
+        slug=slug,
+        status="Enabled"
+    )
+    if not data.category or not data.category.slug:
+        raise Http404("Article has no valid category")
+    return HttpResponsePermanentRedirect(data.get_absolute_url())
+
+# Backwards-compatible alias
+content = legacy_content_redirect
 
 def tags(request, slug):
     tags = get_object_or_404(Tags, slug=slug)
@@ -441,24 +481,19 @@ def tags(request, slug):
 from django.core.paginator import Paginator
 
 def just_in(request):
-    excluded_ids = [7, 23, 24, 25, 26]
     trending_obj, _ = TrendingArticles.objects.get_or_create(id=1)
     selected_trending_articles = trending_obj.articles.all()
     latest_2 = Article.objects.exclude(category__id=7).filter(status="Enabled").order_by('-created_at')[:2]
     exclusives_obj, _ = Exclusives.objects.get_or_create(id=1)
     exclusive_main = exclusives_obj.main_article
     exclusive_suggestions = exclusives_obj.articles.all().order_by('-id')
-    exclusives_obj, _ = Exclusives.objects.get_or_create(id=1)
     reel_highlights_obj, _ = ReelsHighlights.objects.get_or_create(id=1)
     reel_highlights = reel_highlights_obj.reels.all().order_by('-id')
     youtube_videos_latest = BSTV.objects.filter(type='Youtube')[:2]
     ex2_obj, _ = Exclusives2.objects.get_or_create(id=1)
     ex2_reels = ex2_obj.reels.all().order_by('-id')
-    article_latest = Article.objects.exclude(category__id__in=excluded_ids).filter(status="Enabled").order_by('-created_at')
-    latest = article_latest[0]  
-    second_latest = article_latest[1]
 
-    qs = Article.objects.exclude(category__id__in=excluded_ids).order_by('-created_at')
+    qs = get_just_in_articles_queryset().order_by('-created_at')
     latest = qs[0] if qs.count() > 0 else None
     second_latest = qs[1] if qs.count() > 1 else None
     remaining = qs[2:]
@@ -466,18 +501,18 @@ def just_in(request):
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
-    return render(request,'main/justin.html',{
-        'latest_2':latest_2,
-        'selected_trending_articles':selected_trending_articles,
-        'exclusive_main':exclusive_main,
-        'reel_highlights':reel_highlights,
-        'exclusive_suggestions':exclusive_suggestions,
-        'youtube_videos_latest':youtube_videos_latest,
-        'latest':latest,
-        'second_latest':second_latest,
-        'ex2_reels':ex2_reels,
-        'page_obj':page_obj
-        })
+    return render(request, 'main/justin.html', {
+        'latest_2': latest_2,
+        'selected_trending_articles': selected_trending_articles,
+        'exclusive_main': exclusive_main,
+        'reel_highlights': reel_highlights,
+        'exclusive_suggestions': exclusive_suggestions,
+        'youtube_videos_latest': youtube_videos_latest,
+        'latest': latest,
+        'second_latest': second_latest,
+        'ex2_reels': ex2_reels,
+        'page_obj': page_obj
+    })
 
 def bstv(request):
     data = BSTV.objects.all().order_by('-id')

@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow">
 
 <!-- Canonical URL -->
-<link rel="canonical" href="https://bigstorynetwork.com/un-think">
+<link rel="canonical" href="https://www.bigstorynetwork.com/unthink">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="32x32" href="https://bigstorynetwork.com/static/main/Vector.png">
@@ -16,14 +16,14 @@
 
 <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://bigstorynetwork.com/un-think">
+<meta property="og:url" content="https://www.bigstorynetwork.com/unthink">
 <meta property="og:title" content="UN THINK — Decode the World Around You">
 <meta property="og:description" content="Understand the deeper ‘why’ behind real-world issues. UN THINK explains societal shifts, youth trends, economic patterns, policy changes, and human behaviour through sharp, simple storytelling.">
 <meta property="og:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
 
 <!-- Twitter Meta -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://bigstorynetwork.com/un-think">
+<meta name="twitter:url" content="https://www.bigstorynetwork.com/unthink">
 <meta name="twitter:title" content="UN THINK — Bigstory's Deep Dive Into Society & Behaviour">
 <meta name="twitter:description" content="Explore detailed explanations behind India's loneliness wave, demographic shifts, Gen Z protests, infrastructure failures, cultural trends, and more.">
 <meta name="twitter:image" content="https://bigstorynetwork.com/static/main/Brandplate.webp">
@@ -79,7 +79,7 @@
       style="background-color: white;"
     {% endif %}
     >
-      <a href="/content/{{exclusive_main.slug}}" 
+      <a href="{{exclusive_main.get_absolute_url}}" 
       {% if exclusive_main.remaining_text_colour %}
          style="text-decoration: none; color: {{exclusive_main.remaining_text_colour}};"
        {% else %}
@@ -112,7 +112,7 @@
 
     <!-- Right Image -->
     <div class="bigstory-image" style="background-color: transparent;">
-      <a href="/content/{{exclusive_main.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{exclusive_main.get_absolute_url}}" style="text-decoration: none; color: black;">
       <img src="/media/{{exclusive_main.thumbnail_image}}" alt="Bigstory Feature Image">
       </a>
     </div>
@@ -122,14 +122,14 @@
 <div class="multi-news">
   {% for i in exclusive_suggestions  %}
     <div class="news-card">
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
     <img src="/media/{{i.thumbnail_image}}" alt="{{title}}">
     
     <div class="news-info">
-      <a href="/category/{{i.category.slug}}" style="color: #d60000; text-decoration:none">
+      <a href="{{i.category.get_absolute_url}}" style="color: #d60000; text-decoration:none">
       <span class="news-category" >{{i.category}}</span>
       </a>
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
       <h3 class="news-title">{{i.title}}</h3>
       </a>
     </div>
@@ -149,7 +149,7 @@
     {% for i in Latest_Articles %}
       <div class="col">
       <div class="card border-0">
-      <a href="/content/{{i.slug}}" style="text-decoration: none; color: black;">
+      <a href="{{i.get_absolute_url}}" style="text-decoration: none; color: black;">
         <img src="/media/{{i.thumbnail_image}}" class="card-img-top rounded-1" alt="{{i.title}}">
         <div class="card-body px-0">
           <h6 class="text-danger fw-bold mb-1">{{i.category.title}}</h6>
