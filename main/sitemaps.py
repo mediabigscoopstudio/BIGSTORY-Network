@@ -12,7 +12,7 @@ class StaticViewSitemap(Sitemap):
         return [
             'index', 'about_us', 'age_india', 'contact', 'support',
             'just_in', 'the_challengers', 'unthink', 'bigshot',
-            'bharat_one', 'Green_India', 'authors', 'career',
+            'bharat_one', 'green-india', 'authors', 'career',
             'advertise_with_us', 'join_newsletter', 'partner_with_us',
             'terms_and_conditions', 'privacy_policy',
         ]
