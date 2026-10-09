@@ -218,12 +218,14 @@ class SeoAndUrlArchitectureTests(TestCase):
         self.assertNotIn(self.article_disabled.slug, content)
 
     def test_google_news_sitemap_xml(self):
-        """google-news-sitemap.xml must return 200 and contain <news:news> extension."""
+        """google-news-sitemap.xml must return 200, contain <news:news> extension, and use ISO-8601 date format."""
         response = self.client.get('/google-news-sitemap.xml')
         self.assertEqual(response.status_code, 200)
         content = response.content.decode('utf-8')
         self.assertIn('<news:news>', content)
         self.assertIn(self.article_just_in_recent.slug, content)
+        self.assertIn('<news:publication_date>', content)
+
 
     # -------------------------------------------------------------
     # OBJECTIVE 3: URL MIGRATION & REDIRECTS
@@ -304,11 +306,13 @@ class SeoAndUrlArchitectureTests(TestCase):
     # ROBOTS.TXT
     # -------------------------------------------------------------
     def test_robots_txt_sitemap_references(self):
-        """robots.txt must return 200 and reference both canonical sitemaps."""
+        """robots.txt must return 200 and reference canonical sitemaps including Google News."""
         response = self.client.get('/robots.txt')
         self.assertEqual(response.status_code, 200)
         content = response.content.decode('utf-8')
         self.assertIn("Sitemap: https://www.bigstorynetwork.com/sitemap.xml", content)
+        self.assertIn("Sitemap: https://www.bigstorynetwork.com/sitemap-news.xml", content)
+        self.assertIn("Sitemap: https://www.bigstorynetwork.com/google-news-sitemap.xml", content)
 
     # -------------------------------------------------------------
     # ERROR HANDLERS: 404 & 500

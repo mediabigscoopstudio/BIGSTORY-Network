@@ -94,6 +94,7 @@ Allow: /
 
 Sitemap: https://www.bigstorynetwork.com/sitemap.xml
 Sitemap: https://www.bigstorynetwork.com/sitemap-news.xml
+Sitemap: https://www.bigstorynetwork.com/google-news-sitemap.xml
 """
     return HttpResponse(content, content_type="text/plain")
 
