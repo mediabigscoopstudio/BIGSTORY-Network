@@ -15,8 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/main/css/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/main/css/main.min.css">
       <style>
         .trending-bar {
     max-width: 100%;
@@ -107,7 +106,7 @@
     <header class="container my-3">
         <!-- Top Trending Bar -->
         <div class="trending-bar d-flex align-items-center mb-4">
-    <i data-lucide="zap" class="me-2"></i>
+    <i class="bi bi-lightning-charge-fill text-danger me-2"></i>
     <strong>TRENDING:</strong>
     <div class="flex-grow-1 overflow-hidden ms-2">
         <a id="typewriter-link" class="text-dark fw-semibold text-decoration-none" href="#">
@@ -147,7 +146,7 @@
                                       <div class="col">
                                         <div class="article-card card">
                                             <a href="{{i.get_absolute_url}}">
-                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'The Challengers Profile - BIGSTORY'}}" loading="lazy">
                                                 <div class="card-body">
                                                     <h5 class="card-title"><strong>{{i.title}}</strong></h5>
                                                 </div>
@@ -168,11 +167,11 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="row">
-                                    {% for i in unthink_articles_header %}
+                                     {% for i in unthink_articles_header %}
                                       <div class="col">
                                         <div class="article-card card">
                                             <a href="{{i.get_absolute_url}}">
-                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'UN THiNK Analysis - BIGSTORY'}}" loading="lazy">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
                                                 </div>
@@ -197,7 +196,7 @@
                                       <div class="col">
                                         <div class="article-card card">
                                             <a href="{{i.get_absolute_url}}">
-                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'Big Shot Corporate Story - BIGSTORY'}}" loading="lazy">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{i.title}}</h5>
                                                 </div>
@@ -221,7 +220,7 @@
                                       <div class="col">
                                         <div class="article-card card">
                                             <a href="{{i.get_absolute_url}}">
-                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'Expert Diaries Opinion - BIGSTORY'}}" loading="lazy">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
                                                 </div>
@@ -245,7 +244,7 @@
                                       <div class="col">
                                         <div class="article-card card">
                                             <a href="{{i.get_absolute_url}}">
-                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'Gov 360 Policy News - BIGSTORY'}}" loading="lazy">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
                                                 </div>
@@ -269,7 +268,7 @@
                                       <div class="col">
                                         <div class="article-card card">
                                             <a href="{{i.get_absolute_url}}">
-                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                                                <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'Bharat One Geopolitics - BIGSTORY'}}" loading="lazy">
                                                 <div class="card-body">
                                                      <h5 class="card-title"><strong>{{i.title}}</strong></h5>
                                                 </div>
@@ -305,10 +304,10 @@
               The Challengers <i class="bi bi-chevron-down float-end"></i>
             </a>
             <div class="collapse mobile-submenu" id="challengersCollapse">
-                {% for i in thechallengers_articles_header|slice:":3" %}
+                 {% for i in thechallengers_articles_header|slice:":3" %}
                  <div class="article-card card mt-3">
                     <a href="{{i.get_absolute_url}}">
-                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'The Challengers - BIGSTORY'}}" loading="lazy">
                         <div class="card-body">
                              <h5 class="card-title"><strong>{{i.title}}</strong></h5>
                         </div>
@@ -328,7 +327,7 @@
                 {% for i in unthink_articles_header|slice:":3" %}
                 <div class="article-card card mt-3">
                     <a href="{{i.get_absolute_url}}">
-                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'UN THiNK - BIGSTORY'}}" loading="lazy">
                         <div class="card-body">
                              <h5 class="card-title"><strong>{{i.title}}</strong></h5>
                         </div>
@@ -345,7 +344,7 @@
                 {% for i in bigshot_articles_header|slice:":3" %}
                 <div class="article-card card mt-3">
                     <a href="{{i.get_absolute_url}}">
-                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title}}">
+                        <img src="/media/{{i.thumbnail_image}}" class="card-img-top" alt="{{i.title|default:'BIG SHOT - BIGSTORY'}}" loading="lazy">
                         <div class="card-body">
                             <h5 class="card-title">{{i.title}}</h5>
                         </div>
@@ -476,12 +475,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- STEP 2: Call this function to render the icons -->
-    <script>
-        lucide.createIcons();
-    </script>
 <script>
     const headlines = [
         {% for a in latest_articles %}

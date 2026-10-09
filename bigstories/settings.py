@@ -54,7 +54,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "bigstories.urls"
-DEFAULT_HOST = 'main'
+DEFAULT_HOST = 'www'
+PARENT_HOST = 'bigstorynetwork.com'
 ROOT_HOSTCONF = 'bigstories.hosts'
 TEMPLATES = [
     {
