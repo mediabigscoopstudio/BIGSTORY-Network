@@ -99,3 +99,7 @@ dist/
 
 # VPS / Nginx
 bigstory
+
+# AI Agent
+Agent/venv/
+Agent/.env
