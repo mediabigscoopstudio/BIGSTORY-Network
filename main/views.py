@@ -558,3 +558,43 @@ def author(request, slug):
         "author": author,
         "articles": articles
     })
+
+
+def custom_404(request, exception=None):
+    """
+    Custom 404 error handler.
+    Fetches the top 4 latest enabled articles and renders template/404.html with status 404.
+    """
+    try:
+        latest = (
+            Article.objects.filter(status="Enabled")
+            .filter(category__isnull=False)
+            .exclude(category__slug="")
+            .exclude(slug="")
+            .select_related("category", "author")
+            .order_by("-created_at")[:4]
+        )
+    except Exception:
+        latest = []
+
+    return render(request, "404.html", {"latest_articles": latest}, status=404)
+
+
+def custom_500(request):
+    """
+    Custom 500 error handler.
+    Fetches the top 4 latest enabled articles safely and renders template/500.html with status 500.
+    """
+    try:
+        latest = (
+            Article.objects.filter(status="Enabled")
+            .filter(category__isnull=False)
+            .exclude(category__slug="")
+            .exclude(slug="")
+            .select_related("category", "author")
+            .order_by("-created_at")[:4]
+        )
+    except Exception:
+        latest = []
+
+    return render(request, "500.html", {"latest_articles": latest}, status=500)

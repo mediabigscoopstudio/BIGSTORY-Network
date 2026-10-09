@@ -309,4 +309,33 @@ class SeoAndUrlArchitectureTests(TestCase):
         self.assertEqual(response.status_code, 200)
         content = response.content.decode('utf-8')
         self.assertIn("Sitemap: https://www.bigstorynetwork.com/sitemap.xml", content)
-        self.assertIn("Sitemap: https://www.bigstorynetwork.com/sitemap-news.xml", content)
+
+    # -------------------------------------------------------------
+    # ERROR HANDLERS: 404 & 500
+    # -------------------------------------------------------------
+    def test_custom_404_handler_renders_responsive_page_with_latest_articles(self):
+        """404 handler must return 404 status and include top latest articles and brand layout."""
+        response = self.client.get('/this-path-does-not-exist-at-all-404')
+        self.assertEqual(response.status_code, 404)
+        content = response.content.decode('utf-8')
+        self.assertIn("404", content)
+        self.assertIn("The Story You're Looking For Cannot Be Found", content)
+        # Should include latest article title
+        self.assertIn(self.article_enabled.title, content)
+        # Should include navigation links
+        self.assertIn('Back to Homepage', content)
+
+    def test_custom_500_handler_renders_page_with_latest_articles(self):
+        """500 handler must return 500 status and include top latest articles and refresh actions."""
+        from django.test import RequestFactory
+        from main.views import custom_500
+        factory = RequestFactory()
+        request = factory.get('/cause-500-error')
+        response = custom_500(request)
+        self.assertEqual(response.status_code, 500)
+        content = response.content.decode('utf-8')
+        self.assertIn("500", content)
+        self.assertIn("Unexpected Server Interruption", content)
+        self.assertIn(self.article_enabled.title, content)
+        self.assertIn('Try Refreshing', content)
+

@@ -1,0 +1,362 @@
+{% extends "main/base.html" %}
+{% block 'title' %}500 - Server Error | BIGSTORY Network{% endblock 'title' %}
+{% block 'meta' %}
+<meta name="description" content="We are experiencing a temporary server problem. Our technical newsdesk has been notified. Browse our latest stories in the meantime.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://www.bigstorynetwork.com/500">
+{% endblock 'meta' %}
+
+{% block 'css' %}
+<style>
+  .error-hero {
+    padding: 3.5rem 1rem 2.5rem;
+    background: radial-gradient(circle at 50% 20%, rgba(215, 25, 32, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+  }
+  .error-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff0f0;
+    color: #d71920;
+    border: 1px solid rgba(215, 25, 32, 0.2);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 1.25rem;
+  }
+  .error-code {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(5rem, 14vw, 9.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    color: #111111;
+    letter-spacing: -3px;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+  }
+  .error-code span {
+    color: #d71920;
+    position: relative;
+  }
+  .error-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: #111111;
+    margin-bottom: 0.75rem;
+  }
+  .error-desc {
+    max-width: 620px;
+    margin: 0 auto 2rem;
+    color: #555555;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  .error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .btn-brand-primary {
+    background-color: #d71920;
+    color: #ffffff !important;
+    font-weight: 700;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 2px solid #d71920;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-brand-primary:hover {
+    background-color: #b01319;
+    border-color: #b01319;
+    box-shadow: 0 4px 14px rgba(215, 25, 32, 0.3);
+    transform: translateY(-1px);
+  }
+  .btn-brand-outline {
+    background-color: transparent;
+    color: #111111 !important;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 2px solid #e2e8f0;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-brand-outline:hover {
+    background-color: #f8fafc;
+    border-color: #111111;
+    transform: translateY(-1px);
+  }
+  .quick-links-bar {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0.75rem 1.25rem;
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  .quick-links-bar span {
+    font-weight: 700;
+    color: #888888;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+  .quick-links-bar a {
+    color: #222222;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s ease;
+  }
+  .quick-links-bar a:hover {
+    color: #d71920;
+  }
+
+  /* Latest Articles Section */
+  .error-articles-section {
+    padding: 3rem 0 4rem;
+    border-top: 2px solid #f1f3f5;
+  }
+  .error-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .error-section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #111111;
+    margin: 0;
+  }
+  .error-section-title img {
+    width: 28px;
+    height: auto;
+  }
+  .article-preview-card {
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  .article-preview-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: rgba(215, 25, 32, 0.2);
+  }
+  .article-preview-thumb-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 58%;
+    background: #f1f3f5;
+    overflow: hidden;
+  }
+  .article-preview-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .article-preview-card:hover .article-preview-thumb {
+    transform: scale(1.05);
+  }
+  .article-preview-body {
+    padding: 1.15rem 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .article-preview-category {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #d71920;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.4rem;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .article-preview-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #111111;
+    margin-bottom: 0.6rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+  }
+  .article-preview-title:hover {
+    color: #d71920;
+  }
+  .article-preview-meta {
+    margin-top: auto;
+    padding-top: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: #718096;
+    border-top: 1px solid #f7fafc;
+  }
+  .article-preview-author {
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  @media (max-width: 768px) {
+    .error-hero {
+      padding: 2.5rem 1rem 1.75rem;
+    }
+    .error-actions {
+      flex-direction: column;
+      align-items: stretch;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-brand-primary, .btn-brand-outline {
+      justify-content: center;
+    }
+    .quick-links-bar {
+      border-radius: 16px;
+      padding: 1rem;
+    }
+    .error-section-header {
+      margin-bottom: 1.25rem;
+    }
+    .error-section-title {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+{% endblock 'css' %}
+
+{% block 'body' %}
+<div class="error-hero text-center">
+  <div class="container">
+    <div class="error-badge">
+      <i class="bi bi-exclamation-triangle-fill"></i> System Interruption
+    </div>
+    <div class="d-block">
+      <h1 class="error-code">5<span>0</span>0</h1>
+    </div>
+    <h2 class="error-title">Unexpected Server Interruption</h2>
+    <p class="error-desc">
+      Our servers encountered an unexpected glitch while fetching this content.
+      Our engineering team has been notified. You can try refreshing the page, returning home, or reading top stories below.
+    </p>
+
+    <div class="error-actions">
+      <a href="javascript:location.reload();" class="btn-brand-primary">
+        <i class="bi bi-arrow-clockwise"></i> Try Refreshing
+      </a>
+      <a href="/" class="btn-brand-outline">
+        <i class="bi bi-house-door-fill"></i> Back to Homepage
+      </a>
+      <a href="/support" class="btn-brand-outline">
+        <i class="bi bi-life-preserver"></i> Contact Support
+      </a>
+    </div>
+
+    <div class="quick-links-bar">
+      <span>Explore Verticals:</span>
+      <a href="/bigshot">Big Shot</a>
+      <a href="/unthink">Unthink</a>
+      <a href="/the_challengers">The Challengers</a>
+      <a href="/bharat_one">Bharat One</a>
+      <a href="/age_india">Age India</a>
+      <a href="/green-india" target="_blank">Green India</a>
+    </div>
+  </div>
+</div>
+
+<!-- Top Latest Articles -->
+<section class="error-articles-section">
+  <div class="container">
+    <div class="error-section-header">
+      <h3 class="error-section-title">
+        <img src="/static/main/Vector.png" alt="BIGSTORY" />
+        <span>Top Latest Stories</span>
+      </h3>
+      <a href="/just_in" class="btn-brand-outline py-2 px-3 fs-6">
+        View All Stories <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+      {% for article in latest_articles|slice:":4" %}
+      <div class="col">
+        <div class="article-preview-card">
+          <a href="{{ article.get_absolute_url }}" class="article-preview-thumb-wrap" aria-label="{{ article.title }}">
+            {% if article.thumbnail_image %}
+              <img src="/media/{{ article.thumbnail_image }}" alt="{{ article.title }}" class="article-preview-thumb" loading="lazy">
+            {% else %}
+              <img src="/static/main/Brandplate.webp" alt="{{ article.title }}" class="article-preview-thumb" loading="lazy">
+            {% endif %}
+          </a>
+          <div class="article-preview-body">
+            {% if article.category %}
+              <a href="{{ article.category.get_absolute_url }}" class="article-preview-category">
+                {{ article.category.title }}
+              </a>
+            {% endif %}
+            <a href="{{ article.get_absolute_url }}" class="article-preview-title text-decoration-none">
+              {{ article.title }}
+            </a>
+            <div class="article-preview-meta">
+              <span class="article-preview-author">
+                {% if article.author %}{{ article.author.name }}{% else %}BIGSTORY Newsdesk{% endif %}
+              </span>
+              <span><i class="bi bi-clock"></i> {{ article.created_at|date:"M d, Y" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-4">
+        <p class="text-muted">Explore our extensive archive on the <a href="/" class="text-danger fw-bold">homepage</a>.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock 'body' %}

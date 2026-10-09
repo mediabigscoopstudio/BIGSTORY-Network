@@ -37,6 +37,9 @@ from django.http import JsonResponse
 def traffic_advice(request):
     return JsonResponse([{"user_agent": "*", "disallow": False}], safe=False)
 
+handler404 = views.custom_404
+handler500 = views.custom_500
+
 urlpatterns = [
     # Homepage
     path("", views.index, name='index'),
