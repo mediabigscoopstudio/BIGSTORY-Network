@@ -52,6 +52,7 @@ urlpatterns = [
     path("just_in", views.just_in, name='just_in'),
     path("just-in", views.just_in, name='just-in'),
     path("the_challengers", views.the_challengers, name='the_challengers'),
+    path("the-challengers", views.the_challengers, name='the-challengers'),
     path("unthink", views.unthink, name='unthink'),
     path("bigshot", views.bigshot, name='bigshot'),
     path("bharat_one", views.bharat_one, name='bharat_one'),

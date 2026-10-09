@@ -1,0 +1,92 @@
+{% extends "main/base.html" %}
+{% block 'title' %}Contact Us | BIGSTORY Network{% endblock 'title' %}
+{% block 'meta' %}
+<meta name="description" content="Get in touch with the BIGSTORY Network team. Reach out for editorial inquiries, partnerships, feedback, or general support.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.bigstorynetwork.com/contact">
+{% endblock 'meta' %}
+{% block 'css' %}
+<style>
+.section-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #d71920;
+}
+.contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.contact-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2.5rem;
+}
+.btn-submit {
+    background-color: #d71920;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+.btn-submit:hover {
+    background-color: #b01319;
+    color: #fff;
+}
+</style>
+{% endblock 'css' %}
+{% block 'body' %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="section-title d-flex justify-content-center align-items-center gap-2">
+            <img src="/static/main/Vector.png" alt="BIGSTORY Networks" style="width:45px; height:auto;" />
+            Contact Us
+        </h1>
+        <p class="text-muted fs-5 mt-2">Have a question, feedback, or story tip? We would love to hear from you.</p>
+    </div>
+
+    <div class="contact-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="contact-card">
+            <form action="/contact" method="POST">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control py-2" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control py-2" id="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                        <input type="tel" class="form-control py-2" id="phone" name="phone" placeholder="+91 98765 43210">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="subject" class="form-label fw-semibold">Subject <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control py-2" id="subject" name="subject" placeholder="Subject / Query" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="message" class="form-label fw-semibold">Message <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+                    </div>
+                    <div class="col-12 text-center mt-4">
+                        <button type="submit" class="btn btn-submit px-5 py-2 fs-5">Send Message</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock 'body' %}

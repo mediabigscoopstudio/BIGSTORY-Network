@@ -21,26 +21,28 @@ class SeoAndUrlArchitectureTests(TestCase):
 
         # Create Standard Category
         self.category, _ = Category.objects.get_or_create(
-            slug="technology",
+            id=101,
             defaults={
                 'title': "Technology",
                 'description': "Technology news",
                 'meta_title': "Technology News & Updates",
                 'meta_description': "Latest technology updates",
                 'meta_keywords': "tech, technology, gadgets",
+                'slug': "technology",
                 'status': "Enabled"
             }
         )
 
         # Create Category for Just In vertical slug exclusion test
         self.just_in_cat, _ = Category.objects.get_or_create(
-            slug="just-in",
+            id=102,
             defaults={
                 'title': "Just In",
                 'description': "Just in news",
                 'meta_title': "Just In News",
                 'meta_description': "Breaking news",
                 'meta_keywords': "news, breaking",
+                'slug': "just-in",
                 'status': "Enabled"
             }
         )
@@ -253,6 +255,20 @@ class SeoAndUrlArchitectureTests(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.article_enabled.title)
+
+    def test_vertical_category_article_detail_200(self):
+        """Articles under vertical categories like /bigshot/<slug> must return 200."""
+        url = f"/bigshot/{self.article_bigshot.slug}"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.article_bigshot.title)
+
+    def test_contact_and_support_pages_render_200(self):
+        """Contact and support pages must render 200 without TemplateDoesNotExist."""
+        contact_res = self.client.get('/contact')
+        self.assertEqual(contact_res.status_code, 200)
+        support_res = self.client.get('/support')
+        self.assertEqual(support_res.status_code, 200)
 
     def test_canonical_article_detail_404_for_wrong_category(self):
         """Request to /<wrong-category>/<article-slug> must return 404."""

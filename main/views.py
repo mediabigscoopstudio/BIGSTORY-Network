@@ -441,15 +441,20 @@ def render_article_detail(request, data):
     return render(request, 'main/content.html', context)
 
 def article_detail(request, category_slug, article_slug):
-    if category_slug in RESERVED_SLUGS:
-        raise Http404("Invalid category slug")
     data = get_object_or_404(
         Article.objects.select_related('category', 'author'),
         slug=article_slug,
         status="Enabled"
     )
-    if not data.category or data.category.slug != category_slug:
+    if not data.category or not data.category.slug:
         raise Http404("Article does not belong to requested category")
+
+    cat_slug = data.category.slug.replace('_', '-').lower()
+    req_slug = category_slug.replace('_', '-').lower()
+
+    if cat_slug != req_slug:
+        raise Http404("Article does not belong to requested category")
+
     return render_article_detail(request, data)
 
 def legacy_content_redirect(request, slug):
